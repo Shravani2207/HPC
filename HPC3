@@ -1,0 +1,542 @@
+Title :- Implement Min, Max, Sum and Average operations using Parallel Reduction. 
+
+#include <iostream>
+//#include <vector>
+#include <omp.h>
+#include <climits>
+using namespace std;
+void min_reduction(int arr[], int n) {
+  int min_value = INT_MAX;
+  #pragma omp parallel for reduction(min: min_value)
+  for (int i = 0; i < n; i++) {
+	if (arr[i] < min_value) {
+  	min_value = arr[i];
+	}
+  }
+  cout << "Minimum value: " << min_value << endl;
+}
+
+void max_reduction(int arr[], int n) {
+  int max_value = INT_MIN;
+  #pragma omp parallel for reduction(max: max_value)
+  for (int i = 0; i < n; i++) {
+	if (arr[i] > max_value) {
+  	max_value = arr[i];
+	}
+  }
+  cout << "Maximum value: " << max_value << endl;
+}
+
+void sum_reduction(int arr[], int n) {
+  int sum = 0;
+   #pragma omp parallel for reduction(+: sum)
+   for (int i = 0; i < n; i++) {
+	sum += arr[i];
+  }
+  cout << "Sum: " << sum << endl;
+}
+
+void average_reduction(int arr[], int n) {
+  int sum = 0;
+  #pragma omp parallel for reduction(+: sum)
+  for (int i = 0; i < n; i++) {
+	sum += arr[i];
+  }
+  cout << "Average: " << (double)sum / (n-1) << endl;
+}
+
+int main() {
+    int *arr,n;
+    cout<<"\n enter total no of elements=>";
+    cin>>n;
+    arr=new int[n];
+    cout<<"\n enter elements=>";
+    for(int i=0;i<n;i++)
+    {
+   	 cin>>arr[i];
+    }
+//   int arr[] = {5, 2, 9, 1, 7, 6, 8, 3, 4};
+//   int n = size(arr);
+  min_reduction(arr, n);
+  max_reduction(arr, n);
+  sum_reduction(arr, n);
+  average_reduction(arr, n);
+}
+
+
+Header Files
+#include <iostream>
+	Used for input and output operations (cin, cout).
+//#include <vector>
+	Vector library is commented out.
+	Not used in this program.
+#include <omp.h>
+	Includes OpenMP library for parallel programming.
+#include <climits>
+	Provides predefined constants:
+	INT_MAX
+INT_MIN
+Used for minimum and maximum calculations.
+Namespace
+using namespace std;
+•	Allows using standard library names directly.
+Minimum Reduction Function
+void min_reduction(int arr[], int n)
+	Finds minimum element in array using OpenMP reduction.
+Parameters:
+Parameter	Meaning
+arr[]	Input array
+n	Number of elements
+
+Initialize Minimum Value
+int min_value = INT_MAX;
+	Starts with largest possible integer value.
+Example:
+2147483647
+So any array element will be smaller.
+Parallel Reduction
+#pragma omp parallel for reduction(min: min_value)
+	OpenMP divides loop among multiple threads.
+	Each thread calculates local minimum.
+	Finally combines results into global minimum.
+Loop Through Array
+for (int i = 0; i < n; i++)
+	Traverses all array elements.
+Compare Values
+if (arr[i] < min_value)
+	Checks whether current element is smaller.
+Update Minimum
+min_value = arr[i];
+	Stores smaller value.
+Print Minimum
+cout << "Minimum value: " << min_value << endl;
+	Displays minimum element.
+Maximum Reduction Function
+void max_reduction(int arr[], int n)
+	Finds maximum element using OpenMP reduction.
+Initialize Maximum
+int max_value = INT_MIN;
+	Starts with smallest possible integer.
+Example:
+-2147483648
+Parallel Reduction
+#pragma omp parallel for reduction(max: max_value)
+	Threads compute local maximums.
+	OpenMP combines them automatically.
+Compare Elements
+if (arr[i] > max_value)
+	Checks if current element is larger.
+Update Maximum
+max_value = arr[i];
+	Stores larger value.
+Print Maximum
+cout << "Maximum value: " << max_value << endl;
+	Displays maximum element.
+Sum Reduction Function
+void sum_reduction(int arr[], int n)
+	Calculates sum of all array elements.
+Initialize Sum
+int sum = 0;
+	Starts sum from 0.
+Parallel Reduction for Sum
+#pragma omp parallel for reduction(+: sum)
+	Each thread computes partial sum.
+	OpenMP adds all partial sums together.
+Traverse Array
+for (int i = 0; i < n; i++)
+	Visits all elements.
+Add Elements
+sum += arr[i];
+	Adds current element to sum.
+Print Sum
+cout << "Sum: " << sum << endl;
+	Displays total sum
+Average Reduction Function
+void average_reduction(int arr[], int n)
+	Calculates average of array elements.
+Initialize Sum
+int sum = 0;
+	Variable for total sum.
+Parallel Reduction
+#pragma omp parallel for reduction(+: sum)
+	Parallel summation using OpenMP.
+Add Elements
+sum += arr[i];
+	Adds elements into sum.
+Calculate Average
+cout << "Average: " << (double)sum / (n-1) << endl;
+	Converts sum into double.
+	Divides by (n-1).
+Logical Issue:
+Average should normally be:
+sum / n
+Correct statement:
+cout << "Average: " << (double)sum / n << endl;
+Main Function
+int main()
+•	Program execution begins here
+Array Pointer and Size
+int *arr,n;
+Variable	Meaning
+arr	Dynamic array
+n	Number of elements
+
+Input Size
+cout<<"\n enter total no of elements=>";
+cin>>n;
+	User enters array size.
+Dynamic Memory Allocation
+arr=new int[n];
+	Allocates memory dynamically.
+Input Elements
+cout<<"\n enter elements=>";
+	Prompts user for array values.
+Read Array Elements
+for(int i=0;i<n;i++)
+{
+    cin>>arr[i];
+}
+	Inputs all array elements.
+Commented Static Array
+// int arr[] = {5, 2, 9, 1, 7, 6, 8, 3, 4};
+	Example static array.
+	Currently not used.
+Function Calls
+Minimum
+min_reduction(arr, n);
+	Finds minimum value.
+Maximum
+max_reduction(arr, n);
+	Finds maximum value.
+Sum
+sum_reduction(arr, n);
+	Finds total sum.
+Average
+average_reduction(arr, n);
+	Finds average.
+Advantages of Reduction
+	Faster computation
+	Parallel processing
+	Avoids race conditions
+Time Complexity
+Each Operation
+O(n
+Space Complexity
+O(1)
+1. What is reduction in OpenMP?
+Reduction is a technique used to combine results from multiple threads into a single final result.
+2. What operations are performed in this program?
+The program calculates:
+•	Minimum value
+•	Maximum value
+•	Sum
+•	Average
+using OpenMP reduction.
+3. Why is parallel programming used here?
+To improve computation speed using multiple threads.
+4. What is OpenMP?
+OpenMP is an API used for parallel programming in C/C++.
+5. What are threads?
+Threads are lightweight execution units running simultaneously.
+Header File Questions
+6. Why <omp.h> is included?
+#include <omp.h>
+Provides OpenMP functions and directives.
+7. Why <climits> is included?
+#include <climits>
+Provides constants:
+•	INT_MAX
+•	INT_MI
+8. What is INT_MAX?
+INT_MAX
+Largest possible integer value.
+Example:
+2147483647
+9. What is INT_MIN?
+INT_MIN
+Smallest possible integer value.
+Example:
+-214748364810. Explain:
+#pragma omp parallel for reduction(min:min_value)
+Each thread calculates local minimum.
+OpenMP combines them into final minimum.
+11. Explain:
+reduction(max:max_value)
+Combines thread-local maximum values
+12. Explain:
+reduction(+:sum)
+Adds partial sums from all threads
+13. Why reduction is useful?
+Avoids race condition during parallel computation.
+14. What is race condition?
+When multiple threads modify shared data simultaneously causing incorrect results
+15. How reduction avoids race condition?
+Each thread gets private copy of variable.
+OpenMP safely combines results later.16. Explain min_reduction() function.
+void min_reduction(int arr[], int n)
+Finds minimum element using parallel reduction.
+17. Why initialize minimum with INT_MAX?
+int min_value = INT_MAX;
+Ensures first array element becomes minimum initially
+18. Explain maximum reduction function.
+void max_reduction(int arr[], int n)
+Finds largest array element using OpenMP reduction.
+19. Why initialize maximum with INT_MIN?
+int max_value = INT_MIN;
+Ensures first element becomes maximum initially.
+20. Explain sum reduction function.
+void sum_reduction(int arr[], int n)
+Calculates sum of all elements in parallel
+21. Explain average reduction function.
+void average_reduction(int arr[], int n)
+Calculates average using total sum.
+22. Is there any mistake in average calculation?
+Yes.
+sum / (n-1)
+is incorrect.
+Correct formula:
+sum / n
+23. Why typecasting to double is used?
+(double)sum
+To get decimal result instead of integer division.
+24. Why for loop is used?
+for(int i=0;i<n;i++)
+Traverses all array elements.
+25. What is loop parallelization?
+Dividing loop iterations among multiple threads.
+26. Why dynamic memory allocation is used?
+arr = new int[n];
+Array size is decided at runtime.
+27. Difference between static and dynamic memory?
+Static	Dynamic
+Compile-time size	Runtime size
+Stack memory	Heap memory
+28. Time complexity of minimum search?
+O(n)
+29. Time complexity of maximum search?
+O(n
+30. Time complexity of sum?
+O(n)
+31. Space complexity?
+O(1)
+Only a few variables used
+34. Why is average incorrect?
+Because:
+(n-1)
+is used instead of:
+n
+Correct average:
+3035. What is #pragma omp parallel for?
+Executes loop iterations in parallel.
+36. What is parallel computing?
+Executing multiple computations simultaneously
+37. What is multicore processor?
+CPU with multiple cores capable of parallel execution
+38. What is synchronization?
+Coordination between threads to safely share data.
+39. How to compile this code?
+g++ -fopenmp reduction.cpp -o reduction
+40. How to run this code?
+Linux:
+./reduction
+Windows:
+.\reduction.exe41. Why OpenMP improves performance?
+Multiple threads process data simultaneously.
+42. Can reduction be used with multiplication?
+Yes.
+Example:
+reduction(*:product
+43. Which reduction operators are supported?
+Operator	Use
++	Sum
+*	Product
+min	Minimum
+max	Maximum
+Why reduction is used?
+To safely combine thread results.
+Why INT_MAX is used?
+To initialize minimum search.
+Why INT_MIN is used?
+To initialize maximum search.
+Main advantage of OpenMP?
+Faster execution on multicore systems
+Why typecasting used in average?
+To get floating-point result
+What is OpenMP Reduction?
+Reduction combines thread-local results into one final result safely.
+Why INT_MAX is used?
+To initialize minimum search with largest integer value.
+Why INT_MIN is used?
+To initialize maximum search with smallest integer value.
+What is race condition?
+When multiple threads access shared data simultaneously causing incorrect results.
+How reduction avoids race condition?
+Each thread uses private copy and OpenMP combines results automatically. 
+1.	What are the benefits of using parallel reduction for basic operations on large arrays? 
+Benefits: 
+	Faster computation using multiple threads 
+	Efficient utilization of multicore processors 
+	Reduced execution time for large datasets 
+	Improved performance for operations like sum, min, max, and average 
+	Better scalability for large input sizes 
+Parallel reduction divides work among threads, so computations happen simultaneously.  
+2.	How does OpenMP's "reduction" clause work in parallel reduction? 
+The OpenMP reduction clause creates a private copy of the variable for each thread. 
+Working: 
+1.	Each thread performs computation independently. 
+2.	OpenMP stores partial results separately. 
+3.	At the end, all partial results are combined into one final result using the specified operator. 
+Example: 
+#pragma omp parallel for reduction(+:sum) Here: 
+	Each thread calculates partial sum 
+	OpenMP combines all partial sums into final sum This prevents race conditions.  
+3.	How do you set up a C++ program for parallel computation with OpenMP? 
+Steps: 
+Step 1: Include OpenMP header 
+#include <omp.h> 
+Step 2: Write parallel code using directives 
+Example: 
+#pragma omp parallel for  
+Step 3: Compile with OpenMP support 
+g++ -fopenmp program.cpp -o program  
+Step 4: Run the program 
+./program 
+ 
+4.	What are the performance characteristics of parallel reduction, and how do they vary based on input size? 
+Performance Characteristics: 
+	Parallel reduction performs better for large arrays 
+	Multiple threads reduce computation time 
+	Speedup increases with larger datasets Small Input Size: 
+	Parallel overhead may dominate 
+	Performance gain may be very small Large Input Size: 
+	Better thread utilization 
+	Significant speed improvement 
+	Higher efficiency Important Point: 
+Performance depends on: 
+	Number of processor cores 
+	Thread management overhead 
+	Input size  
+5.	How can you modify the provided code example for more complex operations using parallel reduction? 
+You can extend parallel reduction for: 
+	Multiplication 
+	Matrix operations 
+	Dot products 
+	Statistical calculations 
+	Logical operations Example: Instead of sum: 
+reduction(*:product) 
+For custom operations: 
+	Use user-defined reduction •
+Combine structures or objects 
+	Apply reduction on complex data types You can also use: 
+Nested loops 
+	Dynamic scheduling 
+	Task parallelism to improve performance for advanced computations.  
+Q: Why is reduction important? 
+It safely combines results from multiple threads.  
+Q: What problem does reduction solve? 
+Race condition problem.  
+Q: Why does parallel reduction work better for large arrays? 
+Because workload is distributed among many threads.  
+Q: Which compiler flag enables OpenMP? 
+-fopenmp  
+Q: Can reduction work on multiplication? 
+Yes. 
+Example: 
+reduction(*:product)  
+1.	What is Parallel Reduction? 
+Parallel Reduction is a technique used in parallel programming to combine values from multiple threads into a single result such as sum, minimum, maximum, or average.  
+2.	What is reduction in OpenMP? 
+Reduction in OpenMP is a clause that performs parallel computation and combines partial results from all threads safely. 
+Example: 
+#pragma omp parallel for reduction(+:sum)  
+3.	Why is reduction used? 
+Reduction is used to avoid race conditions when multiple threads update the same variable simultaneously.  
+4.	What is a race condition? 
+A race condition occurs when multiple threads access and modify the same variable at the same time, causing incorrect results.  
+5.	What operations can be performed using reduction? 
+Common reduction operations: 
+	Sum (+) 
+	Multiplication (*) 
+	Minimum (min) 
+	Maximum (max)  
+6.	What is Min Reduction? 
+Min Reduction finds the smallest element in an array using parallel threads. 
+Each thread computes its local minimum, then OpenMP combines them into the final minimum value.  
+7.	What is Max Reduction? 
+Max Reduction finds the largest element in an array using multiple threads in parallel.  
+8.	What is Sum Reduction? 
+Sum Reduction calculates the total sum of all elements in parallel. 
+OpenMPHow is Average calculated using reduction? 
+First calculate the sum using reduction, then divide by total number of elements. 
+Average=\frac{Sum}{Number\ of\ Elements}  
+9.	What is the advantage of parallel reduction? 
+	Faster computation 
+	Efficient CPU utilization 
+	Reduces execution time 
+	Simplifies parallel programming  
+10.	Which API is used for parallel reduction in C++? 
+OpenMP.  
+11.	Which header file is required for OpenMP? 
+#include <omp.h>  
+12.	How do you compile an OpenMP program? 
+g++ -fopenmp program.cpp -o program 
+The -fopenmp flag enables OpenMP support. 
+13.	What is the purpose of the reduction clause? 
+The reduction clause combines results from multiple threads into one final result safely.  
+14.	What happens without reduction? 
+Without reduction: 
+	Race conditions may occur 
+	Incorrect output may be produced  
+15.	Explain Min Reduction in simple words. 
+Each thread finds the minimum value in its assigned portion, and OpenMP combines all local minimums to produce the final minimum value.  
+16.	Explain Max Reduction in simple words. 
+Each thread finds the maximum value in its part of the array, then OpenMP combines them.  
+17.	Explain Sum Reduction in simple words. 
+Every thread calculates a partial sum, and OpenMP adds all partial sums together.  
+18.	Why is OpenMP useful? 
+OpenMP makes parallel programming easier using compiler directives. 
+19.	What is parallel programming? 
+Executing multiple tasks simultaneously using multiple processors or cores.  
+20.	What is a thread? 
+A thread is the smallest unit of execution within a process.  
+22. What is shared memory architecture? 
+A system where all threads share the same memory space.  
+23.	What is the syntax of reduction clause? 
+#pragma omp parallel for reduction(operator:variable) 
+Example: 
+#pragma omp parallel for reduction(+:sum)  
+24.	What operators are supported in OpenMP reduction? 
+	+ 
+	* 
+	min 
+	max 
+	& 
+	| 
+	^ 
+ 
+25.	What is execution time? 
+The total time taken by a program to complete execution. 
+26.	Why does parallel reduction improve performance? 
+Because multiple threads work simultaneously on different parts of the data.  
+27.	Can reduction be used for large datasets? 
+Yes. Parallel reduction is especially useful for large datasets.  
+28.	What are the limitations of parallel reduction? 
+	Thread creation overhead 
+	Synchronization overhead 
+	Less benefit for small datasets  
+29.	What is the conclusion of this experiment? 
+We implemented Min, Max, Sum, and Average operations using OpenMP parallel reduction to improve performance and utilize multicore processors efficiently. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
