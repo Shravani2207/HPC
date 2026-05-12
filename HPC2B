@@ -83,21 +83,23 @@ int main()
 	return 0;
 }
 
+
+-----------------------------------
 Header Files
 #include<iostream>
-•	Used for input and output operations (cin, cout).
+	Used for input and output operations (cin, cout).
 #include<stdlib.h>
-•	Standard library header.
-•	Not directly required here.
+	Standard library header.
+	Not directly required here.
 #include<omp.h>
-•	Includes OpenMP library for parallel programming.
+	Includes OpenMP library for parallel programming.
 Namespace
 using namespace std;
-•	Allows use of standard library functions without std::.
+	Allows use of standard library functions without std::.
 
 Function Declarations
 void mergesort(int a[],int i,int j);
-•	Declares recursive Merge Sort function.
+	Declares recursive Merge Sort function.
 Parameters:
 Parameter	Meaning
 a[]	Array
@@ -105,35 +107,35 @@ i	Starting index
 j	Ending index
 
 void merge(int a[],int i1,int j1,int i2,int j2);
-•	Declares merge function.
+	Declares merge function.
 Purpose:
 Merges two sorted subarrays into one sorted array.
 Merge Sort Function
 void mergesort(int a[],int i,int j)
-•	Recursive Merge Sort implementation.
+	Recursive Merge Sort implementation.
 Mid Variable
 int mid;
-•	Stores middle index of array.
+	Stores middle index of array.
 Check Condition
 if(i<j)
-•	Recursion continues only if more than one element exists.
+	Recursion continues only if more than one element exists.
 Example:
 0 < 4 → true
 Calculate Midpoint
 mid=(i+j)/2;
-•	Finds middle position.
+	Finds middle position.
 Example:
 (0+4)/2 = 2
 Parallel Sections
 #pragma omp parallel sections
-•	OpenMP creates parallel threads.
-•	Different sections execute simultaneously.
+	OpenMP creates parallel threads.
+	Different sections execute simultaneously.
 First Section
 #pragma omp section
 {
     mergesort(a,i,mid);
 }
-•	Sorts left half of array.
+	Sorts left half of array.
 Example:
 0 to 2
 Second Section
@@ -141,19 +143,19 @@ Second Section
 {
     mergesort(a,mid+1,j);
 }
-•	Sorts right half of array.
+	Sorts right half of array.
 Example:
 3 to 4
 
 Merge Sorted Halves
 merge(a,i,mid,mid+1,j);
-•	Combines left and right sorted halves.
+	Combines left and right sorted halves.
 Merge Function
 void merge(int a[],int i1,int j1,int i2,int j2)
-•	Merges two sorted arrays.
+	Merges two sorted arrays.
 Temporary Array
 int temp[1000];
-•	Stores merged sorted elements temporarily.
+	Stores merged sorted elements temporarily.
 Variable Declaration
 int i,j,k;
 Variable	Purpose
@@ -170,10 +172,10 @@ Left starts at i1
 Right starts at i2
 Compare Elements
 while(i<=j1 && j<=j2)
-•	Continues while both subarrays contain elements.
+	Continues while both subarrays contain elements.
 If Left Element Smaller
 if(a[i]<a[j])
-•	Compares left and right elements.
+	Compares left and right elements.
 Store Left Element
 temp[k++]=a[i++];
 Meaning:
@@ -182,13 +184,13 @@ Meaning:
 3.	Increment i
 Else Store Right Element
 temp[k++]=a[j++];
-•	Stores smaller right-side element.
+	Stores smaller right-side element.
 Remaining Left Elements
 while(i<=j1)
 {
     temp[k++]=a[i++];
 }
-•	Copies leftover elements from left subarray.
+	Copies leftover elements from left subarray.
 Remaining Right Elements
 while(j<=j2)
 {
@@ -197,13 +199,13 @@ while(j<=j2)
 •	Copies leftover elements from right subarray.
 Copy Back to Original Array
 for(i=i1,j=0;i<=j2;i++,j++)
-•	Copies merged data from temp array into original array.
+	Copies merged data from temp array into original array.
 Assign Sorted Values
 a[i]=temp[j];
-•	Updates original array.
+	Updates original array.
 Main Function
 int main()
-•	Program execution starts here.
+	Program execution starts here.
 Variable Declaration
 int *a,n,i;
 Variable	Meaning
@@ -214,13 +216,13 @@ i	Loop variable
 Input Size
 cout<<"\n enter total no of elements=>";
 cin>>n;
-•	User enters array size.
+	User enters array size.
 Dynamic Memory Allocation
 a= new int[n];
-•	Creates array dynamically at runtime.
+	Creates array dynamically at runtime.
 Input Elements
 cout<<"\n enter elements=>";
-•	Prompts user to enter elements.
+	Prompts user to enter elements.
 Read Elements
 for(i=0;i<n;i++)
 {
@@ -229,12 +231,12 @@ for(i=0;i<n;i++)
 •	Inputs array elements.
 Call Merge Sort
 mergesort(a, 0, n-1);
-•	Sorts entire array.
+	Sorts entire array.
 Example:
 0 to n-1
 Print Message
 cout<<"\n sorted array is=>";
-•	Displays heading.
+	Displays heading.
 Print Sorted Array
 for(i=0;i<n;i++)
 {
@@ -529,11 +531,10 @@ O(n\log n)
 Comparison-based sorting algorithm.  
 33.	Is Merge Sort in-place? 
 No. It requires extra memory.  
-34.	What applications use Merge Sort? 
-•	Large database sorting 
-•	External sorting 
-•	Multithreaded applications 
-•	Distributed systems  
+34.	What applications use Merge Sort? 	Large database sorting 
+	External sorting 
+	Multithreaded applications 
+	Distributed systems  
 35.	What happens if the input array is already sorted? 
 Merge Sort still performs O(n log n) operations. 
 36.	Difference between Sequential and Parallel Merge Sort? 
