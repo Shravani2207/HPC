@@ -68,25 +68,22 @@ int main() {
 }
 !nvcc -arch=sm_75 matrix_mul.cu -o matrix_mul
 !./matrix_mul
+------------------------------------------------
 
 %%writefile matrix_mul.cu
 •	Jupyter/Colab magic command.
 •	Creates CUDA source file:
 matrix_mul.cu
-
-
-
 Header Files
 #include <stdio.h>
 Used for:
 printf()
-
 #include <cuda_runtime.h>
 Includes CUDA runtime library.
 Provides:
-•	cudaMalloc()
-•	cudaMemcpy()
-•	cudaFree()
+	cudaMalloc()
+	cudaMemcpy()
+	cudaFree()
 
 Matrix Size
 #define N 16
@@ -102,8 +99,8 @@ B	Second matrix
 C	Result matrix
 n	Matrix size
 __global__ means:
-•	Runs on GPU
-•	Called from CPU
+	Runs on GPU
+	Called from CPU
 
 Calculate Row Index
 int row = blockIdx.y * blockDim.y + threadIdx.y;
@@ -317,19 +314,19 @@ Thousands of cores 	Few cores
 Faster for large matrices 	Slower for large computations 
 High throughput 	Lower throughput 
 Main Advantages: 
-•	Faster execution time 
-•	Efficient parallel computation 
-•	Better utilization of hardware resources 
-•	Suitable for large-scale scientific and AI applications 
+	Faster execution time 
+	Efficient parallel computation 
+	Better utilization of hardware resources 
+	Suitable for large-scale scientific and AI applications 
 In CUDA, many matrix elements are computed simultaneously by GPU threads.  
 2.	How do you handle matrices that are too large to fit in GPU memory in CUDA matrix multiplication? 
 Large matrices are handled using: 
 1.	Matrix Partitioning (Tiling) 
 The matrix is divided into smaller blocks or tiles. 
 Each tile is: 
-•	Copied to GPU memory 
-•	Processed separately 
-•	Combined later  
+	Copied to GPU memory 
+	Processed separately 
+	Combined later  
 2.	Streaming
 Data is transferred and processed in chunks using CUDA streams.  
 3.	Unified Memory 
