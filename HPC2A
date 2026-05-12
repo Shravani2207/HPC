@@ -51,6 +51,8 @@ int main()
 return 0;
 }
 
+
+------------------------------------
 Header Files
 #include<iostream>
 	Used for input and output operations (cin, cout).
