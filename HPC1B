@@ -69,6 +69,10 @@ cout << "Enter Pair of edges:" ;
 
 	return 0;
 }
+
+
+
+-----------------------------------
 Header Files
 #include <iostream>
 	Used for input and output operations (cin, cout).
@@ -614,12 +618,12 @@ Processors independently explore assigned subgraphs.
 26.	What happens to adjacent nodes during DFS? 
 They are pushed onto the stack for further exploration.  
 27.	What is the main difference between serial DFS and parallel DFS? 
-•	Serial DFS explores sequentially 
-•	Parallel DFS explores simultaneously using multiple threads  
+	Serial DFS explores sequentially 
+	Parallel DFS explores simultaneously using multiple threads  
 28.	What affects performance in Parallel DFS? 
-•	Number of threads 
-•	Graph size 
-•	Synchronization overhead  
+	Number of threads 
+	Graph size 
+Synchronization overhead  
 29.	What is synchronization overhead? 
 Extra time required to coordinate threads.  
 30.	Can Parallel DFS improve performance? 
