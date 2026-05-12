@@ -1,0 +1,658 @@
+Assignment No- 01 B 
+Title :- Design and implement Parallel Depth First Search based on existing algorithms using OpenMP. Use a Tree or an undirected graph for DFS. 
+
+#include <iostream>
+#include <vector>
+#include <stack>
+#include <omp.h>
+
+using namespace std;
+
+const int MAX = 100000;
+vector<int> graph[MAX];
+bool visited[MAX];
+
+void dfs(int node) {
+	stack<int> s;
+	s.push(node);
+
+	while (!s.empty()) {
+    	int curr_node = s.top();
+    	s.pop();
+
+    	if (!visited[curr_node]) {
+        	visited[curr_node] = true;
+        	
+        	if (visited[curr_node]) {
+        	cout << curr_node << " ";
+    	}
+
+        	#pragma omp parallel for
+        	for (int i = 0; i < graph[curr_node].size(); i++) {
+            	int adj_node = graph[curr_node][i];
+            	if (!visited[adj_node]) {
+                	s.push(adj_node);
+            	}
+        	}
+    	}
+	}
+}
+
+int main() {
+	int n, m, start_node;
+	cout << "Enter No of Node,Edges,and start node:" ;
+	cin >> n >> m >> start_node;
+         //n: node,m:edges
+         
+cout << "Enter Pair of edges:" ;
+	for (int i = 0; i < m; i++) {
+    	int u, v;
+    		
+    	cin >> u >> v;
+//u and v: Pair of edges
+    	graph[u].push_back(v);
+    	graph[v].push_back(u);
+	}
+
+	#pragma omp parallel for
+	for (int i = 0; i < n; i++) {
+    	visited[i] = false;
+	}
+
+	dfs(start_node);
+
+/*	for (int i = 0; i < n; i++) {
+    	if (visited[i]) {
+        	cout << i << " ";
+    	}
+	}*/
+
+	return 0;
+}
+Header Files
+#include <iostream>
+	Used for input and output operations (cin, cout).
+#include <vector>
+	Used for dynamic arrays.
+	Here it stores adjacency lists of graph.
+#include <stack>
+	Used to implement DFS using stack.
+#include <omp.h>
+	OpenMP library for parallel programming.
+
+Namespace
+using namespace std;
+	Allows use of standard library names without std::.
+
+Global Variables
+const int MAX = 100000;
+	Maximum number of nodes allowed.
+
+Graph Declaration
+vector<int> graph[MAX];
+	Creates adjacency list representation of graph.
+	Each index stores connected nodes.
+Example:
+graph[0] = {1,2}
+means node 0 is connected to 1 and 2.
+
+Visited Array
+bool visited[MAX];
+	Tracks whether node is visited or not.
+	Prevents revisiting same node.
+
+DFS Function
+void dfs(int node)
+	Function performs Depth First Search.
+	Parameter:
+	node → starting node.
+
+Create Stack
+stack<int> s;
+	Stack stores nodes for DFS traversal.
+
+Push Starting Node
+s.push(node);
+	Inserts start node into stack.
+
+DFS Loop
+while (!s.empty())
+	Runs until stack becomes empty.
+
+Get Top Node
+int curr_node = s.top();
+	Retrieves top element from stack.
+
+Remove Top Node
+s.pop();
+	Removes node from stack.
+
+Check if Node is Unvisited
+if (!visited[curr_node])
+	Process node only if not visited before.
+
+Mark Node as Visited
+visited[curr_node] = true;
+	Marks node visited.
+
+Print Current Node
+if (visited[curr_node]) {
+    cout << curr_node << " ";
+}
+	Prints current node.
+This condition is always true because node was just marked visited.
+Equivalent simpler code:
+cout << curr_node << " ";
+
+Parallel Loop
+#pragma omp parallel for
+	OpenMP creates parallel threads.
+	Different adjacent nodes processed simultaneously.
+
+Traverse Adjacent Nodes
+for (int i = 0; i < graph[curr_node].size(); i++)
+	Loops through all neighbors of current node.
+
+Get Adjacent Node
+int adj_node = graph[curr_node][i];
+	Stores neighbor node.
+
+If Neighbor Not Visited
+if (!visited[adj_node])
+	Checks whether adjacent node is already visited.
+
+Push Neighbor into Stack
+s.push(adj_node);
+	Pushes node into stack for future traversal.
+
+Main Function
+int main()
+	Program execution starts here.
+
+Variable Declaration
+int n, m, start_node;
+Variable	Meaning
+n	Number of nodes
+m	Number of edges
+start_node	DFS starting node
+
+Input Message
+cout << "Enter No of Node,Edges,and start node:";
+	Prompts user for graph details.
+
+Input Values
+cin >> n >> m >> start_node;
+	Reads:
+	Number of nodes
+	Number of edges
+	Starting node
+
+Edge Input Message
+cout << "Enter Pair of edges:";
+	Asks user to enter edges.
+
+Edge Input Loop
+for (int i = 0; i < m; i++)
+	Runs m times to input edges.
+Edge Variables
+int u, v;
+	Stores pair of connected nodes.
+Input Edge
+cin >> u >> v;
+Reads edge between nodes u and v.
+Add Edge to Graph
+graph[u].push_back(v);
+graph[v].push_back(u);
+	Creates undirected graph.
+Example:
+0 1
+means:
+0 ↔ 1
+
+Parallel Initialization
+#pragma omp parallel for
+	Initializes visited array using parallel threads.
+
+Initialize Visited Array
+for (int i = 0; i < n; i++) {
+    visited[i] = false;
+}
+	Marks all nodes unvisited initially.
+
+Start DFS Traversal
+dfs(start_node);
+Calls DFS function from start node.
+
+Commented Code
+/*
+for (int i = 0; i < n; i++) {
+    if (visited[i]) {
+        cout << i << " ";
+    }
+}
+*/
+	Alternative method to print visited nodes.
+	Currently disabled using comments.
+
+End Program
+return 0;
+	Ends program successfully.
+1. What is DFS?
+Depth First Search (DFS) is a graph traversal algorithm that explores nodes deeply before backtracking.
+2. Which data structure is used in DFS?
+Stack is used in DFS because it follows LIFO (Last In First Out).
+3. What is a graph?
+A graph is a collection of:
+•	Vertices (nodes)
+•	Edges (connections)
+4. What type of graph is used here?
+Undirected graph.
+Because:
+graph[u].push_back(v);
+graph[v].push_back(u);
+Edges are added in both directions.
+1 → 0,3
+6. Explain this line.
+const int MAX = 100000;
+Maximum number of nodes allowed in graph.
+7. Explain graph declaration.
+vector<int> graph[MAX];
+Creates adjacency list for graph.
+Each index stores neighbors of node.
+8. Why vector is used?
+Vector provides dynamic size storage.
+9. Purpose of visited array?
+bool visited[MAX];
+Tracks whether node is already visited.
+Prevents infinite loops.
+10. Explain DFS function.
+void dfs(int node)
+Performs depth-first traversal starting from given node.
+11. Why stack is used?
+stack<int> s;
+DFS needs LIFO behavior.
+Latest inserted node processed first.
+12. What does s.push(node) do?
+s.push(node);
+Pushes starting node into stack.
+13. Why while (!s.empty()) is used?
+while (!s.empty())
+Loop continues until all nodes are processed
+14. Explain:
+int curr_node = s.top();
+Gets top node from stack
+15. Why s.pop() is used?
+s.pop();
+Removes processed node from stack
+16. Why check if (!visited[curr_node])?
+if (!visited[curr_node])
+Avoids revisiting already processed nodes
+17. Why mark node as visited?
+visited[curr_node] = true;
+Prevents infinite traversal cycles.
+18. Why current node is printed?
+cout << curr_node << " ";
+Displays DFS traversal order.
+19. What is OpenMP?
+OpenMP is an API for parallel programming in C/C++.
+20. Why use:
+#pragma omp parallel for
+To process adjacent nodes in parallel
+21. What is parallel processing?
+Executing multiple tasks simultaneously.
+22. What are threads?
+Small execution units created for parallel tasks.
+23. Is this DFS fully parallel?
+No.
+Only adjacency traversal loop is parallelized.
+24. Can race condition occur here?
+Yes.
+Because multiple threads may access:
+	visited[]
+	stack s
+simultaneously.
+25. Why is stack unsafe here?
+stack is shared among threads without synchronization
+26. How can it be fixed?
+Using:
+#pragma omp critical
+or locks.
+27. How are edges inserted?
+graph[u].push_back(v);
+graph[v].push_back(u);
+Creates bidirectional connection.
+28. Difference between directed and undirected graph?
+Directed	Undirected
+One-way edge	Two-way edge
+u → v	u ↔ v
+
+29. What happens if graph contains cycle?
+Visited array prevents infinite looping.
+30. Time complexity of DFS?
+O(V + E)
+Where:
+	V = vertices
+	E = edges
+
+31. Space complexity?
+O(V)
+Due to:
+Stack
+Visited array
+35. Why initialize visited array?
+visited[i] = false;
+Initially no node is visited.
+36. Why use global graph array?
+Accessible by all functions
+37. What is recursion?
+Function calling itself.
+38. Is this DFS recursive?
+No.
+This is iterative DFS using stack
+39. Difference between recursive and iterative DFS?
+Recursive DFS	Iterative DFS
+Uses function call stack	Uses explicit stack
+Simpler code	Better control
+40. How to compile this code?
+g++ -fopenmp dfs.cpp -o dfs
+Why stack is used in DFS?
+Because DFS requires LIFO traversal.
+Why visited array is needed?
+To avoid revisiting nodes and infinite loops
+Why vector is used?
+To store dynamic adjacency lists
+What is advantage of DFS?
+Uses less memory compared to BFS.
+
+Time Complexity
+DFS Traversal
+O(V + E)
+Where:
+	V = vertices
+	E = edges
+
+Space Complexity
+O(V)
+Used by:
+	Stack
+	Visited array
+	Adjacency lis
+Why Stack is Used in DFS?
+Stack follows LIFO order which supports depth-wise traversal.
+What is Adjacency List?
+A graph representation where each node stores list of connected nodes.
+Why visited[] is required?
+To avoid infinite loops and revisiting nodes.
+Why OpenMP is used?
+To process graph neighbors in parallel for faster execution. 
+1.	What is DFS? 
+DFS (Depth-First Search) is a graph traversal algorithm that explores one branch completely before backtracking. 
+	It uses a Stack data structure. 
+DFS goes deep into the graph first and then returns back. 
+Steps of DFS 
+1.	Start from source node. 
+2.	Mark node as visited. 
+3.	Push node into stack. 
+4.	Visit unvisited adjacent node. 
+5.	Repeat until all nodes are visited. 
+Applications 
+	Path finding 
+	Cycle detection 
+	Maze solving 
+	Topological sorting  
+2.	Write a Parallel Depth First Search (DFS) Algorithm using OpenMP 
+Parallel DFS Algorithm using OpenMP 
+#include <stdio.h> 
+#include <omp.h> 
+ 
+#define MAX 100 
+ 
+int visited[MAX]; 
+ 
+void parallelDFS(int graph[MAX][MAX], int node, int n) {     visited[node] = 1; 
+ 
+    printf("Visited %d by thread %d\n",            node, omp_get_thread_num()); 
+ 
+    #pragma omp parallel for 
+    for(int i = 0; i < n; i++) { 
+ 
+        if(graph[node][i] && !visited[i]) { 
+ 
+            #pragma omp critical 
+            {                 if(!visited[i]) {                     parallelDFS(graph, i, n); 
+                } 
+            } 
+        } 
+    } 
+} 
+Explanation 
+•	#pragma omp parallel for distributes work among threads. 
+•	Different threads explore different adjacent nodes simultaneously. 
+•	critical section prevents multiple threads from modifying shared data at the same time.  
+3.	What is the advantage of using parallel programming in DFS? 
+Advantages 
+1.	Faster graph traversal 
+2.	Better CPU utilization 
+3.	Efficient for large graphs 
+4.	Reduced execution time 
+5.	Multiple nodes processed simultaneously 
+“Parallel programming improves DFS performance by executing multiple tasks simultaneously.”  
+4.	How can you parallelize a DFS algorithm using OpenMP? 
+DFS can be parallelized by dividing graph traversal work among multiple threads. 
+Method 
+•	Use OpenMP directives like: 
+#pragma omp parallel for 
+•	Different threads process different adjacent nodes simultaneously. 
+•	Shared data structures like visited[] must be synchronized properly. 
+Steps 
+1.	Divide graph into subgraphs/tasks. 
+2.	Assign tasks to threads. 
+3.	Threads explore nodes independently. 
+4.	Synchronize shared resources. 
+ 
+5.	What is a race condition in parallel programming, and how can it be avoided in OpenMP? 
+Race Condition 
+A race condition occurs when multiple threads access and modify shared data simultaneously, causing incorrect results. 
+Example 
+Two threads trying to update visited[] at the same time.  
+How to Avoid Race Condition in OpenMP? 
+Using synchronization directives such as: 
+Critical Section 
+#pragma omp critical 
+Allows only one thread to execute the block at a time.  
+Atomic Operation 
+#pragma omp atomic 
+Safely updates shared variables.  
+Barrier 
+#pragma omp barrier 
+Synchronizes all threads. 
+ 
+1.	Why is it called Depth-First Search? 
+Answer: 
+Because it goes deep into one branch before exploring other branches.  
+2.	Which data structure is used in DFS? 
+Answer: 
+Stack data structure.  
+3.	What is the main idea of DFS? 
+Answer: 
+Visit a node, move deeper to its unvisited neighbor, and backtrack when no neighbor is left.  
+4.	What is backtracking in DFS? 
+Answer: 
+Returning to the previous node when no unvisited adjacent node exists.  
+5.	What are the two categories of vertices in DFS? 
+Answer: 
+1.	Visited 
+2.	Not Visited  
+6.	Why are nodes marked as visited? 
+Answer: 
+To avoid revisiting nodes and prevent cycles/infinite loops.  
+7.	Which traversal method does DFS follow? 
+Answer: 
+Depth-wise traversal.  
+8.	What is the time complexity of DFS? 
+Answer: 
+O(V+E) 
+Where: 
+	V = Number of vertices 
+	E = Number of edges  
+9.	What is the space complexity of DFS? 
+Answer: O(V) 
+Because stack stores vertices.  
+10.	What are the applications of DFS? 
+Answer: 
+	Cycle detection 
+	Path finding 
+	Topological sorting 
+	Maze solving 
+	Graph traversal  
+1.	Can DFS detect cycles? 
+Answer: 
+Yes, DFS can detect cycles in a graph.  
+12.	How does DFS detect a cycle? 
+Answer: 
+If DFS reaches an already visited node, a cycle may exist.  
+13.	What are the two approaches to implement DFS? 
+Answer: 
+1.	Recursive approach 
+2.	Iterative approach  
+14.	Which approach is simpler in DFS?
+Answer: 
+Recursive approach.  
+15.	Why is iterative DFS preferred for large graphs? 
+Answer: 
+Because recursion may cause stack overflow for very large graphs.  
+16.	What data structure is used in iterative DFS? 
+Answer: 
+Explicit stack.  
+17.	What happens when stack becomes empty? 
+Answer: 
+DFS traversal is complete.  
+18.	What is the starting node in DFS called? 
+Answer: 
+Source node or root node.  
+19.	What is graph traversal? 
+Answer: 
+Systematically visiting all vertices of a graph.  
+20.	What is the first step in DFS? 
+Create a stack and select a starting vertex.  
+21.	What is pushed into the stack? 
+Visited vertices.  
+22.	What happens at the top of the stack? 
+Unvisited adjacent vertices are explored.  
+23.	When does DFS backtrack? 
+When no unvisited adjacent vertex is available.  
+24.	Why is stack important in DFS? 
+It stores vertices for backtracking.  
+Difference Between BFS and DFS 
+25.	Difference between BFS and DFS? 
+BFS 	DFS 
+Uses Queue 	Uses Stack 
+Level-wise traversal Depth-wise traversal 
+Finds shortest path 	May not find shortest path 
+More memory usage Less memory usage  
+26.	Which traversal uses queue? 
+: BFS.  
+27.	Which traversal uses stack? 
+DFS.  
+28.	Which algorithm is better for shortest path? 
+BFS for unweighted graphs. 
+ 
+DFS Complexity 
+Time = O(V+E),\ Space = O(V) 
+1.	What is OpenMP? 
+OpenMP is an API used for shared-memory parallel programming in C, C++, and Fortran.  
+2.	Why is OpenMP used? 
+To execute programs in parallel using multiple threads and processors.  
+3.	What type of architecture does OpenMP support? 
+Shared-memory architecture.  
+4.	What is parallel programming? 
+Executing multiple tasks simultaneously to improve performance.  
+5.	What is the fork-join model in OpenMP?  
+The master thread creates worker threads (fork) for parallel execution and combines them back (join) after execution.  
+6.	What are OpenMP directives? 
+Compiler instructions used to parallelize code.  
+7.	Which directive is commonly used in OpenMP? 
+#pragma omp parallel for  
+8.	What does #pragma omp parallel for do? 
+It distributes loop iterations among multiple threads for parallel execution.  
+9.	What is a thread? 
+A thread is a lightweight unit of execution within a process.  
+10.	What is shared memory? 
+Memory accessible by all threads in a program.  
+11.	What is Parallel DFS? 
+Parallel DFS is a parallel version of Depth-First Search where multiple threads explore graph nodes simultaneously.  
+12.	What is the main goal of Parallel DFS? 
+To speed up graph traversal for large graphs.  
+13.	How does Parallel DFS work? 
+The graph is divided into smaller subgraphs, and multiple threads explore them simultaneously.  
+14.	What data structure is used in DFS? 
+r: Stack.  
+15.	Why is stack used in DFS? 
+To store nodes during traversal and support backtracking.  
+16.	What happens during exploration in Parallel DFS? 
+Threads explore nodes independently and mark visited nodes.  
+17.	Why are nodes marked as visited? 
+To avoid revisiting nodes and prevent cycles.  
+18.	What is backtracking in DFS? 
+Returning to a previous node when no unvisited adjacent node exists.  
+19.	What is a subgraph? 
+A smaller portion of a larger graph.  
+20.	Why is graph divided into subgraphs in Parallel DFS? 
+To allow multiple threads to process different parts simultaneously.  
+21.	What is the advantage of Parallel DFS?  
+Faster execution and better processor utilization.  
+22.	What programming models can implement Parallel DFS? 
+OpenMP 
+MPI 
+CUDA  
+23.	How is OpenMP used in Parallel DFS?  
+Using directives like: #pragma omp parallel for to divide work among threads.  
+24.	What is concurrency in Parallel DFS? 
+Multiple threads updating and processing data simultaneously.  
+25.	What is the role of processors in Parallel DFS? 
+Processors independently explore assigned subgraphs.  
+26.	What happens to adjacent nodes during DFS? 
+They are pushed onto the stack for further exploration.  
+27.	What is the main difference between serial DFS and parallel DFS? 
+•	Serial DFS explores sequentially 
+•	Parallel DFS explores simultaneously using multiple threads  
+28.	What affects performance in Parallel DFS? 
+•	Number of threads 
+•	Graph size 
+•	Synchronization overhead  
+29.	What is synchronization overhead? 
+Extra time required to coordinate threads.  
+30.	Can Parallel DFS improve performance? 
+Yes, especially for very large graphs.  
+Difference Between Parallel BFS and Parallel DFS 
+Parallel BFS 	Parallel DFS 
+Uses Queue 	Uses Stack 
+Level-wise traversal 	Depth-wise traversal 
+Explores neighbors first Explores deeply first 
+ 
+DFS Complexity 
+Time = O(V+E),\ Space = O(V) 
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
