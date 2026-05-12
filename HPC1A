@@ -1,0 +1,682 @@
+#include<iostream>
+#include<stdlib.h>
+#include<queue>
+using namespace std;
+class node
+{
+   public:
+    node *left, *right;
+    int data;
+};    
+class Breadthfs
+{
+ public:
+ node *insert(node *, int);
+ void bfs(node *); 
+};
+
+node *insert(node *root, int data)
+// inserts a node in tree
+{
+    if(!root)
+    {
+   	 root=new node;
+   	 root->left=NULL;
+   	 root->right=NULL;
+   	 root->data=data;
+   	 return root;
+    }
+    queue<node *> q;
+    q.push(root);
+    while(!q.empty())
+    {
+   	 node *temp=q.front();
+   	 q.pop();
+   	 if(temp->left==NULL)
+   	 {	 
+   		 temp->left=new node;
+   		 temp->left->left=NULL;
+   		 temp->left->right=NULL;
+   		 temp->left->data=data;    
+   		 return root;
+   	 }
+   	 else
+   	 {
+   	 q.push(temp->left);
+   	 }
+   	 if(temp->right==NULL)
+   	 {	 
+   		 temp->right=new node;
+   		 temp->right->left=NULL;
+   		 temp->right->right=NULL;
+   		 temp->right->data=data;    
+   		 return root;
+   	 }
+   	 else
+   	 {
+   	 q.push(temp->right);
+   	 }
+    }   
+}
+void bfs(node *head)
+{
+   	 queue<node*> q;
+   	 q.push(head);
+   	 int qSize;
+   	 while (!q.empty())
+   	 {
+   		 qSize = q.size();
+   		 #pragma omp parallel for
+            	//creates parallel threads
+   		 for (int i = 0; i < qSize; i++)
+   		 {
+   			 node* currNode;
+   			 #pragma omp critical
+   			 {
+   			   currNode = q.front();
+   			   q.pop();
+   			   cout<<"\t"<<currNode->data;
+   			 }// prints parent node
+   			 #pragma omp critical
+   			 {
+   			 if(currNode->left)// push parent's left node in queue
+   				 q.push(currNode->left);
+   			 if(currNode->right)
+   				 q.push(currNode->right);
+   			 }// push parent's right node in queue   	 
+   		 }
+   	 }
+}
+int main(){
+    node *root=NULL;
+    int data;
+    char ans;
+    do
+    {
+   	 cout<<"\n enter data=>";
+   	 cin>>data;
+   	 root=insert(root,data);
+   	 cout<<"do you want insert one more node?";
+   	 cin>>ans;
+    }while(ans=='y'||ans=='Y');
+    bfs(root);
+    return 0;
+}
+
+Header Files
+#include<iostream>
+	Includes input/output functions like cout and cin.
+#include<stdlib.h>
+	Standard library header (not heavily used here).
+#include<queue>
+	Includes STL Queue container used for BFS traversal.
+using namespace std;
+Allows using standard library names directly (cout instead of std::cout).
+
+Node Class
+class node
+{
+   public:
+    node *left, *right;
+    int data;
+};
+This defines a tree node.
+Members:
+•	left → pointer to left child
+•	right → pointer to right child
+•	data → stores integer value
+Breadthfs Class
+class Breadthfs
+{
+ public:
+ node *insert(node *, int);
+ void bfs(node *);
+};
+This class declares:
+	insert() → inserts node into binary tree
+	bfs() → performs Breadth First Search traversal
+
+Insert Function
+node *insert(node *root, int data)
+	Function inserts a new node into the tree.
+	Parameters:
+	root → root of tree
+	data → value to insert
+
+If Tree is Empty
+if(!root)
+	Checks if tree is empty.
+{
+    root=new node;
+	Dynamically creates a new node.
+    root->left=NULL;
+    root->right=NULL;
+	Left and right child pointers initialized to NULL.
+    root->data=data;
+	Stores input data in node.
+    return root;
+}
+	Returns newly created root node.
+
+Queue for Level Order Insertion
+queue<node *> q;
+	Creates queue of node pointers.
+q.push(root);
+	Push root node into queue.
+
+Loop Until Queue Becomes Empty
+while(!q.empty())
+	Continues traversal until queue is empty.
+Access Front Node
+node *temp=q.front();
+q.pop();
+	Gets first node from queue and removes it.
+Insert Left Child
+if(temp->left==NULL)
+	Checks whether left child is empty.
+temp->left=new node;
+	Creates new left child node.
+temp->left->left=NULL;
+temp->left->right=NULL;
+	Initializes child pointers.
+temp->left->data=data;
+	Assigns value.
+return root;
+	Returns updated tree.
+
+If Left Child Exists
+else
+{
+    q.push(temp->left);
+}
+	Push existing left child into queue for further checking.
+Insert Right Child
+if(temp->right==NULL)
+	Checks whether right child is empty.
+temp->right=new node;
+Creates new right child node.
+temp->right->left=NULL;
+temp->right->right=NULL;
+	Initializes child pointers.
+temp->right->data=data;
+	Stores data.
+return root;
+	Returns updated root.
+If Right Child Exists
+else
+{
+    q.push(temp->right);
+}
+	Pushes right child into queue.
+BFS Function
+void bfs(node *head)
+	Performs Breadth First Search traversal.
+queue<node*> q;
+	Creates queue for BFS traversal.
+q.push(head);
+	Push root node into queue.
+Queue Size Variable
+int qSize;
+	Stores number of nodes at current level.
+BFS Loop
+while (!q.empty())
+	Continues until all nodes are processed.
+Get Current Level Size
+qSize = q.size();
+	Stores total nodes present at current level.
+
+OpenMP Parallel Section
+#pragma omp parallel for
+	Creates multiple parallel threads.
+	Different nodes of same level can be processed simultaneously.
+Loop Through Current Level Nodes
+for (int i = 0; i < qSize; i++)
+	Traverses all nodes at current level.
+Current Node Pointer
+node* currNode;
+	Pointer for current node.
+Critical Section
+#pragma omp critical
+	Ensures only one thread accesses shared queue at a time.
+
+Remove Node From Queue
+currNode = q.front();
+q.pop();
+	Retrieves front node and removes it safely.
+Print Node Data
+cout<<"\t"<<currNode->data;
+	Prints node value.
+Another Critical Section
+#pragma omp critical
+	Prevents multiple threads from modifying queue simultaneously.
+Push Left Child
+if(currNode->left)
+    q.push(currNode->left);
+	Adds left child to queue if it exists.
+
+Push Right Child
+if(currNode->right)
+    q.push(currNode->right);
+	Adds right child to queue if it exists.
+Main Function
+int main()
+	Program execution starts here.
+Root Pointer
+node *root=NULL;
+	Initially tree is empty.
+Variables
+int data;
+char ans;
+	data → stores node value
+ans → user choice
+Input Loop
+do
+	Repeats until user stops.
+Input Data
+cout<<"\n enter data=>";
+cin>>data;
+	Takes node value from user.
+Insert Node
+root=insert(root,data);
+	Inserts node into tree.
+Ask User
+cout<<"do you want insert one more node?";
+cin>>ans;
+	User decides whether to continue.
+Loop Condition
+}while(ans=='y'||ans=='Y');
+	Continues if user enters y/Y.
+Perform BFS
+bfs(root);
+	Calls BFS traversal.
+End Program
+return 0;
+	Terminates program successfully.
+1. What is BFS?
+Breadth First Search (BFS) is a traversal technique that visits nodes level by level.
+2. Which data structure is used in BFS?
+Queue is used in BFS because it follows FIFO (First In First Out)
+3. What type of tree is created in this program?
+A complete binary tree is created using level-order insertion.
+4. What is a binary tree?
+A binary tree is a tree data structure where each node has at most two children:
+	Left child
+	Right child
+5. What is the role of queue in this code?
+Queue stores nodes level-wise during insertion and traversal.
+6. Explain the node class.
+class node
+{
+   public:
+    node *left, *right;
+    int data;
+};
+It represents one tree node containing:
+	data
+	Pointer to left child
+Pointer to right child
+7. Why are pointers used in tree?
+Pointers dynamically connect nodes in memory
+8. What is dynamic memory allocation?
+Memory allocation at runtime using:
+new
+9. How does insertion happen in this program?
+Insertion occurs level by level using queue.
+10. Why is level-order insertion used?
+To maintain a complete binary tree structure
+11. What happens if root is NULL?
+if(!root)
+A new root node is created
+12. Why do we initialize left and right to NULL?
+root->left=NULL;
+root->right=NULL;
+To indicate node has no children initially.13. Explain BFS traversal in this code.
+	Root inserted into queue
+	Remove front node
+	Print it
+	Insert left and right children
+Repeat until queue becomes empty
+
+14. Why does BFS use FIFO?
+Nodes must be processed in same order they are discovered
+15. What is level-order traversal?
+Traversal where nodes are visited level by level from left to right.
+16. What is OpenMP?
+OpenMP is an API for parallel programming in C/C++.
+17. Why is #pragma omp parallel for used?
+#pragma omp parallel for
+To execute loop iterations in parallel using multiple threads
+18. What is parallel computing?
+Executing multiple tasks simultaneously using multiple processors/threads
+19. What are threads?
+Threads are lightweight execution units within a process.
+20. What is the benefit of parallel BFS?
+It improves traversal performance on multicore systems.
+21. Why is #pragma omp critical used?
+#pragma omp critical
+To avoid multiple threads accessing shared queue simultaneously.
+22. What is race condition?
+When multiple threads modify shared data at same time causing incorrect results
+23. Which shared resource may cause race condition here?
+Queue q
+24. What happens if critical section is removed?
+Queue corruption or incorrect traversal may occur.
+25. What is time complexity of BFS?
+O(n)
+Each node visited once.
+26. What is space complexity?
+O(n)
+Queue may store all nodes.
+27. Which STL container is used?
+queue<node *>
+28. What operations are used on queue?
+Function	Purpose
+push()	Insert element
+pop()	Remove element
+front()	Access first element
+empty()	Check queue empty
+29. Difference between . and -> operator?
+Operator	Use
+.	Object access
+->	Pointer access
+Example:
+temp->left
+30. Why use node *temp?
+To store address of current node.
+32. Can output order change?
+Yes, because of parallel execution.
+Example:
+1 3 2 5 4
+may occur.33. Difference between BFS and DFS?
+BFS	DFS
+Level-wise traversal	Depth-wise traversal
+Uses Queue	Uses Stack
+FIFO	LIFO
+
+34. Why queue instead of stack in BFS?
+Queue preserves level order traversal.
+35. What is complete binary tree?
+All levels completely filled except possibly last level.
+36. Is this BFS fully parallel?
+No.
+Queue operations still require synchronization.
+37. What is synchronization?
+Coordinating threads safely when sharing resources
+38. What is multicore processor?
+CPU having multiple processing cores.
+39. How many threads OpenMP creates?
+Depends on system cores and environment settings.
+40. How to compile this code?
+g++ -fopenmp bfs.cpp -o bfs
+Why OpenMP is used?
+To achieve parallel execution and improve performance.
+Why critical section is required?
+To prevent race condition on shared queue.
+Why BFS uses queue?
+Because queue processes nodes in FIFO order.
+Main advantage of BFS?
+Finds shortest path in unweighted graphs/trees.
+Main disadvantage of BFS?
+Requires more memory because queue stores nodes.
+Why Queue is Used in BFS?
+Queue follows FIFO order, which helps process nodes level-wise.
+What is OpenMP?
+OpenMP is an API used for parallel programming in C/C++.
+Why #pragma omp critical is used?
+To prevent multiple threads from accessing/modifying the queue simultaneously.
+Time Complexity
+	Insertion: O(n)
+	BFS Traversal: O(n)
+Space Complexity
+	Queue storage: O(n)
+
+1.	What is BFS? 
+BFS (Breadth First Search) is a graph traversal algorithm used to visit all nodes level by level starting from a source node. 
+	It first visits all neighboring nodes. 
+	Then it moves to the next level neighbors. 
+	It uses a Queue (FIFO) data structure. 
+Steps of BFS 
+1.	Start from a source vertex. 
+2.	Mark it as visited. 
+3.	Insert it into the queue. 
+4.	Remove a node from queue and visit all its unvisited neighbors. 
+5.	Repeat until queue becomes empty. 
+Applications of BFS 
+	Shortest path in unweighted graphs 
+	Social network analysis 
+	Web crawling 
+GPS navigation 
+	Network broadcasting 
+ 
+2.	What is OpenMP? What is its significance in parallel programming? 
+OpenMP (Open Multi-Processing) is an API used for parallel programming in C, C++, and Fortran on shared-memory systems. 
+It allows a program to run multiple threads simultaneously to improve performance. 
+Significance of OpenMP 
+	Easy way to implement parallelism 
+	Reduces execution time 
+	Uses multi-core processors efficiently 
+	Supports shared memory architecture 
+	Simple compiler directives like #pragma omp 
+Features 
+	Thread creation and management 
+	Parallel loops 
+	Synchronization 
+	Work sharing 
+Example 
+#pragma omp parallel 
+{ 
+   printf("Hello from thread"); 
+} 
+ 
+3.	Applications of Parallel BFS 
+Parallel BFS is used where large graphs must be processed quickly. 
+Applications 
+1.	Social network analysis 
+2.	Web search engines 
+3.	Route planning and navigation 
+4.	Network routing 
+5.	Artificial Intelligence 
+6.	Graph analytics 
+7.	Bioinformatics 
+8.	Recommendation systems 
+9.	Big data processing 
+ 
+4.	How can BFS be parallelized using OpenMP? Describe the parallel BFS algorithm using OpenMP. 
+BFS can be parallelized by processing multiple neighboring vertices at the same time using threads. 
+Parallel BFS using OpenMP 
+Different threads explore different nodes simultaneously. 
+	OpenMP parallel loops are used to process neighbors. 
+Algorithm 
+1.	Initialize queue and visited array. 
+2.	Insert source node into queue. 
+3.	While queue is not empty: 
+	Remove a node. o 	Process all adjacent nodes in parallel using OpenMP. 
+	Mark unvisited nodes as visited. 
+	Add them to queue. 
+Example Code 
+#pragma omp parallel for 
+for(int i = 0; i < adj[node].size(); i++) {     int neighbor = adj[node][i]; 
+ 
+    if(!visited[neighbor]) {         visited[neighbor] = 1;         #pragma omp critical         queue.push(neighbor); 
+    } 
+} 
+Advantages 
+Faster traversal 
+	Better CPU utilization 
+	Suitable for large graphs 
+ 
+5. Write Down Commands used in OpenMP 
+Common OpenMP Directives / Commands 
+Command 	Purpose 
+#pragma omp parallel 	Creates parallel threads 
+#pragma omp for 	Parallelizes loops 
+#pragma omp parallel for Parallel loop execution 
+#pragma omp critical 	Allows one thread at a time 
+#pragma omp barrier 	Synchronization point 
+#pragma omp single 	Only one thread executes block 
+#pragma omp sections 	Divides tasks among threads 
+#pragma omp master 	Executed only by master thread 
+omp_get_thread_num() Returns thread ID omp_get_num_threads() Returns total threads 
+Compilation Command gcc program.c -fopenmp Execution Command 
+./a.out 
+Set Number of Threads export OMP_NUM_THREADS=4 
+1.	What is BFS? 
+BFS (Breadth-First Search) is a graph traversal algorithm that visits nodes level by level using a queue.  
+2.	Why is it called Breadth-First Search?  
+Because it explores all neighboring nodes first before moving to the next depth level.  
+3.	Which data structure is used in BFS? 
+Queue (FIFO – First In First Out).  
+4.	What is the main idea of BFS? 
+Visit all nodes at the current level before visiting nodes at the next level.  
+5.	What are the steps of BFS?  
+1.	Start from source node 
+2.	Mark node as visited 
+3.	Insert into queue 
+4.	Remove node from queue 
+5.	Visit unvisited neighbors 
+6.	Repeat until queue becomes empty  
+6.	Why do we mark nodes as visited? 
+To avoid revisiting the same node and prevent infinite loops.  
+7.	What happens if nodes are not marked visited? 
+The algorithm may visit the same node repeatedly and may enter an infinite loop.  
+8.	What is the time complexity of BFS? 
+O(V+E) 
+Where: 
+•	V = Number of vertices 
+•	E = Number of edges  
+9.	What is the space complexity of BFS? 
+Answer: 
+O(V) 
+Because queue and visited array store vertices.  
+10.	What are the applications of BFS? 
+	Shortest path finding 
+	Social networks 
+	GPS navigation 
+	Web crawling 	Network broadcasting  
+11.	Which traversal technique does BFS follow? 
+Level-order traversal.  
+12.	What is the difference between BFS and DFS? 
+BFS 	DFS 
+Uses Queue 	Uses Stack/Recursion 
+Level-wise traversal Depth-wise traversal 
+Finds shortest path May not find shortest path  
+13.	Does BFS guarantee shortest path? 
+Yes, in an unweighted graph BFS gives the shortest path.  
+14.	Can BFS be used on trees and graphs? 
+Yes, BFS works on both trees and graphs.  
+15.	What is the starting node in BFS called? 
+Source node or root node.  
+16.	What is meant by graph traversal? 
+Systematically visiting all nodes of a graph.  
+17.	Why is queue used in BFS? 
+Queue processes nodes in FIFO order, which helps visit nodes level by level.  
+18.	What are neighboring nodes? 
+Nodes directly connected to a current node by an edge.  
+19.	What is FIFO in BFS? 
+FIFO means First In First Out — the first inserted node is processed first.  
+20.	Give one real-life example of BFS.
+Finding shortest route in Google Maps or GPS navigation.  
+Queue in BFS 
+“Queue helps BFS process nodes level by level.” 
+Visited Array 
+“It prevents revisiting the same node.” 
+BFS Use 
+“BFS is mainly used for shortest path and graph traversal.” 
+BFS Traversal Order 
+“Breadth-wise or level-wise.” 
+BFS Complexity 
+Time = O(V+E),\ Space = O(V)  
+1.	What is OpenMP? 
+OpenMP (Open Multi-Processing) is an API used for shared-memory parallel programming in C, C++, and Fortran.  
+2.	Why is OpenMP used? 
+It is used to execute programs in parallel using multiple processor cores to improve performance.  
+3.	What type of memory architecture does OpenMP use? 
+Shared-memory architecture.  
+4.	Which languages support OpenMP? 
+C, C++, and Fortran.  
+5.	What is parallel programming? 
+Executing multiple tasks simultaneously using multiple processors or threads. 
+6.	What is the main advantage of OpenMP? 
+It reduces execution time and improves CPU utilization.
+7.	What is a thread in OpenMP? 
+A thread is an independent flow of execution within a program.  
+8.	What is the fork-join model in OpenMP? 
+
+In the fork-join model, the master thread creates worker threads for parallel execution and joins them back after completion.  
+9.	Explain fork-join model briefly. 
+Fork → Multiple threads are created 
+Parallel execution occurs 
+Join → Threads combine back into one master thread 
+10.	What is a parallel region in OpenMP? 
+A section of code executed by multiple threads simultaneously.  
+11.	Which directive is used to create parallel execution? 
+#pragma omp parallel 
+12.	What is shared memory?  
+Memory that can be accessed b all threads/processors. 
+13.	What are OpenMP directives?  
+Compiler instructions used to parallelize code.  
+14.	Give some OpenMP directives. 
+	#pragma omp parallel 
+	#pragma omp for 
+#pragma omp critical 
+#pragma omp barrier  
+15.	What is #pragma omp for used for? 
+It parallelizes loop execution among multiple threads.  
+16.	What is synchronization in OpenMP? 
+Coordination between threads to avoid conflicts and ensure correct execution.  
+17.	What is a critical section? 
+Answer: 
+A code section that only one thread can execute at a time. 
+18.	Why is OpenMP popular?  
+Because it is simple, portable, and easy  implement. 
+ What is Parallel BFS? 
+Parallel BFS is a parallel version of Breadth-First Search where multiple threads process graph nodes simultaneously.  
+19.	Why do we use Parallel BFS? 
+To speed up graph traversal for large graphs.  
+20.	How does Parallel BFS work? 
+Different threads process different nodes at the same level simultaneously.  
+21.	What are the two phases of Parallel BFS? 
+1.	Computation Phase 
+2.	Communication Phase  
+22.	What happens in the computation phase? 
+Threads process nodes in their local queues. 
+23.	What happens in the communication phase? 
+Threads exchange adjacent nodes with other threads/processors.  
+24.	What is a local queue? 
+A queue maintained by each thread to store nodes to visit.  
+26.	What is the benefit of Parallel BFS? 
+Faster traversal and better processor utilization.  
+27.	Where is Parallel BFS used? 
+	Social networks 
+	Web search 
+	AI 
+	Network routing 
+	Big data analytics  
+28.	Which programming models can implement Parallel BFS? 
+OpenMP 
+MPI 
+CUDA  
+29.	What affects the performance of Parallel BFS?  
+Number of threads 
+	Graph size 
+Communication overhead  
+30.	What is communication overhead? 
+Extra time spent exchanging data between threads/processors.  
+31.	What is the termination condition in Parallel BFS? 
+The algorithm stops when all nodes are visited or target node is found.  
+32.	Does Parallel BFS improve performance? 
+Yes, especially for large graphs and multicore systems.  
+OpenMP 
+“OpenMP is an API for shared-memory parallel programming.” 
+Fork-Join Model 
+“Master thread creates worker threads and joins them after execution.” 
+Parallel BFS 
+“Multiple threads traverse graph nodes simultaneously.” 
+Shared Memory 
+“All threads access the same memory.” 
+Communication Phase 
+“Threads exchange adjacent node information.” 
+Computation Phase 
+“Threads process nodes from local queues.” 
+Main Benefit 
+“Reduced execution time.” 
