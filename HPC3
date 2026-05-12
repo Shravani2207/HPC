@@ -62,6 +62,7 @@ int main() {
   sum_reduction(arr, n);
   average_reduction(arr, n);
 }
+------------------------------------------------
 
 
 Header Files
