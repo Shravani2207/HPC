@@ -1,0 +1,562 @@
+Title: - Write a program to implement Parallel Merge Sort. Use existing algorithms and measure the performance of sequential and parallel algorithms. 
+
+#include<iostream>
+#include<stdlib.h>
+#include<omp.h>
+using namespace std;
+void mergesort(int a[],int i,int j);
+void merge(int a[],int i1,int j1,int i2,int j2);
+void mergesort(int a[],int i,int j)
+{
+	int mid;
+	if(i<j)
+	{
+    	mid=(i+j)/2;
+    	#pragma omp parallel sections
+    	{
+        	#pragma omp section
+        	{
+            	mergesort(a,i,mid);   	 
+        	}
+
+        	#pragma omp section
+        	{
+            	mergesort(a,mid+1,j);    
+        	}
+    	}
+    	merge(a,i,mid,mid+1,j);    
+	}
+}
+void merge(int a[],int i1,int j1,int i2,int j2)
+{
+	int temp[1000];    
+	int i,j,k;
+	i=i1;    
+	j=i2;    
+	k=0;   
+	while(i<=j1 && j<=j2)    
+	{
+    	if(a[i]<a[j])
+    	{
+        	temp[k++]=a[i++];
+    	}
+    	else
+    	{
+        	temp[k++]=a[j++];
+    }    
+	}  
+	while(i<=j1)    
+	{
+    	temp[k++]=a[i++];
+	} 	 
+	while(j<=j2)    
+	{
+    	temp[k++]=a[j++];
+	} 	 
+	for(i=i1,j=0;i<=j2;i++,j++)
+	{
+    	a[i]=temp[j];
+	}    
+}
+int main()
+{
+	int *a,n,i;
+	cout<<"\n enter total no of elements=>";
+	cin>>n;
+	a= new int[n];
+
+	cout<<"\n enter elements=>";
+	for(i=0;i<n;i++)
+	{
+    	cin>>a[i];
+	}
+   //	 start=.......
+//#pragma ompâ€¦..
+	mergesort(a, 0, n-1);
+//          stopâ€¦â€¦.
+	cout<<"\n sorted array is=>";
+	for(i=0;i<n;i++)
+	{
+    	cout<<"\n"<<a[i];
+	}
+  	// Cout<<Stop-Start
+	return 0;
+}
+
+Header Files
+#include<iostream>
+•	Used for input and output operations (cin, cout).
+#include<stdlib.h>
+•	Standard library header.
+•	Not directly required here.
+#include<omp.h>
+•	Includes OpenMP library for parallel programming.
+Namespace
+using namespace std;
+•	Allows use of standard library functions without std::.
+
+Function Declarations
+void mergesort(int a[],int i,int j);
+•	Declares recursive Merge Sort function.
+Parameters:
+Parameter	Meaning
+a[]	Array
+i	Starting index
+j	Ending index
+
+void merge(int a[],int i1,int j1,int i2,int j2);
+•	Declares merge function.
+Purpose:
+Merges two sorted subarrays into one sorted array.
+Merge Sort Function
+void mergesort(int a[],int i,int j)
+•	Recursive Merge Sort implementation.
+Mid Variable
+int mid;
+•	Stores middle index of array.
+Check Condition
+if(i<j)
+•	Recursion continues only if more than one element exists.
+Example:
+0 < 4 → true
+Calculate Midpoint
+mid=(i+j)/2;
+•	Finds middle position.
+Example:
+(0+4)/2 = 2
+Parallel Sections
+#pragma omp parallel sections
+•	OpenMP creates parallel threads.
+•	Different sections execute simultaneously.
+First Section
+#pragma omp section
+{
+    mergesort(a,i,mid);
+}
+•	Sorts left half of array.
+Example:
+0 to 2
+Second Section
+#pragma omp section
+{
+    mergesort(a,mid+1,j);
+}
+•	Sorts right half of array.
+Example:
+3 to 4
+
+Merge Sorted Halves
+merge(a,i,mid,mid+1,j);
+•	Combines left and right sorted halves.
+Merge Function
+void merge(int a[],int i1,int j1,int i2,int j2)
+•	Merges two sorted arrays.
+Temporary Array
+int temp[1000];
+•	Stores merged sorted elements temporarily.
+Variable Declaration
+int i,j,k;
+Variable	Purpose
+i	Left subarray index
+j	Right subarray index
+k	Temp array index
+
+Initialize Indices
+i=i1;
+j=i2;
+k=0;
+Example:
+Left starts at i1
+Right starts at i2
+Compare Elements
+while(i<=j1 && j<=j2)
+•	Continues while both subarrays contain elements.
+If Left Element Smaller
+if(a[i]<a[j])
+•	Compares left and right elements.
+Store Left Element
+temp[k++]=a[i++];
+Meaning:
+1.	Copy a[i] into temp
+2.	Increment k
+3.	Increment i
+Else Store Right Element
+temp[k++]=a[j++];
+•	Stores smaller right-side element.
+Remaining Left Elements
+while(i<=j1)
+{
+    temp[k++]=a[i++];
+}
+•	Copies leftover elements from left subarray.
+Remaining Right Elements
+while(j<=j2)
+{
+    temp[k++]=a[j++];
+}
+•	Copies leftover elements from right subarray.
+Copy Back to Original Array
+for(i=i1,j=0;i<=j2;i++,j++)
+•	Copies merged data from temp array into original array.
+Assign Sorted Values
+a[i]=temp[j];
+•	Updates original array.
+Main Function
+int main()
+•	Program execution starts here.
+Variable Declaration
+int *a,n,i;
+Variable	Meaning
+a	Dynamic array
+n	Number of elements
+i	Loop variable
+
+Input Size
+cout<<"\n enter total no of elements=>";
+cin>>n;
+•	User enters array size.
+Dynamic Memory Allocation
+a= new int[n];
+•	Creates array dynamically at runtime.
+Input Elements
+cout<<"\n enter elements=>";
+•	Prompts user to enter elements.
+Read Elements
+for(i=0;i<n;i++)
+{
+    cin>>a[i];
+}
+•	Inputs array elements.
+Call Merge Sort
+mergesort(a, 0, n-1);
+•	Sorts entire array.
+Example:
+0 to n-1
+Print Message
+cout<<"\n sorted array is=>";
+•	Displays heading.
+Print Sorted Array
+for(i=0;i<n;i++)
+{
+    cout<<"\n"<<a[i];
+}
+Prints sorted elements.
+End Program
+return 0;
+	Terminates program successfully.
+
+1. What is Merge Sort?
+Merge Sort is a divide-and-conquer sorting algorithm that divides array into smaller parts, sorts them, and merges them.
+2. What technique is used in Merge Sort?
+Divide and Conquer technique.
+3. Why is Merge Sort efficient?
+Because its time complexity is:
+O(n log n)
+4. Is Merge Sort recursive?
+Yes.
+It repeatedly calls itself on smaller subarrays
+5. Is Merge Sort stable?
+Yes.
+Equal elements maintain their relative order.
+6. Why <omp.h> is included?
+#include<omp.h>
+To use OpenMP directives for parallel programming.
+7. Why using namespace std is used?
+using namespace std;
+Allows using:
+cout, cin
+without std::.8. Explain mergesort() function.
+void mergesort(int a[],int i,int j)
+Recursively divides array into smaller halves and sorts them.
+9. Why if(i<j) condition is used?
+if(i<j)
+Recursion continues only if subarray has more than one element.
+10. Explain midpoint calculation.
+mid=(i+j)/2;
+Finds middle index of current subarray
+11. What is recursion?
+A function calling itself repeatedly
+12. What is base condition in recursion?
+Condition where recursive calls stop.
+Here:
+i >= j
+13. Explain:
+#pragma omp parallel sections
+Creates parallel sections executed simultaneously by different threads.
+14. Why parallel sections are used?
+To sort left and right halves simultaneously
+15. Explain:
+#pragma omp section
+Defines independent code blocks for parallel execution
+16. What is OpenMP?
+OpenMP is an API for parallel programming in C/C++
+17. What is parallel computing?
+Executing multiple operations simultaneously.
+18. What are threads?
+Lightweight execution units used for parallel tasks.
+19. Explain merge() function.
+void merge(int a[],int i1,int j1,int i2,int j2)
+Combines two sorted subarrays into one sorted array.
+20. Why temporary array is used?
+int temp[1000];
+Stores merged sorted elements temporarily
+21. Why compare elements during merge?
+if(a[i]<a[j])
+To insert smaller element first into sorted array
+22. Why remaining elements are copied separately?
+while(i<=j1)
+while(j<=j2)
+After one subarray finishes, leftover elements must be copied.
+23. Why copy temp back into original array?
+a[i]=temp[j];
+Updates original array with sorted data.24. Time complexity of Merge Sort?
+O(n log n)
+25. Space complexity?
+O(n)
+Because temporary array is used.
+26. Why Merge Sort is faster than Bubble Sort?
+Merge Sort	Bubble Sort
+O(n log n)	O(n²)
+27. Why dynamic memory allocation is used?
+a = new int[n];
+Array size is decided at runtime.
+28. Difference between static and dynamic memory?
+Static	Dynamic
+Fixed size	Runtime size
+Stack memory	Heap memory
+31. What is Divide and Conquer?
+Problem divided into smaller subproblems, solved separately, then combined.
+32. How does Merge Sort divide array?
+Example:
+[5 2 8 1 4]
+→ [5 2 8] [1 4]
+→ [5 2] [8] [1] [4]
+33. How merging happens?
+[5] [2] → [2 5]
+34. Is Merge Sort in-place?
+No.
+Extra memory is required
+35. Can Merge Sort be parallelized easily?
+Yes.
+Left and right halves are independent.
+36. What is advantage of parallel Merge Sort?
+Faster sorting using multicore processors.
+37. Why Merge Sort is suitable for parallelization?
+Subarrays can be sorted independently.
+38. What is multicore processor?
+CPU containing multiple cores for parallel execution.
+39. What is limitation of:
+int temp[1000];
+Fails for arrays larger than 1000 elements.
+40. Better alternative?
+int *temp = new int[j2-i1+1];
+Dynamic temporary array.
+Compilation Questions
+41. How to compile this code?
+g++ -fopenmp mergesort.cpp -o mergesor
+42. How to run?
+Linux:
+./mergesort
+Windows:
+.\mergesort.exeWhy OpenMP is used?
+To execute left and right recursive calls in parallel.
+Why Merge Sort is efficient?
+Because complexity is:
+O(n log n
+Main disadvantage of Merge Sort?
+Requires extra memory
+Main advantage of Merge Sort?
+Fast and stable sorting.
+Why recursion is used?
+To divide array repeatedly into smaller parts
+Why Merge Sort is Fast?
+Merge Sort divides array into smaller parts:
+Divide → Sort → Merge
+Efficient for large datasets.
+Time Complexity
+O(n log n)
+Space Complexity-O(n)
+Because temporary array is used.
+OpenMP Advantage
+Without OpenMP:
+•	Left and right halves sorted sequentially.
+With OpenMP:
+•	Both halves sorted simultaneously.
+This improves performance on multicore processors.
+Why Merge Sort is better than Bubble Sort?
+It has lower complexity:
+O(n log n)
+instead of:
+O(n²)
+ 
+1.	What is Parallel Merge Sort? 
+Parallel Merge Sort is a parallel version of the Merge Sort algorithm where multiple processors or
+threads work simultaneously to sort different parts of an array. It improves performance by utilizing multicore processors.  
+2.	How does Parallel Merge Sort work? 
+Parallel Merge Sort works in the following steps: 
+1.	Divide the array into smaller subarrays. 
+2.	Assign different subarrays to different threads/processors. 
+3.	Sort each subarray in parallel using Merge Sort. 
+4.	Merge the sorted subarrays together. 
+5.	Produce the final sorted array. 
+The sorting and merging operations are performed concurrently, reducing execution time.  
+3.	How do you implement Parallel Merge Sort using OpenMP? 
+Parallel Merge Sort is implemented in OpenMP using parallel sections or tasks. 
+Steps: 
+1.	Include OpenMP header: 
+#include <omp.h> 
+2.	Use OpenMP directives like: 
+#pragma omp parallel sections 
+3.	Divide the array recursively into two halves. 
+4.	Sort both halves simultaneously using separate threads. 
+5.	Merge the sorted halves. Simple idea: 
+	One thread sorts left half 
+	Another thread sorts right half 
+	Main thread merges results 
+OpenMP automatically manages thread creation and synchronization.  
+4.	What are the advantages of Parallel Merge Sort? 
+Advantages: 
+	Faster execution for large datasets 
+	Utilizes multiple CPU cores efficiently 
+	Reduces overall sorting time 
+	Better performance on multicore systems 
+	Maintains Merge Sort stability 
+	Suitable for high-performance computing applications  
+5.	Difference between Serial Merge Sort and Parallel Merge Sort 
+Serial Merge Sort 	Parallel Merge Sort 
+Uses single processor/thread Uses multiple processors/threads 
+Executes sequentially 	Executes simultaneously 
+Slower for large data 	Faster for large data 
+Less overhead 	More thread management overhead 
+Simpler implementation 	More complex implementation 
+Serial Merge Sort 	Parallel Merge Sort 
+No parallelism 	Uses parallel computing 
+Lower hardware utilization 	Better CPU utilization  
+Q: Why is Parallel Merge Sort faster? 
+Because multiple subarrays are sorted at the same time using multiple cores.  
+Q: Which API is used for Parallel Merge Sort in C/C++? 
+OpenMP.  
+Q: What is the main goal of parallelization? 
+To reduce execution time and improve performance.  
+Q: Is Parallel Merge Sort always faster? 
+No. For small arrays, thread overhead may reduce performance benefits.  
+1.	What is Merge Sort? 
+Merge Sort is a divide-and-conquer sorting algorithm that divides an array into smaller halves, sorts them recursively, and merges them back in sorted order.  
+2.	Why is Merge Sort called a Divide-and-Conquer algorithm? 
+Because it: 
+1.	Divides the problem into smaller subproblems 
+2.	Solves them recursively 
+3.	Combines the results using merge operation  
+3.	What is the time complexity of Merge Sort? 
+T(n)=O(n\log n) 
+Best Case = O(n log n) 
+Average Case = O(n log n) 
+Worst Case = O(n log n)  
+4.	What is the space complexity of Merge Sort? 
+It requires extra memory for merging arrays. 
+Space\ Complexity = O(n)  
+5.	Is Merge Sort stable? 
+Yes. Merge Sort is a stable sorting algorithm because equal elements maintain their original order.  
+6.	What is meant by stable sorting? 
+If two elements have the same value, their relative order remains unchanged after sorting.  
+7.	What is the main advantage of Merge Sort? •
+Efficient for large datasets 
+	Guaranteed O(n log n) performance 
+Stable sorting algorithm  
+8.	What is the disadvantage of Merge Sort? 
+It requires additional memory space for temporary arrays during merging.  
+9.	How does merging work in Merge Sort? 
+Two sorted subarrays are compared element-by-element and merged into a single sorted array.  
+10.	Why is Merge Sort suitable for parallelization? 
+Because different subarrays can be sorted independently at the same time using multiple processors or threads. 
+11.	What is OpenMP? 
+OpenMP is an API used for parallel programming in C, C++, and Fortran on shared-memory systems.  
+12.	What does OpenMP stand for? 
+Open Multi-Processing.  
+13.	What is parallel programming? 
+Executing multiple tasks simultaneously using multiple processors or cores.  
+14.	What is a thread in OpenMP? 
+A thread is a lightweight process that executes part of a program independently.  
+15. What is shared memory architecture? 
+A system where multiple processors access the same memory space.  
+16.	What is the fork-join model in OpenMP? 
+•	Master thread creates worker threads (fork) 
+	Threads execute tasks in parallel 
+	Threads combine back into one thread (join)  
+17.	Which compiler directive is commonly used in OpenMP? 
+#pragma omp parallel  
+18.	Which header file is used in OpenMP? 
+#include <omp.h>  
+19.	How do you compile an OpenMP program? 
+Using GCC: 
+gcc filename.c -fopenmp  
+20.	What is the use of omp_get_wtime()? 
+It measures execution time of the program. 
+ 
+Parallel Merge Sort Viva Questions 
+21.	What is Parallel Merge Sort? 
+Parallel Merge Sort divides sorting work among multiple processors/threads to improve speed.  
+22.	What are the steps in Parallel Merge Sort? 
+1.	Divide array into subarrays 
+2.	Sort subarrays in parallel 
+3.	Merge sorted arrays 
+4.	Produce final sorted output  
+23.	Why is Parallel Merge Sort faster? 
+Because multiple parts of the array are processed simultaneously.  
+24.	What is speedup? 
+Speedup compares sequential and parallel execution times. 
+Speedup=\frac{Sequential\ Time}{Parallel\ Time}  
+25.	What is efficiency in parallel computing? 
+Efficiency measures how effectively processors are utilized. 
+Efficiency=\frac{Speedup}{Number\ of\ Processors}  
+26.	What is scalability? 
+Scalability is the ability of an algorithm to maintain performance as processors or input size increase.  
+27.	Can Parallel Merge Sort always be faster? 
+No. For small inputs, thread creation overhead may reduce performance benefits.  
+28.	What is execution time? 
+The total time required by a program to complete execution.  
+29.	What is recursion in Merge Sort? 
+A function calling itself repeatedly until the base condition is reached.  
+30.	What is the base condition in Merge Sort? 
+When array size becomes 1, it is already sorted.  
+31.	Why is Merge Sort preferred over Bubble Sort? 
+Because Merge Sort is much faster for large datasets. 
+Bubble Sort: 
+O(n^2) 
+Merge Sort: 
+O(n\log n)  
+32.	What type of sorting is Merge Sort? 
+Comparison-based sorting algorithm.  
+33.	Is Merge Sort in-place? 
+No. It requires extra memory.  
+34.	What applications use Merge Sort? 
+•	Large database sorting 
+•	External sorting 
+•	Multithreaded applications 
+•	Distributed systems  
+35.	What happens if the input array is already sorted? 
+Merge Sort still performs O(n log n) operations. 
+36.	Difference between Sequential and Parallel Merge Sort? 
+Sequential 	Parallel 
+Uses single processor Uses multiple processors 
+Slower 	Faster for large data 
+Less overhead 	More thread management  
+37.	What is the role of multicore processors? 
+They allow multiple threads to execute simultaneously.  
+38.	What is synchronization in OpenMP? 
+Coordination between threads to avoid conflicts during execution.  
+39.	What is load balancing? 
+Equal distribution of work among processors.  
+40.	What is the biggest benefit of OpenMP? 
+Easy implementation of parallel programming using compiler directives.  
+ 
+ 
+
+
+
+
+
+
+
+
+
