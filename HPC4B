@@ -1,0 +1,443 @@
+Title: - Write a Program for Matrix Multiplication using CUDA C 
+
+%%writefile matrix_mul.cu
+#include <stdio.h>
+#include <cuda_runtime.h>
+
+#define N 16  
+
+
+__global__ void matrixMulKernel(float *A, float *B, float *C, int n) {
+    int row = blockIdx.y * blockDim.y + threadIdx.y;  
+    int col = blockIdx.x * blockDim.x + threadIdx.x;  
+
+    if (row < n && col < n) {
+        float sum = 0.0f;
+        for (int k = 0; k < n; ++k) {
+            sum += A[row * n + k] * B[k * n + col];
+        }
+        C[row * n + col] = sum;
+    }
+}
+
+
+int main() {
+    int size = N * N * sizeof(float);
+    float *h_A = (float *)malloc(size);
+    float *h_B = (float *)malloc(size);
+    float *h_C = (float *)malloc(size);
+
+    
+    for (int i = 0; i < N * N; i++) {
+        h_A[i] = 1.0f;
+        h_B[i] = 2.0f;
+    }
+
+    float *d_A, *d_B, *d_C;
+    cudaMalloc((void **)&d_A, size);
+    cudaMalloc((void **)&d_B, size);
+    cudaMalloc((void **)&d_C, size);
+
+    cudaMemcpy(d_A, h_A, size, cudaMemcpyHostToDevice);
+    cudaMemcpy(d_B, h_B, size, cudaMemcpyHostToDevice);
+
+    
+    dim3 threadsPerBlock(16, 16);
+    dim3 blocksPerGrid((N + 15) / 16, (N + 15) / 16);
+    matrixMulKernel<<<blocksPerGrid, threadsPerBlock>>>(d_A, d_B, d_C, N);
+
+    cudaMemcpy(h_C, d_C, size, cudaMemcpyDeviceToHost);
+
+    
+    printf("Top-left 4x4 result matrix:\n");
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            printf("%.1f ", h_C[i * N + j]);
+        }
+        printf("\n");
+    }
+
+    cudaFree(d_A);
+    cudaFree(d_B);
+    cudaFree(d_C);
+    free(h_A);
+    free(h_B);
+    free(h_C);
+
+    return 0;
+}
+!nvcc -arch=sm_75 matrix_mul.cu -o matrix_mul
+!./matrix_mul
+
+%%writefile matrix_mul.cu
+•	Jupyter/Colab magic command.
+•	Creates CUDA source file:
+matrix_mul.cu
+
+
+
+Header Files
+#include <stdio.h>
+Used for:
+printf()
+
+#include <cuda_runtime.h>
+Includes CUDA runtime library.
+Provides:
+•	cudaMalloc()
+•	cudaMemcpy()
+•	cudaFree()
+
+Matrix Size
+#define N 16
+Defines matrix dimension:
+16 × 16
+
+CUDA Kernel Function
+__global__ void matrixMulKernel(float *A, float *B, float *C, int n)
+Explanation
+Parameter	Meaning
+A	First matrix
+B	Second matrix
+C	Result matrix
+n	Matrix size
+__global__ means:
+•	Runs on GPU
+•	Called from CPU
+
+Calculate Row Index
+int row = blockIdx.y * blockDim.y + threadIdx.y;
+Computes row handled by current thread.
+
+Calculate Column Index
+int col = blockIdx.x * blockDim.x + threadIdx.x;
+Computes column handled by current thread.
+
+Boundary Check
+if (row < n && col < n)
+Ensures thread accesses valid matrix elements.
+
+Initialize Sum
+float sum = 0.0f;
+Stores multiplication result for one matrix cell.
+
+Matrix Multiplication Loop
+for (int k = 0; k < n; ++k)
+Performs multiplication across row and column.
+
+Matrix Multiplication Formula
+sum += A[row * n + k] * B[k * n + col];
+Formula used:
+C[i][j]=\sum_{k=0}^{n-1} A[i][k] \times B[k][j]
+
+Store Result
+C[row * n + col] = sum;
+Stores computed value into result matrix.
+
+Main Function
+int main()
+Program execution starts here.
+
+Memory Size Calculation
+int size = N * N * sizeof(float);
+Calculates total bytes needed for matrix.
+Example:
+16 × 16 × 4 bytes
+
+Host Memory Allocation
+float *h_A = (float *)malloc(size);
+Allocates CPU memory for matrix A.
+
+float *h_B = (float *)malloc(size);
+Allocates CPU memory for matrix B.
+
+float *h_C = (float *)malloc(size);
+Allocates CPU memory for result matrix.
+
+Initialize Matrices
+for (int i = 0; i < N * N; i++)
+Loops through all matrix elements.
+
+Assign Values
+h_A[i] = 1.0f;
+All elements of A become:
+1
+
+h_B[i] = 2.0f;
+All elements of B become:
+2
+
+Device Memory Pointers
+float *d_A, *d_B, *d_C;
+Pointers for GPU memory.
+
+Allocate GPU Memory
+cudaMalloc((void **)&d_A, size);
+Allocates GPU memory for matrix A.
+
+cudaMalloc((void **)&d_B, size);
+Allocates GPU memory for matrix B.
+
+cudaMalloc((void **)&d_C, size);
+Allocates GPU memory for result matrix.
+
+Copy CPU → GPU
+cudaMemcpy(d_A, h_A, size, cudaMemcpyHostToDevice);
+Transfers matrix A to GPU.
+
+cudaMemcpy(d_B, h_B, size, cudaMemcpyHostToDevice);
+Transfers matrix B to GPU.
+
+Thread Block Dimensions
+dim3 threadsPerBlock(16, 16);
+Creates:
+16 × 16 = 256 threads
+per block.
+
+Grid Dimensions
+dim3 blocksPerGrid((N + 15) / 16, (N + 15) / 16);
+Calculates required number of blocks.
+
+Launch CUDA Kernel
+matrixMulKernel<<<blocksPerGrid, threadsPerBlock>>>(d_A, d_B, d_C, N);
+Launches matrix multiplication on GPU.
+
+Copy GPU → CPU
+cudaMemcpy(h_C, d_C, size, cudaMemcpyDeviceToHost);
+Transfers result matrix to CPU.
+
+Print Result
+printf("Top-left 4x4 result matrix:\n");
+Displays first 4×4 section of result matrix.
+
+Print Matrix Elements
+printf("%.1f ", h_C[i * N + j]);
+Prints matrix values.
+
+Why Output is 32?
+Each row contains:
+16 multiplications
+Each multiplication:
+1 × 2 = 2
+Total:
+16 × 2 = 32
+
+Free GPU Memory
+cudaFree(d_A);
+Releases GPU memory.
+
+Free CPU Memory
+free(h_A);
+Releases host memory.
+
+End Program
+return 0;
+Terminates successfully.
+
+Compile CUDA Program
+!nvcc -arch=sm_75 matrix_mul.cu -o matrix_mul
+Explanation
+Part	Meaning
+nvcc	CUDA compiler
+-arch=sm_75	GPU architecture
+matrix_mul.cu	Source file
+-o	Output executable
+
+Run Program
+!./matrix_mul
+Executes CUDA program.
+
+1. What is CUDA?
+CUDA is NVIDIA’s platform for GPU parallel programming
+2. What is matrix multiplication?
+Multiplying rows of first matrix with columns of second matrix.
+3. What is kernel function?
+GPU function executed by many threads simultaneously.
+4. What does __global__ mean?
+Function runs on GPU and called from CPU.
+5. What is thread in CUDA?
+Smallest execution unit.
+6. What is block in CUDA?
+Group of threads.
+7. What is grid in CUDA?
+Collection of blocks.
+8. Why 2D thread indexing is used?
+Matrices are two-dimensional.
+9. Explain row calculation.
+blockIdx.y * blockDim.y + threadIdx.y
+Finds matrix row processed by thread.
+10. Explain column calculation.
+blockIdx.x * blockDim.x + threadIdx.x
+Finds matrix column processed by thread.
+11. Why boundary check is necessary?
+if(row<n && col<n)
+Prevents invalid memory access.
+12. What is dim3?
+CUDA datatype for 3D dimensions
+13. Why use 16×16 threads?
+Efficient GPU thread organization
+14. What is host memory?
+CPU memory.
+15. What is device memory?
+GPU memory.
+16. Why cudaMemcpy() is required?
+CPU and GPU have separate memory spaces
+17. Difference between CPU and GPU?
+CPU	GPU
+Sequential	Parallel
+Few cores	Thousands of cores
+
+18. What is time complexity of matrix multiplication?
+O(n^3)
+19. Why GPU is faster for matrix multiplication?
+Many threads compute matrix elements simultaneously
+20. What is data parallelism?
+Same operation applied to multiple data elements simultaneously
+21. Why each thread computes one matrix element?
+Enables parallel execution.
+22. What is warp in CUDA?
+Group of 32 threads executed together
+23. What is shared memory in CUDA?
+Fast on-chip memory shared among threads in block.
+24. Can this program be optimized further?
+Yes.
+Using:
+	Shared memory
+	Tiling technique
+25. Why free memory after execution?
+To avoid memory leaks.
+
+
+  
+1.	What are the advantages of using CUDA to perform matrix multiplication compared to using a CPU? 
+Advantages of CUDA over CPU: 
+CUDA GPU 	CPU 
+Massive parallel processing Limited parallelism 
+Thousands of cores 	Few cores 
+Faster for large matrices 	Slower for large computations 
+High throughput 	Lower throughput 
+Main Advantages: 
+•	Faster execution time 
+•	Efficient parallel computation 
+•	Better utilization of hardware resources 
+•	Suitable for large-scale scientific and AI applications 
+In CUDA, many matrix elements are computed simultaneously by GPU threads.  
+2.	How do you handle matrices that are too large to fit in GPU memory in CUDA matrix multiplication? 
+Large matrices are handled using: 
+1.	Matrix Partitioning (Tiling) 
+The matrix is divided into smaller blocks or tiles. 
+Each tile is: 
+•	Copied to GPU memory 
+•	Processed separately 
+•	Combined later  
+2.	Streaming
+Data is transferred and processed in chunks using CUDA streams.  
+3.	Unified Memory 
+CUDA Unified Memory allows automatic memory management between CPU and GPU.  
+4.	Multi-GPU Processing 
+Very large matrices can be distributed across multiple GPUs.  
+3. How do you optimize the performance of the CUDA program for matrix multiplication? 
+Optimization Techniques: 
+1.	Use Shared Memory 
+Shared memory is faster than global memory and reduces memory access time.  
+2.	Use Proper Block and Thread Sizes 
+Efficient thread organization improves GPU utilization. 
+Example: 
+dim3 blockSize(16,16);  
+3.	Memory Coalescing 
+Access consecutive memory locations to improve bandwidth.  
+4.	Reduce Memory Transfers 
+Minimize copying data between CPU and GPU.  
+5.	Use Tiling Technique 
+Divide matrices into smaller tiles for efficient computation.  
+6.	Avoid Thread Divergence 
+Threads in the same warp should execute similar instructions.  
+7.	Optimize Kernel Code 
+Reduce unnecessary calculations and synchronization.  
+4. How do you ensure correctness of the CUDA program for matrix multiplication and verify the results? 
+Methods to Verify Correctness: 
+1. Compare with CPU Result 
+Run matrix multiplication on CPU and compare with CUDA output.  
+5. Validate Output Values 
+Check whether output dimensions and values are correct.  
+Q: Why is CUDA faster than CPU for matrix multiplication? 
+Because thousands of GPU threads compute matrix elements simultaneously.  
+Q: What is tiling in CUDA? 
+Dividing matrices into smaller blocks for efficient GPU processing.  
+Q: Which memory is faster in CUDA? 
+Shared memory.  
+Q: How do you verify CUDA results? 
+Compare GPU output with CPU output.  
+Q: What function detects CUDA runtime errors? 
+cudaGetLastError() 
+6.	Which keyword is used to define a CUDA kernel? __global__  
+7.	What is the role of cudaMalloc()? 
+cudaMalloc() allocates memory on the GPU device. 
+Example: 
+cudaMalloc((void**)&d_A, size);  
+8.	What is the purpose of cudaMemcpy()
+cudaMemcpy() transfers data between host memory and device memory.  
+9.	What is host memory and device memory? 
+Host Memory 	Device Memory 
+CPU memory 	GPU memory 
+Managed by CPU Managed by GPU  
+10.	What is the purpose of cudaDeviceSynchronize()? 
+It ensures that all GPU kernel executions are completed before continuing execution.  
+11.	What is a thread in CUDA? 
+A thread is the smallest execution unit that performs computation for one data element.  
+12. What is a block in CUDA? 
+A block is a group of threads that execute together.  
+13. What is a grid in CUDA? 
+A grid is a collection of blocks.  
+14.	How is a CUDA kernel launched? 
+Using: 
+kernel<<<blocks, threads>>>(); Example: 
+matrixMul<<<gridSize, blockSize>>>(A, B, C);  
+15.	Why does CUDA improve performance? 
+Because thousands of GPU threads execute computations simultaneously.  
+16.	What compiler is used for CUDA programs? 
+nvcc  
+17.	How do you compile a CUDA program? 
+nvcc program.cu -o program  
+18.	How do you run a CUDA program? 
+./program  
+19.	What are the steps involved in CUDA matrix multiplication? 
+1.	Initialize matrices 
+2.	Allocate memory 
+3.	Copy data to GPU 
+4.	Launch kernel 
+5.	Synchronize device 
+6.	Copy result back 
+7.	Free memory 
+20.	Why is memory transfer important in CUDA? 
+Data must be copied between CPU and GPU because they use separate memory spaces.  
+21.	What is parallel computing? 
+Executing multiple computations simultaneously. 
+22.	What are the advantages of CUDA matrix multiplication? 
+Advantages: 
+	Faster execution 
+	Massive parallelism 
+	Efficient for large matrices 
+	Better GPU utilization  
+23.	What are the limitations of CUDA? 
+Limitations: 
+	Requires NVIDIA GPU 
+	Memory transfer overhead 
+	Complex programming compared to CPU  
+24.	What is thread parallelism in CUDA? 
+Different threads execute different computations simultaneously.  
+25.	What happens if matrix size is large? 
+CUDA distributes computations among many GPU threads for faster execution.  
+26.	Why do we free device memory?
+To avoid memory leaks on the GPU. 
+Function used: cudaFree()  
+27.	What is the role of shared memory in CUDA?
+Shared memory is faster than global memory and improves performance. 
+28.	What are the applications of CUDA? 
+	Machine Learning 
+	Deep Learning 
+	Image Processing 
+	Scientific Simulations 
+	Video Processing  
+29.	What is the conclusion of this experiment? 
+We implemented matrix multiplication using CUDA and achieved parallel execution using GPU threads to improve performance. 
