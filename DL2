@@ -1,0 +1,624 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler, LabelBinarizer
+import tensorflow as tf
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense
+from tensorflow.keras.optimizers import Adam
+url = "https://archive.ics.uci.edu/ml/machine-learning-databases/letter-recognition/letter-recognition.data"
+col_names = ["letter"] + [f"feat_{i}" for i in range(16)]
+data = pd.read_csv(url, header=None, names=col_names)
+X = data.drop("letter", axis=1).values
+y = data["letter"].values
+encoder = LabelBinarizer()
+Y = encoder.fit_transform(y)
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2, random_state=42)
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+model = Sequential([
+    Dense(128, activation='relu', input_shape=(16,)),
+    Dense(64, activation='relu'),
+    Dense(26, activation='softmax')
+])
+model.compile(
+    optimizer=Adam(learning_rate=0.001),
+    loss="categorical_crossentropy",
+    metrics=["accuracy"]
+)
+history = model.fit(X_train, Y_train, epochs=25, batch_size=32, validation_split=0.1)
+
+test_loss, test_acc = model.evaluate(X_test, Y_test)
+print(f"Test Accuracy: {test_acc:.4f}")
+import matplotlib.pyplot as plt
+
+plt.plot(history.history['accuracy'])
+plt.plot(history.history['val_accuracy'])
+
+plt.title('Model Accuracy')
+plt.ylabel('Accuracy')
+plt.xlabel('Epoch')
+plt.legend(['Train', 'Validation'])
+
+plt.show()
+plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
+
+plt.title('Model Loss')
+plt.ylabel('Loss')
+plt.xlabel('Epoch')
+plt.legend(['Train', 'Validation'])
+
+plt.show()
+
+
+
+--------------------------------------------------------------
+import pandas as pd
+Imports pandas library for handling datasets and tables.
+from sklearn.model_selection import train_test_split
+Imports function to split data into training and testing sets.
+from sklearn.preprocessing import StandardScaler, LabelBinarizer
+StandardScaler → normalizes feature values.
+LabelBinarizer → converts letter labels into binary form.
+import tensorflow as tf
+Imports TensorFlow library.
+from tensorflow.keras.models import Sequential
+Imports Sequential model for creating neural networks layer by layer.
+from tensorflow.keras.layers import Dense
+Imports Dense (fully connected) layer.
+from tensorflow.keras.optimizers import Adam
+Imports Adam optimizer for training.
+
+url = "https://archive.ics.uci.edu/ml/machine-learning-databases/letter-recognition/letter-recognition.data"
+Stores dataset URL.
+col_names = ["letter"] + [f"feat_{i}" for i in range(16)]
+Creates column names:
+letter → output label
+feat_0 to feat_15 → input features
+data = pd.read_csv(url, header=None, names=col_names)
+Loads dataset into dataframe.
+
+X = data.drop("letter", axis=1).values
+Stores input features in X.
+y = data["letter"].values
+Stores target letters in y.
+
+encoder = LabelBinarizer()
+Creates encoder object.
+Y = encoder.fit_transform(y)
+Converts letters A-Z into binary encoded format.
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2, random_state=42)
+Splits data:
+80% training
+20% testing
+
+scaler = StandardScaler()
+Creates scaler object.
+X_train = scaler.fit_transform(X_train)
+Normalizes training data.
+X_test = scaler.transform(X_test)
+Normalizes testing data.
+
+model = Sequential([
+Starts neural network model.
+Dense(128, activation='relu', input_shape=(16,)),
+First hidden layer:
+128 neurons
+ReLU activation
+input has 16 features
+Dense(64, activation='relu'),
+Second hidden layer:
+64 neurons
+ReLU activation
+Dense(26, activation='softmax')
+Output layer:
+26 neurons for A-Z classes
+Softmax gives probabilities
+])
+Ends model definition.
+
+model.compile(
+Configures model training.
+optimizer=Adam(learning_rate=0.001),
+Uses Adam optimizer.
+loss="categorical_crossentropy",
+Uses categorical crossentropy loss for multi-class classification.
+metrics=["accuracy"]
+Tracks accuracy.
+)
+Ends compile step.
+
+history = model.fit(X_train, Y_train, epochs=25, batch_size=32, validation_split=0.1)
+Trains model:
+25 epochs
+batch size = 32
+10% validation data
+Stores training history in history.
+
+test_loss, test_acc = model.evaluate(X_test, Y_test)
+Evaluates model on test data.
+print(f"Test Accuracy: {test_acc:.4f}")
+Prints test accuracy.
+
+Accuracy Graph
+import matplotlib.pyplot as plt
+Imports Matplotlib plotting library.
+plt.plot(history.history['accuracy'])
+Plots training accuracy.
+plt.plot(history.history['val_accuracy'])
+Plots validation accuracy.
+plt.title('Model Accuracy')
+Adds graph title.
+plt.ylabel('Accuracy')
+Labels Y-axis.
+plt.xlabel('Epoch')
+Labels X-axis.
+plt.legend(['Train', 'Validation'])
+Shows graph labels.
+plt.show()
+Displays accuracy graph.
+
+Loss Graph
+plt.plot(history.history['loss'])
+Plots training loss.
+plt.plot(history.history['val_loss'])
+Plots validation loss.
+plt.title('Model Loss')
+Adds graph title.
+plt.ylabel('Loss')
+Labels Y-axis.
+plt.xlabel('Epoch')
+Labels X-axis.
+plt.legend(['Train', 'Validation'])
+Shows graph labels.
+plt.show()
+Displays loss graph.
+-------------------------------------------------
+
+
+
+
+
+Overall Workflow
+Step-by-Step Flow
+Import libraries
+Load dataset
+Separate input and output
+Encode labels
+Split dataset
+Scale features
+Build DNN model
+Compile model
+Train model
+Evaluate accuracy
+What type of problem is this?
+t is a multi-class classification problem because the model predicts one alphabet out of 26 classes.
+Why is Softmax used?
+Softmax converts outputs into probability values for multi-class classification.
+Why are 26 neurons used in output layer?
+Because there are 26 English alphabets (A–Z).
+What is One-Hot Encoding?
+It converts categorical labels into binary vectors.
+Example:
+A	[1 0 0 0...]
+
+Why use categorical_crossentropy?
+Because the problem has multiple output classes.
+Why use ReLU activation?
+ReLU improves training speed and solves vanishing gradient problem.
+What is validation_split?
+It reserves part of training data for validation during training.
+
+Difference between Classification and Regression?
+Classification	Regression
+Predicts categories	Predicts continuous values
+Example: A-Z	Example: House price
+
+What is Accuracy?
+Answer:
+Accuracy measures percentage of correctly predicted samples.
+Formula:
+Accuracy = \frac{Correct\ Predictions}{Total\ Predictions
+Why is feature scaling important?
+Scaling improves convergence speed and neural network performance.
+
+What is the aim of this program?
+The aim is to recognize English alphabets (A–Z) using a Deep Neural Network (DNN).
+What type of Machine Learning problem is this?
+It is a multi-class classification problem because the model predicts one class among 26 alphabets.
+What dataset is used?
+The Letter Recognition dataset from the University of California, Irvine Machine Learning Repository is used.
+How many classes are present in the dataset?
+26 classes (A to Z).
+How many input features are used?
+16 input features.
+Why is Pandas used?
+Pandas is used to load and manipulate tabular data using DataFrames.
+Why is TensorFlow used?
+TensorFlow is used to build and train deep learning models.
+What is Keras?
+Keras is a high-level API in TensorFlow used for building neural networks easily.
+Why is NumPy important in Deep Learning?
+NumPy provides fast numerical operations and array handling.
+Why is pd.read_csv() used?
+It reads dataset from the URL into a DataFrame.
+Why are custom column names assigned?
+To make the dataset more readable and understandable.
+What does axis=1 mean in drop()?
+axis=1 means column operation.
+What is preprocessing?
+Preprocessing prepares raw data for training by scaling and encoding.
+Why is LabelBinarizer used?
+It converts categorical alphabet labels into binary vectors using one-hot encoding.
+What is One-Hot Encoding?
+It converts categorical values into binary vectors.
+Example:
+A	[1 0 0 0 ...]
+
+Why is feature scaling needed
+Feature scaling ensures all features are in similar range, improving training speed and accuracy.
+What is StandardScaler?
+StandardScaler standardizes data using mean and standard deviation.
+Formula:
+genui{"math_block_widget_always_prefetch_v2":{"content":"z = \frac{x-\mu}{\sigma}"}}
+Why do we use fit_transform() on training data
+It computes scaling parameters and transforms training data.
+Why only transform() on test data?
+To apply the same scaling learned from training data.
+Why do we split dataset?
+To train model n one dataset and test on unseen dataset.
+What is the meaning of test_size=0.2
+20% data is used for testing and 80% for training.
+What is random_state=42?
+It ensures reproducible random splitting.
+What is a Neural Network?
+A Neural Network is a computational model inspired by the human brain used to learn patterns from data.
+What is Deep Learning?
+
+Deep Learning is a subset of Machine Learning using multi-layer neural networks.
+What is Sequential Model?
+Answer:
+Sequential model stacks layers one after another linearly.
+What is a Dense Layer?
+Answer:
+A Dense layer is a fully connected neural network layer.
+Why are hidden layers used?
+Answer:
+Hidden layers learn complex patterns and relationships in data.
+Why is ReLU activation used?
+ReLU improves learning speed and prevents vanishing gradient problem.
+Formula:
+f(x)=\max(0,x)
+What is Softmax activation?
+Softmax converts outputs into probabilities for multi-class classification.
+Formula:
+\sigma(z_i)=\frac{e^{z_i}}{\sum_{j=1}^{K} e^{z_j}}
+Why is Softmax used in output layer?
+Because the model predicts one class among 26 classes.
+Why are 26 neurons used in output layer?
+Because there are 26 English alphabets.
+What are weights and biases?
+Weights control importance of inputs.
+Bias shifts activation output.
+What is model compilation?
+Answer:
+Compilation configures optimizer, loss function, and metrics.
+What is Adam optimizer?
+Adam is an adaptive optimizer combining RMSprop and Momentum for faster convergence.
+Why is Adam optimizer used?
+Because it trains faster and works efficiently on deep neural network
+What is learning rate?
+Learning rate controls how much weights are updated during training.
+What is loss function?
+Loss function measures prediction error.
+Why use categorical_crossentropy?
+Because it is suitable for multi-class classification problems.
+Formula:
+L=-\sum_{i=1}^{C} y_i \log(\hat{y_i})
+What is accuracy?
+Accuracy measures percentage of correctly predicted samples.
+Formula:
+Accuracy = \frac{Correct\ Predictions}{Total\ Predictions}
+What is epoch?
+One complete pass of training data through neural network.
+What is batch size?
+Number of samples processed before updating weights.
+Why batch size = 32?
+It balances memory usage and training speed efficiently.
+What is validation_split=0.1?
+10% of training data is used for validation during training.
+What is validation data?
+Validation data monitors model performance during training.
+What is overfitting?
+When model performs well on training data but poorly on new data.
+How can overfitting be reduced?
+Dropout
+Regularization
+Early stopping
+More data
+What does model.evaluate() do?
+It calculates model performance on test data.
+What is test accuracy?
+Percentage of correctly classified test samples.
+Why higher accuracy is better?
+Higher accuracy means better predictions.
+Difference between Classification and Regression?
+Classification	Regression
+Predicts classes	Predicts continuous values
+Example: A-Z	Example: House price
+
+Difference between Binary and Multi-class Classification?
+Binary	Multi-class
+Two classes	More than two classes
+Yes/No	A-Z
+
+What is Forward Propagation?
+Process where input moves through layers to generate output.
+What is Backpropagation?
+Process of updating weights using error gradients.
+What is Gradient Descent?:
+Optimization technique used to minimize loss.
+Explain complete workflow of your project.
+Answer:
+Import required libraries
+Load Letter Recognition dataset
+Separate features and labels
+Encode labels using one-hot encoding
+Split data into training and testing sets
+Scale features using StandardScaler
+Build DNN using Sequential model
+Add Dense hidden layers with ReLU activation
+Add output layer with Softmax activation
+Compile model using Adam optimizer and categorical crossentropy loss
+Train model using fit()
+Evaluate model accuracy using test dataset
+Explain types of loss function with example
+A loss function measures how much error exists between the predicted output and the actual output.
+The goal of training is to minimize the loss.
+Types of Loss Functions
+Regression Loss Functions
+Used when output is a continuous numerical value.
+Mean Squared Error (MSE)
+Used in Linear Regression.
+MSE = \frac{1}{n}\sum_{i=1}^{n}(y_i-\hat{y}_i)^2
+Squares the error difference.
+Large errors get higher penalty.
+Example:
+Actual Price = 20
+Predicted Price = 18
+Error = (20 - 18 = 2)
+Squared Error = (2^2 = 4)
+Root Mean Squared Error (RMSE)
+RMSE = \sqrt{\frac{1}{n}\sum_{i=1}^{n}(y_i-\hat{y}_i)^2}
+Square root of MSE.
+Easier to interpret because unit remains same as output
+Mean Absolute Error (MAE)
+MAE = \frac{1}{n}\sum_{i=1}^{n}|y_i-\hat{y}_i|
+Uses absolute difference.
+Less sensitive to outliers.
+Example:
+Actual = 10
+Predicted = 7
+Absolute Error = |10 − 7| = 3
+Classification Loss Functions
+Used when output belongs to categories/classes.
+Binary Cross Entropy
+Used for binary classification problems.
+L=-\frac{1}{N}\sum_{i=1}^{N}[y_i\log(\hat{y}_i)+(1-y_i)\log(1-\hat{y}_i)]
+Example:
+Positive/Negative sentiment analysis
+Spam email detection
+Categorical Cross Entropy
+Used for multiclass classification.
+Example:
+Classifying images into:
+Cat
+Dog
+Bird
+What are L1 and L2 loss functions?
+L1 Loss Function (Least Absolute Error)
+L1 loss calculates the absolute difference between actual and predicted values.
+L1 = \sum |y-\hat{y}|
+Characteristics:
+Less sensitive to outliers
+Produces sparse models
+Used in Lasso Regression
+Example:
+Actual = 8
+Predicted = 5
+L1 Loss = |8 − 5| = 3
+L2 Loss Function (Least Squared Error)
+L2 loss calculates squared difference between actual and predicted values.
+L2 = \sum (y-\hat{y})^2
+Characteristics:
+Penalizes large errors heavily
+Sensitive to outliers
+Used in Ridge Regression
+Example:
+Actual = 8
+Predicted = 5
+L2 Loss = (8 − 5)² = 9
+Difference Between L1 and L2 Loss
+Feature	L1 Loss	L2 Loss
+Formula	Absolute Error	Squared Error
+Outlier Sensitivity	Low	High
+Sparsity	Yes	No
+Regression Type	Lasso	Ridge
+
+What is Deep Networking?
+Deep Networking or Deep Neural Network (DNN) is an artificial neural network having multiple hidden layers between input and output layers.
+Structure:
+Input Layer → Hidden Layers → Output Layer
+Features of Deep Networking
+Learns complex patterns automatically
+Handles large datasets
+Performs feature extraction automatically
+Used in AI applications
+Applications of Deep Networking
+Image Recognition
+Speech Recognition
+Sentiment Analysis
+Self-driving Cars
+Medical Diagnosis
+Advantages
+High accuracy
+Learns nonlinear relationships
+Automatic feature learning
+Disadvantages
+Requires large data
+High computational cost
+Longer training time
+What is Deep Learning?
+Deep Learning is a subset of machine learning that uses neural networks with multiple hidden layers to learn patterns from data.
+What is a Deep Neural Network (DNN)?
+A Deep Neural Network is an artificial neural network containing multiple hidden layers between input and output layers.
+What is Binary Classification?
+Binary classification is a task where the model predicts one of two possible classes.
+Example:
+Positive review
+Negative review
+4) What is Sentiment Analysis?
+Sentimnt analysis identifies whether text expresses positive or negative emotions/opinions.
+5) What is the IMDB Dataset?
+The IMDB dataset contains movie reviews labeled as:
+Positive (1)
+Negative (0)
+It is commonly used for sentiment classification tasks.
+6) How many classes are present in this problem?
+Two classes:
+Positive
+Negative
+7) Why is this called supervised learning?
+Because the dataset contains both input data and correct output labels.
+8) What type of data is used in this experiment?
+Text data (movie reviews).
+9) What is preprocessing in NLP?
+Preprocessing converts raw text into machine-readable numerical format.
+10) Why do we convert words into numbers?
+Neural networks cannot understand text directly, so words must be represented numerically.
+11) What is word indexing?
+Assigning unique integer values to words.
+Example:
+good → 5
+movie → 12
+12) What is padding?
+Padding adds zeros to make all sequences equal length.
+13) Why is padding required?
+Neural networks require inputs of fixed size.
+14) What is vocabulary size?
+The number of unique words considered in the dataset.
+15) What is sequence length?
+The number of words/tokens in a review after preprocessing.
+16) What is the architecture used in this model?
+Typical architecture:
+Input Layer
+Embedding Layer
+Dense Hidden Layers
+Output Layer
+17) What is an Embedding Layer?
+Embedding layer converts word indices into dense vector representations.
+18) Why are embeddings useful?
+They capture semantic meaning and relationships between words.
+19) What activation function is used in hidden layers?
+ReLU activation function.
+20) What activation function is used in output layer?
+Sigmoid activation function.
+\sigma(x)=\frac{1}{1+e^{-x}
+21) Why is sigmoid used in binary classification?
+Because sigmoid outputs values between 0 and 1 representing probability.
+22) What does output value 0.8 mean?
+The model predicts 80% probability that the review is positive.
+23) What is a loss function?
+Loss function measures prediction error.
+24) Which loss function is used here?
+Binary Cross Entropy.
+L=-\frac{1}{N}\sum_{i=1}^{N}[y_i\log(\hat{y}_i)+(1-y_i)\log(1-\hat{y}_i)]
+25) Why is Binary Cross Entropy used?
+Because the problem has only two output classes.
+26) What optimizer is commonly used?
+Adam optimizer.
+27) What is backpropagation?
+Process of updating weights based on prediction error.
+28) What is an epoch?
+One complete pass of training data through the network.
+29) What is batch size?
+Number of samples processed before updating weights.
+30) What is validation data?
+A separate dataset used to evaluate model performance during training
+31) What is accuracy?
+Accuracy is the percentage of correctly predicted outputs.
+32) What does higher accuracy indicate?
+Better prediction performance.
+33) What is overfitting?
+When the model performs well on training data but poorly on unseen data
+34) How can overfitting be reduced?
+Dropout
+Regularization
+Early stopping
+More training data
+35) What is dropout?
+Dropout randomly disables neurons during training to prevent overfitting.
+36) What is underfitting?
+When the model fails to learn patterns properly.
+37) What does the training graph show?
+It shows:
+Training accuracy/loss
+Validation accuracy/loss
+across epochs
+38) What indicates overfitting in the graph?
+Training accuracy increases while validation accuracy decreases.
+39) What indicates good learning?
+Both training and validation accuracy improve together
+40) Which libraries are used?
+NumPy
+TensorFlow
+Keras
+Matplotlib
+41) What is TensorFlow?
+TensorFlow is an open-source deep learning framework.
+42) What is Keras?
+Keras is a high-level API for building neural networks.
+43) What does model.fit() do?
+It trains the neural network.
+44) What does model.evaluate() do?
+It evaluates model performance on test data.
+45) What does model.predict() do?
+It predicts outputs for new input data.
+46) Difference between Machine Learning and Deep Learning?
+Machine Learning often needs manual feature extraction.
+Deep Learning automatically learns features.
+47) Why use DNN for sentiment analysis?
+Because DNN can learn complex language patterns and semantic meanings.
+48) What is NLP?
+Natural Language Processing is a field that enables computers to understand human language.
+49) What are advantages of Deep Learning in NLP?
+Automatic feature extraction
+Better accuracy
+Handles large datasets
+Learns complex pattern
+50) What is the conclusion of this experiment?
+Deep Neural Networks can successfully classify movie reviews as positive or negative with high accuracy.
+What is binary classification?
+Classification into two classes.
+Which dataset is used?
+IMDB Movie Review Dataset.
+Which activation is used in output layer?
+Sigmoid.
+Which loss function is used?
+Binary Cross Entropy.
+Why use padding?
+To make input sequences equal length.
+What is embedding?
+Dense vector representation of words.
+What is overfitting?
+Good training performance but poor testing performance.
+What optimizer is used?
+Adam optimizer.
+What does sigmoid output?
+Probability between 0 and 1.
+What is sentiment analysis?
+Detecting positive or negative opinion from text.
+
+
+
