@@ -1,0 +1,551 @@
+Title: - Write a CUDA Program for Addition of two large vectors. 
+%%writefile vector_add.cu
+#include <stdio.h>
+#include <cuda_runtime.h>
+
+__global__ void vectorAdd(float *a, float *b, float *c, int n) {
+    int i = blockIdx.x * blockDim.x + threadIdx.x;
+    if (i < n) {
+        c[i] = a[i] + b[i];
+    }
+}
+
+#define CHECK_CUDA_ERROR(call) \
+    do { \
+        cudaError_t err = call; \
+        if (err != cudaSuccess) { \
+            fprintf(stderr, "CUDA error in %s at line %d: %s\n", __FILE__, __LINE__, cudaGetErrorString(err)); \
+            return 1; \
+        } \
+    } while(0)
+
+int main() {
+    int n = 1 << 20;
+    size_t size = n * sizeof(float);
+
+
+    float *h_a = (float *)malloc(size);
+    float *h_b = (float *)malloc(size);
+    float *h_c = (float *)malloc(size);
+
+
+    for (int i = 0; i < n; i++) {
+        h_a[i] = float(i);
+        h_b[i] = float(i * 2);
+    }
+
+
+    float *d_a, *d_b, *d_c;
+    CHECK_CUDA_ERROR(cudaMalloc((void **)&d_a, size));
+    CHECK_CUDA_ERROR(cudaMalloc((void **)&d_b, size));
+    CHECK_CUDA_ERROR(cudaMalloc((void **)&d_c, size));
+
+
+    CHECK_CUDA_ERROR(cudaMemcpy(d_a, h_a, size, cudaMemcpyHostToDevice));
+    CHECK_CUDA_ERROR(cudaMemcpy(d_b, h_b, size, cudaMemcpyHostToDevice));
+
+
+    int threadsPerBlock = 256;
+    int blocksPerGrid = (n + threadsPerBlock - 1) / threadsPerBlock;
+    vectorAdd<<<blocksPerGrid, threadsPerBlock>>>(d_a, d_b, d_c, n);
+
+
+    CHECK_CUDA_ERROR(cudaGetLastError());
+
+
+    CHECK_CUDA_ERROR(cudaMemcpy(h_c, d_c, size, cudaMemcpyDeviceToHost));
+
+
+    for (int i = 0; i < 9; i++) {
+        printf("c[%d] = %f\n", i, h_c[i]);
+    }
+
+
+    cudaFree(d_a);
+    cudaFree(d_b);
+    cudaFree(d_c);
+    free(h_a);
+    free(h_b);
+    free(h_c);
+
+    return 0;
+}
+!nvcc -arch=sm_75 vector_add.cu -o vector_add
+!./vector_add
+
+
+
+%%writefile vector_add.cu
+	Jupyter/Google Colab magic command.
+	Creates a file named:
+vector_add.cu
+	Stores CUDA C++ code inside it.
+Header Files
+#include <stdio.h>
+	Standard input/output library.
+	Used for:
+printf()
+
+#include <cuda_runtime.h>
+	Includes CUDA runtime library.
+	Provides CUDA functions like:
+	cudaMalloc()
+	cudaMemcpy()
+cudaFree()
+
+CUDA Kernel Function
+__global__ void vectorAdd(float *a, float *b, float *c, int n)
+Explanation
+Part	Meaning
+__global__	Function runs on GPU
+void	No return value
+float *a	Input vector A
+float *b	Input vector B
+float *c	Output vector
+int n	Vector size
+This is called:
+CUDA Kernel
+Calculate Thread Index
+int i = blockIdx.x * blockDim.x + threadIdx.x;
+Explanation
+Computes unique index for each thread.
+Terms
+Variable	Meaning
+blockIdx.x	Block number
+blockDim.x	Threads per block
+threadIdx.x	Thread number inside block
+
+Boundary Check
+if (i < n)
+•	Ensures thread accesses valid array index.
+Vector Addition
+c[i] = a[i] + b[i];
+Each thread performs:
+c[i] = a[i] + b[i]
+Example:
+5 + 10 = 15
+CUDA Error Checking Macro
+#define CHECK_CUDA_ERROR(call)
+Defines macro for checking CUDA errors.
+Execute CUDA Function
+cudaError_t err = call;
+Stores CUDA error status.
+Check Error Condition
+if (err != cudaSuccess)
+Checks whether CUDA operation failed.
+Print Error Message
+fprintf(stderr, "CUDA error...");
+Displays CUDA error details
+Main Function
+int main()
+Program execution starts here.
+Vector Size
+int n = 1 << 20;
+Meaning
+2^20 = 1048576
+Vector contains:
+1,048,576 element
+Calculate Memory Size
+size_t size = n * sizeof(float);
+Computes total memory needed.
+Example:
+1048576 × 4 byte
+Host Memory Allocation
+float *h_a = (float *)malloc(size);
+Allocates memory on CPU for vector A.
+float *h_b = (float *)malloc(size);
+Allocates memory for vector B.
+float *h_c = (float *)malloc(size);
+Allocates memory for result vector
+Initialize Input Vectors
+for (int i = 0; i < n; i++)
+Loops through all elements
+Assign Values
+h_a[i] = float(i);
+Stores:
+0,1,2,3,...
+h_b[i] = float(i * 2);
+Stores:
+0,2,4,6,...
+Device Pointers
+float *d_a, *d_b, *d_c;
+Pointers for GPU memory
+Allocate GPU Memory
+cudaMalloc((void **)&d_a, size);
+Allocates memory on GPU for vector A
+cudaMalloc((void **)&d_b, size);
+Allocates GPU memory for vector B.
+cudaMalloc((void **)&d_c, size);
+Allocates GPU memory for output vector.
+Copy Data CPU → GPU
+cudaMemcpy(d_a, h_a, size, cudaMemcpyHostToDevice);
+Copies vector A from CPU to GPU.
+cudaMemcpy(d_b, h_b, size, cudaMemcpyHostToDevice);
+Copies vector B to GPU.
+Threads Per Block
+int threadsPerBlock = 256;
+Each block contains:
+256 threads
+Calculate Number of Blocks
+int blocksPerGrid = (n + threadsPerBlock - 1) / threadsPerBlock;
+Computes required blocks.
+Formula ensures:
+	Enough threads for all elements.
+Launch CUDA Kernel
+vectorAdd<<<blocksPerGrid, threadsPerBlock>>>(d_a, d_b, d_c, n);
+CUDA Kernel Launch Syntax
+<<<blocks, threads>>>
+Launches GPU computation
+Check Kernel Errors
+cudaGetLastError();
+Checks whether kernel launch failed.
+Copy Data GPU → CPU
+cudaMemcpy(h_c, d_c, size, cudaMemcpyDeviceToHost);
+Copies result vector from GPU to CPU.
+Print Results
+for (int i = 0; i < 9; i++)
+Prints first 9 elements
+Free GPU Memory
+cudaFree(d_a);
+Releases GPU memory.
+Free CPU Memory
+free(h_a);
+Releases host memory.
+End Program
+return 0;
+Terminates program successfully.
+
+Compile CUDA Program
+!nvcc -arch=sm_75 vector_add.cu -o vector_add
+Explanation
+Part	Meaning
+nvcc	CUDA compiler
+-arch=sm_75	GPU architecture
+vector_add.cu	CUDA source file
+-o vector_add	Output executable
+
+Run Program
+!./vector_add
+Executes CUDA program
+
+Formula Used
+Each thread computes:
+c[i]=a[i]+b[i]
+CUDA Concepts Used
+Concept	Purpose
+Kernel Function	Runs on GPU
+Threads	Parallel execution
+Blocks	Group of threads
+cudaMalloc	GPU memory allocation
+cudaMemcpy	Data transfer
+cudaFree	Memory deallocation
+What is CUDA?
+CUDA is NVIDIA’s paralle computing platform for GPU programming.
+
+What is kernel function?
+GPU function executed by many threads simultaneously.
+Why GPU is faster?
+GPU has thousands of cores for parallel processing.
+
+What is thread?
+Smallest execution unit in CUDA.
+Difference between CPU and GPU?
+CPU	GPU
+Few powerful cores	Thousands of smaller cores
+Sequential processing	Parallel processing
+
+Time Complexity
+O(n)
+But operations run in parallel on GPU.
+Advantages of CUDA
+	Massive parallelism
+	Faster computation
+	High throughput
+	Efficient for vector/matrix operations
+
+1. What is CUDA?
+CUDA (Compute Unified Device Architecture) is NVIDIA’s parallel computing platform for GPU programming.
+2. Why is CUDA used?
+CUDA is used to perform parallel computation on GPU for faster execution
+3. What is GPU computing?
+Using Graphics Processing Unit (GPU) for general-purpose parallel computation
+4. Difference between CPU and GPU?
+CPU	GPU
+Few powerful cores	Thousands of smaller cores
+Sequential processing	Parallel processing
+Better for control tasks	Better for massive computations
+
+5. What is parallel computing?
+Executing multiple tasks simultaneously.6. What is a kernel function?
+__global__ void vectorAdd(...)
+A function executed on GPU by many threads in parallel.
+7. What does __global__ mean?
+__global__
+Indicates function:
+•	Runs on GPU
+•	Called from CPU
+8. Why kernel function is used?
+To perform vector addition in parallel.
+9. What operation is performed in kernel?
+c[i]=a[i]+b[i]10. Explain this line.
+int i = blockIdx.x * blockDim.x + threadIdx.x;
+Calculates unique index for each thread.
+11. What is threadIdx.x?
+Thread number inside block
+12. What is blockIdx.x?
+Block number in grid.
+13. What is blockDim.x?
+Total number of threads in one block
+14. Why unique index is required?
+Each thread processes different array element.
+15. What is host memory?
+h_a, h_b, h_c
+Memory allocated on CPU.
+16. What is device memory?
+d_a, d_b, d_c
+Memory allocated on GPU
+17. Why cudaMalloc() is used?
+cudaMalloc()
+Allocates memory on GPU.
+18. Difference between malloc() and cudaMalloc()?
+malloc()	cudaMalloc()
+CPU memory	GPU memory
+Host allocation	Device allocation
+
+19. Why cudaMemcpy() is needed?
+CPU and GPU have separate memories.
+Data transfer is required
+20. Explain:
+cudaMemcpyHostToDevice
+Copies data from CPU → GPU.
+21. Explain:
+cudaMemcpyDeviceToHost
+Copies data from GPU → CPU.22. Explain:
+int threadsPerBlock = 256;
+Each block contains 256 threads.
+23. Why 256 threads are chosen?
+Efficient for most NVIDIA GPUs.
+24. Explain blocks per grid calculation.
+(n + threadsPerBlock - 1) / threadsPerBlock
+Calculates required blocks to process all elements.
+25. What is grid in CUDA?
+Collection of blocks.
+26. What is block in CUDA?
+Collection of threads.
+27. What is thread in CUDA?
+Smallest execution unit.
+28. Explain kernel launch syntax.
+vectorAdd<<<blocksPerGrid, threadsPerBlock>>>
+Launches GPU kernel
+29. Meaing of:
+<<<blocks, threads>>>
+Specifies:
+•	Number of blocks
+•	Threads 
+30. Why CHECK_CUDA_ERROR macro is used?
+To detect CUDA runtime errors.
+31. What is purpose of:
+cudaGetLastError()
+Checks kernel execution errors.
+32. What happens if CUDA error occurs?
+Program prints error message.
+33. Explain:
+h_a[i] = float(i);
+Initializes vector A.
+34. Explain:
+h_b[i] = float(i * 2);
+Initializes vector B.37. Time complexity of vector addition?
+O(n)
+But computation is parallelized.
+38. Why GPU execution is faster?
+Thousands of threads execute simultaneousl.39. What is streaming multiprocessor (SM)?
+Hardware unit executing CUDA blocks.
+40. What is warp in CUDA?
+Group of 32 threads executed together.
+41. What is nvcc?
+nvcc
+CUDA compiler.
+42. Explain compilation command.
+nvcc -arch=sm_75 vector_add.cu -o vector_add
+Part	Meaning
+nvcc	CUDA compiler
+-arch=sm_75	GPU architecture
+-o	Output executable
+
+43. What does sm_75 mean?
+GPU compute capability architecture.44. Why cudaFree() is used?
+cudaFree(d_a);
+Releases GPU memory.
+45. Why free() is used?
+free(h_a);
+Releases CPU memory.
+46. Why boundary check is necessary?
+if(i < n)
+Prevents invalid memory access.
+47. What happens if boundary check removed?
+Threads may access invalid memory causing crash
+48. Why CUDA is suitable for vector addition?
+Same operation performed independently on many elements.
+49. What type of parallelism is used?
+Data Parallelism
+50. Can CPU and GPU execute simultaneously?
+Yes.
+CUDA supports asynchronous execution.
+Why CUDA is faster?
+Massive parallel execution on GPU cores.
+What is kernel?
+GPU function executed by many threads
+Why cudaMemcpy is needed?
+CPU and GPU memories are separate
+Why thread indexing is important?
+Each thread processes unique data.
+Main advantage of GPU computing?
+High-speed parallel computatio
+
+
+  
+1.	What is the purpose of using CUDA to perform addition of two large vectors? 
+The purpose of using CUDA is to speed up vector addition by utilizing the parallel processing power of the GPU. 
+In CUDA: 
+	Multiple GPU threads add vector elements simultaneously 
+	Large computations are completed much faster than CPU execution 
+Example: 
+C[i]=A[i]+B[i] 
+Each thread computes one element independently. 
+Benefits: 
+	Faster execution 
+Better performance for large datasets 
+	Efficient parallel computation  
+2.	How do you allocate memory for the vectors on the device using CUDA? 
+Memory on the GPU device is allocated using cudaMalloc(). 
+Syntax: 
+cudaMalloc((void**)&A, size); Example: 
+cudaMalloc((void**)&d_A, size); 
+cudaMalloc((void**)&d_B, size); cudaMalloc((void**)&d_C, size); Where: 
+•	d_A, d_B, d_C are device pointers 
+•	size is memory size in bytes  
+3.	How do you launch the CUDA kernel to perform the addition of two large vectors? 
+CUDA kernels are launched using the <<<blocks, threads>>> syntax. 
+Syntax: 
+kernel<<<number_of_blocks, threads_per_block>>>(); Example: 
+vectorAdd<<<256, 256>>>(d_A, d_B, d_C); 
+Where: 
+•	First value = number of blocks 
+•	Second value = number of threads per block 
+Each thread performs addition for one vector element.  
+4.	How can you optimize the performance of the CUDA program for adding two large vectors? 
+Optimization Techniques: 
+1.	Use proper number of threads and blocks 
+Efficient thread configuration improves GPU utilization.  
+2.	Minimize memory transfer 
+Reduce data transfer between CPU and GPU because it increases overhead.  
+3.	Use coalesced memory access 
+Access consecutive memory locations for faster GPU memory performance. 
+4.	Use shared memory 
+Shared memory is faster than global memory and improves speed.  
+5.	Increase parallelism 
+Use more threads to fully utilize GPU cores.  
+6.	Avoid uecessary synchronization 
+Too much synchronization reduces performance.  
+7.	Optimize kernel execution 
+Reduce branching and inefficient instructions inside kernels. 
+Q: Why is CUDA faster for vector addition? 
+Because thousands of GPU threads work simultaneously.  
+Q: Which function allocates GPU memory? 
+cudaMalloc()  
+Q: Which function copies data between CPU and GPU? 
+cudaMemcpy()  
+Q: What is kernel launch syntax? kernel<<<blocks, threads>>>();  
+Q: What is the biggest advantage of CUDA? 
+Massive parallel processing capability.  
+1.	What is CUDA? 
+CUDA (Compute Unified Device Architecture) is a parallel computing platform developed by NVIDIA that allows programmers to use GPUs for high-speed parallel computation.  
+2.	Why is CUDA used? 
+CUDA is used to accelerate computationally intensive tasks by utilizing the parallel processing power of GPUs.  
+3.	What is GPU? 
+GPU (Graphics Processing Unit) is a processor designed for parallel processing of large amounts of data simultaneously.  
+4.	What is the difference between CPU and GPU? 
+CPU 	GPU 
+Few powerful cores 	Thousands of smaller cores 
+Best for sequential tasks Best for parallel tasks 
+Lower parallelism 	Massive parallelism  
+5.	What is vector addition in CUDA? 
+Vector addition means adding corresponding elements of two vectors in parallel using GPU threads. 
+Example: 
+C[i]=A[i]+B[i]  
+6.	What is a CUDA kernel? 
+A CUDA kernel is a function executed on the GPU by many threads in parallel.  
+7.	How do you define a kernel in CUDA? 
+Using the __global__ keyword. 
+Example: 
+__global__ void vectorAdd(int *A, int *B, int *C)  
+8.	What is the purpose of cudaMalloc()? 
+cudaMalloc() allocates memory on the GPU device.  
+9.	What is the purpose of cudaMemcpy()? 
+cudaMemcpy() transfers data between host memory and device memory.  
+10.	What is the difference between host and device? 
+Host 	Device 
+CPU memory 	GPU memory 
+Sequential execution Parallel execution 
+ 
+11.	What is a thread in CUDA? 
+A thread is the smallest execution unit that performs computation on one data element.  
+12. What is a block in CUDA? 
+A block is a group of threads that execute together and share resources.  
+13. What is a grid in CUDA? 
+A grid is a collection of thread blocks.  
+14.	Why is vector addition parallelizable? 
+Because each element addition is independent and can be executed simultaneously.  
+15.	What is the syntax for launching a CUDA kernel? 
+kernel<<<number_of_blocks, threads_per_block>>>();  
+16.	Why do we use multiple threads in CUDA? 
+To perform computations simultaneously and reduce execution time.  
+17.	What compiler is used for CUDA programs? 
+nvcc compiler.  
+18.	How do you compile a CUDA program? 
+nvcc program.cu -o program  
+19.	How do you run a CUDA program? 
+./program  
+20.	What is the role of cudaFree()? 
+cudaFree() releases memory allocated on the GPU.  
+21.	Why do we copy data from host to device? 
+Because the GPU cannot directly access CPU memory.  
+22.	Why is CUDA faster for large vectors? 
+Because thousands of GPU threads process vector elements simultaneously. 
+23.	What happens if vector size is very large? 
+CUDA efficiently distributes computations across many GPU cores.  
+24.	What is parallel computing? 
+Performing multiple computations simultaneously. 
+25.	What are the advantages of CUDA? 
+Advantages: 
+	High-speed computation 
+	Massive parallelism 
+	Better performance for large datasets 
+	Efficient for scientific computing and AI  
+26.	What are the limitations of CUDA? 
+Limitations: 
+	Requires NVIDIA GPU 
+	Complex memory management 
+	Data transfer overhead between CPU and GPU  
+27.	What is memory transfer overhead? 
+Time spent copying data between host and device memory. 
+28.	Which programming languages support CUDA? 
+	C 
+	C++ 
+	Python  
+29.	What are real-world applications of CUDA? 
+	Machine Learning 
+	Image Processing 
+	Deep Learning 
+	Scientific Simulations 
+	Video Processing  
+30.	What is the conclusion of this experiment? 
+We implemented vector addition using CUDA and utilized GPU parallelism to improve computational performance. 
+  
+ 
+ 
+ 
+
+
+
+
