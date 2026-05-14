@@ -295,6 +295,8 @@ bfs(root);
 End Program
 return 0;
 	Terminates program successfully.
+==========================================
+
 1. What is BFS?
 Breadth First Search (BFS) is a traversal technique that visits nodes level by level.
 2. Which data structure is used in BFS?
@@ -340,38 +342,26 @@ To indicate node has no children initially.13. Explain BFS traversal in this cod
 	Insert left and right children
 Repeat until queue becomes empty
 
-14. Why does BFS use FIFO?
-Nodes must be processed in same order they are discovered
-15. What is level-order traversal?
-Traversal where nodes are visited level by level from left to right.
-16. What is OpenMP?
-OpenMP is an API for parallel programming in C/C++.
-17. Why is #pragma omp parallel for used?
-#pragma omp parallel for
+14. Why does BFS use FIFO?Nodes must be processed in same order they are discovered
+15. What is level-order traversal?Traversal where nodes are visited level by level from left to right.
+16. What is OpenMP?OpenMP is an API for parallel programming in C/C++.
+17. Why is #pragma omp parallel for used?#pragma omp parallel for
 To execute loop iterations in parallel using multiple threads
 18. What is parallel computing?
 Executing multiple tasks simultaneously using multiple processors/threads
-19. What are threads?
-Threads are lightweight execution units within a process.
+19. What are threads?Threads are lightweight execution units within a process.
 20. What is the benefit of parallel BFS?
 It improves traversal performance on multicore systems.
-21. Why is #pragma omp critical used?
-#pragma omp critical
+21. Why is #pragma omp critical used?#pragma omp critical
 To avoid multiple threads accessing shared queue simultaneously.
 22. What is race condition?
 When multiple threads modify shared data at same time causing incorrect results
-23. Which shared resource may cause race condition here?
-Queue q
+23. Which shared resource may cause race condition here?Queue q
 24. What happens if critical section is removed?
 Queue corruption or incorrect traversal may occur.
-25. What is time complexity of BFS?
-O(n)
-Each node visited once.
-26. What is space complexity?
-O(n)
-Queue may store all nodes.
-27. Which STL container is used?
-queue<node *>
+25. What is time complexity of BFS?O(n)Each node visited once.
+26. What is space complexity?O(n)Queue may store all nodes.
+27. Which STL container is used?queue<node *>
 28. What operations are used on queue?
 Function	Purpose
 push()	Insert element
@@ -384,47 +374,28 @@ Operator	Use
 ->	Pointer access
 Example:
 temp->left
-30. Why use node *temp?
-To store address of current node.
-32. Can output order change?
-Yes, because of parallel execution.
-Example:
-1 3 2 5 4
-may occur.33. Difference between BFS and DFS?
-BFS	DFS
+30. Why use node *temp?To store address of current node.
+32. Can output order change?Yes, because of parallel execution.
+Example:1 3 2 5 4
+33. Difference between BFS and DFS?
 Level-wise traversal	Depth-wise traversal
 Uses Queue	Uses Stack
 FIFO	LIFO
 
-34. Why queue instead of stack in BFS?
-Queue preserves level order traversal.
-35. What is complete binary tree?
-All levels completely filled except possibly last level.
-36. Is this BFS fully parallel?
-No.
-Queue operations still require synchronization.
-37. What is synchronization?
-Coordinating threads safely when sharing resources
-38. What is multicore processor?
-CPU having multiple processing cores.
-39. How many threads OpenMP creates?
-Depends on system cores and environment settings.
-40. How to compile this code?
-g++ -fopenmp bfs.cpp -o bfs
-Why OpenMP is used?
-To achieve parallel execution and improve performance.
-Why critical section is required?
-To prevent race condition on shared queue.
-Why BFS uses queue?
-Because queue processes nodes in FIFO order.
-Main advantage of BFS?
-Finds shortest path in unweighted graphs/trees.
-Main disadvantage of BFS?
-Requires more memory because queue stores nodes.
-Why Queue is Used in BFS?
-Queue follows FIFO order, which helps process nodes level-wise.
-What is OpenMP?
-OpenMP is an API used for parallel programming in C/C++.
+34. Why queue instead of stack in BFS?Queue preserves level order traversal.
+35. What is complete binary tree?All levels completely filled except possibly last level.
+36. Is this BFS fully parallel?No.Queue operations still require synchronization.
+37. What is synchronization?Coordinating threads safely when sharing resources
+38. What is multicore processor?CPU having multiple processing cores.
+39. How many threads OpenMP creates?Depends on system cores and environment settings.
+40. How to compile this code?g++ -fopenmp bfs.cpp -o bfs
+Why OpenMP is used?To achieve parallel execution and improve performance.
+Why critical section is required?To prevent race condition on shared queue.
+Why BFS uses queue?Because queue processes nodes in FIFO order.
+Main advantage of BFS?Finds shortest path in unweighted graphs/trees.
+Main disadvantage of BFS?Requires more memory because queue stores nodes.
+Why Queue is Used in BFS?Queue follows FIFO order, which helps process nodes level-wise.
+.
 Why #pragma omp critical is used?
 To prevent multiple threads from accessing/modifying the queue simultaneously.
 Time Complexity
@@ -433,11 +404,6 @@ Time Complexity
 Space Complexity
 	Queue storage: O(n)
 
-1.	What is BFS? 
-BFS (Breadth First Search) is a graph traversal algorithm used to visit all nodes level by level starting from a source node. 
-	It first visits all neighboring nodes. 
-	Then it moves to the next level neighbors. 
-	It uses a Queue (FIFO) data structure. 
 Steps of BFS 
 1.	Start from a source vertex. 
 2.	Mark it as visited. 
@@ -473,16 +439,8 @@ Example
  
 3.	Applications of Parallel BFS 
 Parallel BFS is used where large graphs must be processed quickly. 
-Applications 
-1.	Social network analysis 
-2.	Web search engines 
-3.	Route planning and navigation 
-4.	Network routing 
-5.	Artificial Intelligence 
-6.	Graph analytics 
-7.	Bioinformatics 
-8.	Recommendation systems 
-9.	Big data processing 
+1.	Social network analysis ,Web search engines,Route planning and navigation,Network routing 
+Artificial Intelligence ,Graph analytics ,Bioinformatics ,Recommendation systems 
  
 4.	How can BFS be parallelized using OpenMP? Describe the parallel BFS algorithm using OpenMP. 
 BFS can be parallelized by processing multiple neighboring vertices at the same time using threads. 
@@ -500,7 +458,7 @@ Example Code
 #pragma omp parallel for 
 for(int i = 0; i < adj[node].size(); i++) {     int neighbor = adj[node][i]; 
  
-    if(!visited[neighbor]) {         visited[neighbor] = 1;         #pragma omp critical         queue.push(neighbor); 
+    if(!visited[neighbor]) {  visited[neighbor] = 1;    #pragma omp critical    queue.push(neighbor); 
     } 
 } 
 Advantages 
@@ -523,14 +481,11 @@ omp_get_thread_num() Returns thread ID omp_get_num_threads() Returns total threa
 Compilation Command gcc program.c -fopenmp Execution Command 
 ./a.out 
 Set Number of Threads export OMP_NUM_THREADS=4 
-1.	What is BFS? 
-BFS (Breadth-First Search) is a graph traversal algorithm that visits nodes level by level using a queue.  
-2.	Why is it called Breadth-First Search?  
-Because it explores all neighboring nodes first before moving to the next depth level.  
-3.	Which data structure is used in BFS? 
-Queue (FIFO – First In First Out).  
-4.	What is the main idea of BFS? 
-Visit all nodes at the current level before visiting nodes at the next level.  
+
+2.	Why is it called Breadth-First Search? Bec it explores all neighboring nodes first before moving to next depth level.  
+3.	Which data structure is used in BFS? Queue (FIFO – First In First Out).  
+4.	What is the main idea of BFS? Visit all nodes at the current level before visiting nodes at next level.  
+
 5.	What are the steps of BFS?  
 1.	Start from source node 
 2.	Mark node as visited 
@@ -540,26 +495,17 @@ Visit all nodes at the current level before visiting nodes at the next level.
 6.	Repeat until queue becomes empty  
 6.	Why do we mark nodes as visited? 
 To avoid revisiting the same node and prevent infinite loops.  
+
 7.	What happens if nodes are not marked visited? 
 The algorithm may visit the same node repeatedly and may enter an infinite loop.  
-8.	What is the time complexity of BFS? 
-O(V+E) 
-Where: 
-•	V = Number of vertices 
-•	E = Number of edges  
-9.	What is the space complexity of BFS? 
-Answer: 
-O(V) 
+8.	What is the time complexity of BFS? O(V+E) 
+Where: V = Number of vertices ,E = Number of edges  
+9.	What is the space complexity of BFS? O(V) 
 Because queue and visited array store vertices.  
 10.	What are the applications of BFS? 
-	Shortest path finding 
-	Social networks 
-	GPS navigation 
-	Web crawling 	Network broadcasting  
-11.	Which traversal technique does BFS follow? 
-Level-order traversal.  
+Shortest path finding ,Social networks ,GPS navigation  
+11.	Which traversal technique does BFS follow? Level-order traversal.  
 12.	What is the difference between BFS and DFS? 
-BFS 	DFS 
 Uses Queue 	Uses Stack/Recursion 
 Level-wise traversal Depth-wise traversal 
 Finds shortest path May not find shortest path  
@@ -567,16 +513,12 @@ Finds shortest path May not find shortest path
 Yes, in an unweighted graph BFS gives the shortest path.  
 14.	Can BFS be used on trees and graphs? 
 Yes, BFS works on both trees and graphs.  
-15.	What is the starting node in BFS called? 
-Source node or root node.  
-16.	What is meant by graph traversal? 
-Systematically visiting all nodes of a graph.  
+15.	What is the starting node in BFS called? Source node or root node.  
+16.	What is meant by graph traversal? Systematically visiting all nodes of a graph.  
 17.	Why is queue used in BFS? 
 Queue processes nodes in FIFO order, which helps visit nodes level by level.  
-18.	What are neighboring nodes? 
-Nodes directly connected to a current node by an edge.  
-19.	What is FIFO in BFS? 
-FIFO means First In First Out — the first inserted node is processed first.  
+18.	What are neighboring nodes? Nodes directly connected to a current node by an edge.  
+19.	What is FIFO in BFS?  the first inserted node is processed first.  
 20.	Give one real-life example of BFS.
 Finding shortest route in Google Maps or GPS navigation.  
 Queue in BFS 
@@ -590,59 +532,45 @@ BFS Traversal Order
 BFS Complexity 
 Time = O(V+E),\ Space = O(V)  
 1.	What is OpenMP? 
-OpenMP (Open Multi-Processing) is an API used for shared-memory parallel programming in C, C++, and Fortran.  
+(Open Multi-Processing) is API used for shared-memory parallel programming in C, C++&Fortran.  
 2.	Why is OpenMP used? 
 It is used to execute programs in parallel using multiple processor cores to improve performance.  
-3.	What type of memory architecture does OpenMP use? 
-Shared-memory architecture.  
-4.	Which languages support OpenMP? 
-C, C++, and Fortran.  
+3.	What type of memory architecture does OpenMP use? Shared-memory architecture.  
+4.	Which languages support OpenMP? C, C++, and Fortran.  
 5.	What is parallel programming? 
 Executing multiple tasks simultaneously using multiple processors or threads. 
-6.	What is the main advantage of OpenMP? 
-It reduces execution time and improves CPU utilization.
-7.	What is a thread in OpenMP? 
-A thread is an independent flow of execution within a program.  
+6.	What is the main advantage of OpenMP? It reduces execution time and improves CPU utilization.
+7.	What is a thread in OpenMP? A thread is an independent flow of execution within a program.  
 8.	What is the fork-join model in OpenMP? 
-
-In the fork-join model, the master thread creates worker threads for parallel execution and joins them back after completion.  
+the master thread creates worker threads for parallel execution and joins them back after completion.  
 9.	Explain fork-join model briefly. 
-Fork → Multiple threads are created 
-Parallel execution occurs 
+Fork → Multiple threads are created ,Parallel execution occurs 
 Join → Threads combine back into one master thread 
 10.	What is a parallel region in OpenMP? 
 A section of code executed by multiple threads simultaneously.  
-11.	Which directive is used to create parallel execution? 
-#pragma omp parallel 
-12.	What is shared memory?  
-Memory that can be accessed b all threads/processors. 
-13.	What are OpenMP directives?  
-Compiler instructions used to parallelize code.  
+11.	Which directive is used to create parallel execution? #pragma omp parallel 
+12.	What is shared memory?  Memory that can be accessed b all threads/processors. 
+13.	What are OpenMP directives?  Compiler instructions used to parallelize code.  
 14.	Give some OpenMP directives. 
 	#pragma omp parallel 
 	#pragma omp for 
 #pragma omp critical 
 #pragma omp barrier  
-15.	What is #pragma omp for used for? 
-It parallelizes loop execution among multiple threads.  
-16.	What is synchronization in OpenMP? 
-Coordination between threads to avoid conflicts and ensure correct execution.  
+15.	What is #pragma omp for used for? It parallelizes loop execution among multiple threads.  
+16.	What is synchronization in OpenMP? Coordination bet threads to avoid conflict&ensure correct execution.  
 17.	What is a critical section? 
-Answer: 
 A code section that only one thread can execute at a time. 
-18.	Why is OpenMP popular?  
-Because it is simple, portable, and easy  implement. 
+18.	Why is OpenMP popular?  Because it is simple, portable, and easy  implement. 
  What is Parallel BFS? 
-Parallel BFS is a parallel version of Breadth-First Search where multiple threads process graph nodes simultaneously.  
-19.	Why do we use Parallel BFS? 
-To speed up graph traversal for large graphs.  
+Parallel BFS is a parallel version of Breadth-First Search where multiple
+threads process graph nodes simultaneously.  
+19.	Why do we use Parallel BFS? To speed up graph traversal for large graphs.  
 20.	How does Parallel BFS work? 
 Different threads process different nodes at the same level simultaneously.  
 21.	What are the two phases of Parallel BFS? 
 1.	Computation Phase 
 2.	Communication Phase  
-22.	What happens in the computation phase? 
-Threads process nodes in their local queues. 
+22.	What happens in the computation phase? Threads process nodes in their local queues. 
 23.	What happens in the communication phase? 
 Threads exchange adjacent nodes with other threads/processors.  
 24.	What is a local queue? 
@@ -650,36 +578,17 @@ A queue maintained by each thread to store nodes to visit.
 26.	What is the benefit of Parallel BFS? 
 Faster traversal and better processor utilization.  
 27.	Where is Parallel BFS used? 
-	Social networks 
-	Web search 
-	AI 
-	Network routing 
-	Big data analytics  
+	Social networks ,Web search ,AI ,Network routing  
 28.	Which programming models can implement Parallel BFS? 
-OpenMP 
-MPI 
-CUDA  
+OpenMP ,MPI ,CUDA  
 29.	What affects the performance of Parallel BFS?  
-Number of threads 
-	Graph size 
-Communication overhead  
+Number of threads ,Graph size ,Communication overhead  
 30.	What is communication overhead? 
 Extra time spent exchanging data between threads/processors.  
 31.	What is the termination condition in Parallel BFS? 
 The algorithm stops when all nodes are visited or target node is found.  
-32.	Does Parallel BFS improve performance? 
-Yes, especially for large graphs and multicore systems.  
-OpenMP 
-“OpenMP is an API for shared-memory parallel programming.” 
-Fork-Join Model 
-“Master thread creates worker threads and joins them after execution.” 
-Parallel BFS 
-“Multiple threads traverse graph nodes simultaneously.” 
-Shared Memory 
-“All threads access the same memory.” 
-Communication Phase 
-“Threads exchange adjacent node information.” 
-Computation Phase 
-“Threads process nodes from local queues.” 
-Main Benefit 
-“Reduced execution time.” 
+ 
+Shared Memory =All threads access the same memory.
+Communication Phase =Threads exchange adjacent node information.
+Computation Phase =Threads process nodes from local queues. 
+
