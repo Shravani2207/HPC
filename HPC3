@@ -215,65 +215,47 @@ sum_reduction(arr, n);
 Average
 average_reduction(arr, n);
 	Finds average.
+-------------------------------------------------
+
 Advantages of Reduction
 	Faster computation
 	Parallel processing
 	Avoids race conditions
-Time Complexity
-Each Operation
-O(n
-Space Complexity
-O(1)
+Time Complexity Each Operation-O(n
+Space Complexity O(1)
 1. What is reduction in OpenMP?
-Reduction is a technique used to combine results from multiple threads into a single final result.
+ a technique used to combine results from multiple threads into a single final result.
 2. What operations are performed in this program?
-The program calculates:
-•	Minimum value
-•	Maximum value
-•	Sum
-•	Average
-using OpenMP reduction.
+The program calculates:	Minimum value,Maximum value,Sum,Averag
 3. Why is parallel programming used here?
 To improve computation speed using multiple threads.
-4. What is OpenMP?
-OpenMP is an API used for parallel programming in C/C++.
-5. What are threads?
-Threads are lightweight execution units running simultaneously.
-Header File Questions
+4. What is OpenMP? an API used for parallel programming in C/C++.
+5. What are threads? are lightweight execution units running simultaneously.
+
 6. Why <omp.h> is included?
-#include <omp.h>
-Provides OpenMP functions and directives.
+#include <omp.h>Provides OpenMP functions and directives.
 7. Why <climits> is included?
 #include <climits>
 Provides constants:
 •	INT_MAX
 •	INT_MI
-8. What is INT_MAX?
-INT_MAX
-Largest possible integer value.
-Example:
-2147483647
-9. What is INT_MIN?
-INT_MIN
-Smallest possible integer value.
-Example:
--214748364810. Explain:
+8. What is INT_MAX?Largest possible integer value.
+Example:2147483647
+9. What is INT_MIN?Smallest possible integer value.
+Example:-214748364810. Explain:
 #pragma omp parallel for reduction(min:min_value)
 Each thread calculates local minimum.
 OpenMP combines them into final minimum.
-11. Explain:
-reduction(max:max_value)
+11. Explain:reduction(max:max_value)
 Combines thread-local maximum values
-12. Explain:
-reduction(+:sum)
+12. Explain:reduction(+:sum)
 Adds partial sums from all threads
-13. Why reduction is useful?
-Avoids race condition during parallel computation.
+13. Why reduction is useful?Avoids race condition during parallel computation.
 14. What is race condition?
 When multiple threads modify shared data simultaneously causing incorrect results
-15. How reduction avoids race condition?
-Each thread gets private copy of variable.
-OpenMP safely combines results later.16. Explain min_reduction() function.
+15. How reduction avoids race condition?Each thread gets private copy of variable.
+OpenMP safely combines results later.
+16. Explain min_reduction() function.
 void min_reduction(int arr[], int n)
 Finds minimum element using parallel reduction.
 17. Why initialize minimum with INT_MAX?
@@ -292,51 +274,28 @@ Calculates sum of all elements in parallel
 void average_reduction(int arr[], int n)
 Calculates average using total sum.
 22. Is there any mistake in average calculation?
-Yes.
-sum / (n-1)
-is incorrect.
-Correct formula:
-sum / n
+Yes.sum / (n-1)is incorrect.
+Correct formula:sum / n
 23. Why typecasting to double is used?
-(double)sum
-To get decimal result instead of integer division.
+(double)sumTo get decimal result instead of integer division.
 24. Why for loop is used?
-for(int i=0;i<n;i++)
-Traverses all array elements.
+for(int i=0;i<n;i++)Traverses all array elements.
 25. What is loop parallelization?
 Dividing loop iterations among multiple threads.
 26. Why dynamic memory allocation is used?
-arr = new int[n];
-Array size is decided at runtime.
+arr = new int[n];Array size is decided at runtime.
 27. Difference between static and dynamic memory?
-Static	Dynamic
 Compile-time size	Runtime size
 Stack memory	Heap memory
-28. Time complexity of minimum search?
-O(n)
-29. Time complexity of maximum search?
-O(n
-30. Time complexity of sum?
-O(n)
-31. Space complexity?
-O(1)
-Only a few variables used
-34. Why is average incorrect?
-Because:
-(n-1)
-is used instead of:
-n
-Correct average:
-3035. What is #pragma omp parallel for?
-Executes loop iterations in parallel.
-36. What is parallel computing?
-Executing multiple computations simultaneously
-37. What is multicore processor?
-CPU with multiple cores capable of parallel execution
-38. What is synchronization?
-Coordination between threads to safely share data.
-39. How to compile this code?
-g++ -fopenmp reduction.cpp -o reduction
+28. Time complexity of minimum search?O(n)
+29. Time complexity of maximum search?O(n
+30. Time complexity of sum?O(n)
+31. Space complexity?O(1)
+35. What is #pragma omp parallel for?Executes loop iterations in parallel.
+36. What is parallel computing?Executing multiple computations simultaneously
+37. What is multicore processor?CPU with multiple cores capable of parallel execution
+38. What is synchronization?Coordination bet threads to safely share data.
+39. How to compile this code?g++ -fopenmp reduction.cpp -o reduction
 40. How to run this code?
 Linux:
 ./reduction
@@ -344,9 +303,7 @@ Windows:
 .\reduction.exe41. Why OpenMP improves performance?
 Multiple threads process data simultaneously.
 42. Can reduction be used with multiplication?
-Yes.
-Example:
-reduction(*:product
+Yes.Example:reduction(*:product
 43. Which reduction operators are supported?
 Operator	Use
 +	Sum
@@ -355,20 +312,13 @@ min	Minimum
 max	Maximum
 Why reduction is used?
 To safely combine thread results.
-Why INT_MAX is used?
-To initialize minimum search.
-Why INT_MIN is used?
-To initialize maximum search.
-Main advantage of OpenMP?
-Faster execution on multicore systems
-Why typecasting used in average?
-To get floating-point result
-What is OpenMP Reduction?
-Reduction combines thread-local results into one final result safely.
-Why INT_MAX is used?
-To initialize minimum search with largest integer value.
-Why INT_MIN is used?
-To initialize maximum search with smallest integer value.
+Why INT_MAX is used?To initialize minimum search.
+Why INT_MIN is used?To initialize maximum search.
+Main advantage of OpenMP?Faster execution on multicore systems
+Why typecasting used in average?To get floating-point result
+What is OpenMP Reduction? combines thread-local results into one final result safely.
+Why INT_MAX is used?To initialize minimum search with largest integer value.
+Why INT_MIN is used?To initialize maximum search with smallest integer value.
 What is race condition?
 When multiple threads access shared data simultaneously causing incorrect results.
 How reduction avoids race condition?
@@ -419,47 +369,31 @@ Performance depends on:
 	Input size  
 5.	How can you modify the provided code example for more complex operations using parallel reduction? 
 You can extend parallel reduction for: 
-	Multiplication 
-	Matrix operations 
-	Dot products 
-	Statistical calculations 
-	Logical operations Example: Instead of sum: 
-reduction(*:product) 
-For custom operations: 
-	Use user-defined reduction •
+	Multiplication ,Matrix operations ,Dot products ,Statistical calculations 
+	Logical operations Example: Instead of sum: reduction(*:product) 
+For custom operations: 	Use user-defined reduction •
 Combine structures or objects 
-	Apply reduction on complex data types You can also use: 
+Apply reduction on complex data types You can also use: 
 Nested loops 
 	Dynamic scheduling 
 	Task parallelism to improve performance for advanced computations.  
-Q: Why is reduction important? 
-It safely combines results from multiple threads.  
-Q: What problem does reduction solve? 
-Race condition problem.  
-Q: Why does parallel reduction work better for large arrays? 
-Because workload is distributed among many threads.  
-Q: Which compiler flag enables OpenMP? 
--fopenmp  
-Q: Can reduction work on multiplication? 
-Yes. 
-Example: 
-reduction(*:product)  
+Q: Why is reduction important? It safely combines results from multiple threads.  
+Q: What problem does reduction solve? Race condition problem.  
+Q: Why does parallel reduction work better for large arrays? Bec workload is distributed among many threads.  
+Q: Which compiler flag enables OpenMP? -fopenmp  
+Q: Can reduction work on multiplication? Yes. Example: reduction(*:product)  
 1.	What is Parallel Reduction? 
-Parallel Reduction is a technique used in parallel programming to combine values from multiple threads into a single result such as sum, minimum, maximum, or average.  
+a technique used in parallel programming to combine values from multiple threads into a single
+result such as sum, minimum, maximum, or average.  
 2.	What is reduction in OpenMP? 
-Reduction in OpenMP is a clause that performs parallel computation and combines partial results from all threads safely. 
-Example: 
-#pragma omp parallel for reduction(+:sum)  
+is a clause that performs parallel computation and combines partial results from all threads safely. 
+Example: #pragma omp parallel for reduction(+:sum)  
 3.	Why is reduction used? 
-Reduction is used to avoid race conditions when multiple threads update the same variable simultaneously.  
+used to avoid race conditions when multiple threads update the same variable simultaneously.  
 4.	What is a race condition? 
-A race condition occurs when multiple threads access and modify the same variable at the same time, causing incorrect results.  
+occurs when multiple threads access&modify the same variable at the same time, causing incorrect results.  
 5.	What operations can be performed using reduction? 
-Common reduction operations: 
-	Sum (+) 
-	Multiplication (*) 
-	Minimum (min) 
-	Maximum (max)  
+Common reduction operations:Sum(+),Multiplication(*),Minimum (min),Maximum (max)  
 6.	What is Min Reduction? 
 Min Reduction finds the smallest element in an array using parallel threads. 
 Each thread computes its local minimum, then OpenMP combines them into the final minimum value.  
@@ -475,46 +409,32 @@ Average=\frac{Sum}{Number\ of\ Elements}
 	Efficient CPU utilization 
 	Reduces execution time 
 	Simplifies parallel programming  
-10.	Which API is used for parallel reduction in C++? 
-OpenMP.  
-11.	Which header file is required for OpenMP? 
-#include <omp.h>  
-12.	How do you compile an OpenMP program? 
-g++ -fopenmp program.cpp -o program 
+10.	Which API is used for parallel reduction in C++? OpenMP.  
+11.	Which header file is required for OpenMP? #include <omp.h>  
+12.	How do you compile an OpenMP program? g++ -fopenmp program.cpp -o program 
 The -fopenmp flag enables OpenMP support. 
 13.	What is the purpose of the reduction clause? 
 The reduction clause combines results from multiple threads into one final result safely.  
 14.	What happens without reduction? 
-Without reduction: 
-	Race conditions may occur 
-	Incorrect output may be produced  
+Without reduction: 	Race conditions may occur ,Incorrect output may be produced  
 15.	Explain Min Reduction in simple words. 
-Each thread finds the minimum value in its assigned portion, and OpenMP combines all local minimums to produce the final minimum value.  
+Each thread finds the minimum value in its assigned portion,
+and OpenMP combines all local minimums to produce the final minimum value.  
 16.	Explain Max Reduction in simple words. 
 Each thread finds the maximum value in its part of the array, then OpenMP combines them.  
 17.	Explain Sum Reduction in simple words. 
-Every thread calculates a partial sum, and OpenMP adds all partial sums together.  
-18.	Why is OpenMP useful? 
-OpenMP makes parallel programming easier using compiler directives. 
+Every thread calculates a partial sum&OpenMP adds all partial sums together.  
+18.	Why is OpenMP useful? OpenMP makes parallel programming easier using compiler directives. 
 19.	What is parallel programming? 
 Executing multiple tasks simultaneously using multiple processors or cores.  
-20.	What is a thread? 
-A thread is the smallest unit of execution within a process.  
+20.	What is a thread? is the smallest unit of execution within a process.  
 22. What is shared memory architecture? 
 A system where all threads share the same memory space.  
 23.	What is the syntax of reduction clause? 
 #pragma omp parallel for reduction(operator:variable) 
-Example: 
-#pragma omp parallel for reduction(+:sum)  
+Example: #pragma omp parallel for reduction(+:sum)  
 24.	What operators are supported in OpenMP reduction? 
-	+ 
-	* 
-	min 
-	max 
-	& 
-	| 
-	^ 
- 
+	+ ,	*,min,max,&,^ 
 25.	What is execution time? 
 The total time taken by a program to complete execution. 
 26.	Why does parallel reduction improve performance? 
@@ -522,11 +442,10 @@ Because multiple threads work simultaneously on different parts of the data.
 27.	Can reduction be used for large datasets? 
 Yes. Parallel reduction is especially useful for large datasets.  
 28.	What are the limitations of parallel reduction? 
-	Thread creation overhead 
-	Synchronization overhead 
-	Less benefit for small datasets  
+Thread creation overhead,Synchronization overhead,Less benefit for small datasets  
 29.	What is the conclusion of this experiment? 
-We implemented Min, Max, Sum, and Average operations using OpenMP parallel reduction to improve performance and utilize multicore processors efficiently. 
+We implemented Min, Max, Sum, and Average operations using OpenMP parallel reduction to improve performance 
+and utilize multicore processors efficiently. 
 
 
 
