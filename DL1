@@ -357,9 +357,8 @@ plt.show()
 ----------------------------------------------------
 
 1. What is Deep Learning?
-Deep Learning is a subset of Machine Learning that uses multi-layered neural networks to learn complex patterns from data automatically.
-2. What is a Neural Network?
-A Neural Network is a computational model inspired by the human brain. 
+is a subset of Machine Learning that uses multi-layered neural networks to learn complex patterns from data automatically.
+2. What is a Neural Network? is a computational model inspired by the human brain. 
 It consists of neurons connected through layers to process and learn data patterns.
 3. What is the Boston Housing Dataset?
  It is a dataset containing information about houses in Boston suburbs. 
@@ -439,24 +438,18 @@ Weights are updated after every training sample, called stochastic gradient desc
 When model learns training data too well but performs poorly on new data.
 32. How can Overfitting be reduced?
 Dropout,Regularization,Early stopping,More training data
-33. What is Dropout Layer?
-Dropout randomly disables neurons during training to prevent overfitting.
-34. What is Correlation?
-Correlation measures relationship between two variables.
+33. What is Dropout Layer? randomly disables neurons during training to prevent overfitting.
+34. What is Correlation? measures relationship between two variables.
 35. What does Positive Correlation mean?
 When one variable increases, the other also increases.
 Example:More rooms → Higher house pric
 36. What does Negative Correlation mean?
 When one variable increases, the other decreases.
 Example Higher poverty rate → Lower house pric
-37. Why is Heatmap used?
-Heatmap visually shows correlation between all features
-38. What is a Histogram?
-Histogram shows frequency distribution of data.
-39. What is a Boxplot?
-Boxplot displays data spread, median, quartiles, and outliers
-40. What are Outliers?
-Outliers are unusually high or low values different from normal data.
+37. Why is Heatmap used?visually shows correlation between all features
+38. What is a Histogram? shows frequency distribution of data.
+39. What is a Boxplot? displays data spread, median, quartiles, and outliers
+40. What are Outliers? are unusually high or low values different from normal data.
 41. Why visualize data before training?
 Visualization helps understand:
 	Distribution,Correlation,Outliers,Trends
@@ -467,18 +460,14 @@ Output shapesTrainable parameters
 Weights and biases learned during training.
 44. Why validation_data is used?
 To monitor mdel performance on unseen data during training.
-45. What is Prediction?
-Prediction is estimating output using trained model.
+45. What is Prediction? estimating output using trained model.
 46. Difference between Training and Testing?
-Training	Testing
 Model learns	Model evaluates
 Uses known data	Uses unseen data
 47. Why lower MSE and MAE are better?
 Lower error means predictions are closer to actual values.
-48. What is TensorFlow?
-TensorFlow is an open-source deep learning framework developed by Google.
-49. What is Keras?
-Keras is a high-level API used to build and train deep learning models easily
+48. What is TensorFlow? open-source DL framework developed by Google.
+49. What is Keras? high-level API used to build and train DL models easily
 50. Difference between Machine Learning and Deep Learning?
 Requires feature engineering	Learns features automatically
 Works well on small data	Performs better on large data
@@ -494,6 +483,7 @@ The model is trained using the following steps:
 6.	Optimizer updates weights and biases to reduce error.
 7.	The process repeats for multiple epochs until loss becomes minimum.
 Gradient Descent is commonly used for updating weights.
+
 3) What is the architecture of a Neural Network for Linear Regression?
 The architecture generally contains:
 	Input Layer → Takes input features
@@ -513,6 +503,7 @@ Deep Neural Networks are used because they can:
 	Handle large datasets efficiently,Improve prediction accuracy
 	Automatically learn important features,Perform better than simple linear regression for complex data
 In Boston Housing prediction, DNN can capture hidden patterns between housing features and prices more effectively.
+
 Steps to Implement Linear Regression Using a DNN
 Let’s break down the process into clear steps:
 1. Load the Boston Housing Dataset.
@@ -521,9 +512,8 @@ Let’s break down the process into clear steps:
 4. Compile the model.
 5. Train the model.
 6. Evaluate the model’s performance.
-1. What is Deep Learning?
-Deep learning is a branch of machine learning that uses artificial neural networks with multiple 
-hidden layers to learn complex patterns from data automatically.
+
+
 2. What is Linear Regression?
 Linear Regression is a supervised machine learning algorithm used to predict continuous values by finding the 
 relationship between dependent and independent variables.
