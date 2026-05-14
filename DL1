@@ -359,9 +359,11 @@ plt.show()
 1. What is Deep Learning?
 Deep Learning is a subset of Machine Learning that uses multi-layered neural networks to learn complex patterns from data automatically.
 2. What is a Neural Network?
-A Neural Network is a computational model inspired by the human brain. It consists of neurons connected through layers to process and learn data patterns.
+A Neural Network is a computational model inspired by the human brain. 
+It consists of neurons connected through layers to process and learn data patterns.
 3. What is the Boston Housing Dataset?
- It is a dataset containing information about houses in Boston suburbs. It has 13 input features and the output is house price prediction.
+ It is a dataset containing information about houses in Boston suburbs. 
+It has 13 input features and the output is house price prediction.
 4. Why is this a Regression Problem?
 Because the output is a continuous numerical value (house price), not a category or class
 5. What are Features and Labels?
@@ -371,7 +373,8 @@ Because the output is a continuous numerical value (house price), not a category
 	Training data is used to train the model.
 	Testing data is used to evaluate model performance on unseen data.
 7. What is Feature Scaling?
-Feature scaling standardizes data so all features are in similar range, improving neural network performance and convergence speed.
+Feature scaling standardizes data so all features are in similar range,
+improving neural network performance and convergence speed.
 8. Why is StandardScaler used?
 StandardScaler converts data to zero mean and unit variance.
 Formula:
@@ -394,8 +397,7 @@ Sequential model is a linear stack of layers where output of one layer becomes i
 Activation function decides whether a neuron should activate or not by introducing non-linearity.
 14. Why is ReLU used?
 ReLU is computationally efficient and helps solve vanishing gradient problem.
-Formula:
-f(x)=\max(0,x)
+Formula:f(x)=\max(0,x)
 15. What is Vanishing Gradient Problem?
 In deep networks, gradients become extremely small during backpropagation, causing slow learning
 16. Why are multiple hidden layers used?
@@ -424,7 +426,6 @@ Because it penalizes larger errors more strongly and is suitable for continuous 
 MAE calculates average absolute difference between actual and predicted values.
 MAE = \frac{1}{n}\sum_{i=1}^{n}|y_i-\hat{y_i}|
 27. Difference between MSE and MAE?
-MSE	MAE
 Squares errors	Uses absolute errors
 Penalizes large errors more	Less sensitive to outliers
 
@@ -437,22 +438,17 @@ Weights are updated after every training sample, called stochastic gradient desc
 31. What is Overfitting?
 When model learns training data too well but performs poorly on new data.
 32. How can Overfitting be reduced?
-Dropout
-	Regularization
-	Early stopping
-	More training data
+Dropout,Regularization,Early stopping,More training data
 33. What is Dropout Layer?
 Dropout randomly disables neurons during training to prevent overfitting.
 34. What is Correlation?
 Correlation measures relationship between two variables.
 35. What does Positive Correlation mean?
 When one variable increases, the other also increases.
-Example:
-	More rooms → Higher house pric
+Example:More rooms → Higher house pric
 36. What does Negative Correlation mean?
 When one variable increases, the other decreases.
-Example:
-•	Higher poverty rate → Lower house pric
+Example Higher poverty rate → Lower house pric
 37. Why is Heatmap used?
 Heatmap visually shows correlation between all features
 38. What is a Histogram?
@@ -463,15 +459,10 @@ Boxplot displays data spread, median, quartiles, and outliers
 Outliers are unusually high or low values different from normal data.
 41. Why visualize data before training?
 Visualization helps understand:
-	Distribution
-	Correlation
-	Outliers
-	Trends
+	Distribution,Correlation,Outliers,Trends
 42. What does model.summary() show?
-It displays:
-	Layers
-Output shapes
-	Trainable parameters
+It displays:Layers
+Output shapesTrainable parameters
 43. What are Trainable Parameters?
 Weights and biases learned during training.
 44. Why validation_data is used?
@@ -482,7 +473,6 @@ Prediction is estimating output using trained model.
 Training	Testing
 Model learns	Model evaluates
 Uses known data	Uses unseen data
-
 47. Why lower MSE and MAE are better?
 Lower error means predictions are closer to actual values.
 48. What is TensorFlow?
@@ -490,7 +480,6 @@ TensorFlow is an open-source deep learning framework developed by Google.
 49. What is Keras?
 Keras is a high-level API used to build and train deep learning models easily
 50. Difference between Machine Learning and Deep Learning?
-Machine Learning	Deep Learning
 Requires feature engineering	Learns features automatically
 Works well on small data	Performs better on large data
 Simpler models	Multi-layer neural networks
@@ -510,25 +499,19 @@ The architecture generally contains:
 	Input Layer → Takes input features
 	Hidden Layer(s) → Learns patterns in data
 	Output Layer → Produces one continuous output value
-For regression:
-	Hidden layers commonly use ReLU activation
+For regression:Hidden layers commonly use ReLU activation
 	Output layer uses Linear activation function
-Simple architecture:
-Input Layer → Hidden Layer(s) → Output Laye
+Simple architecture:Input Layer → Hidden Layer(s) → Output Laye
 4) What is the loss function used in Neural Network Linear Regression?
 The commonly used loss function is Mean Squared Error (MSE).
 MSE = \frac{1}{n}\sum_{i=1}^{n}(y_i-\hat{y}_i)^2
-Where:
-	(y_i) = actual value
-	(\hat{y}_i) = predicted value
+Where:(y_i) = actual value,(\hat{y}_i) = predicted value
 MSE measures the average squared difference between actual and predicted values
 5) Why use a Deep Neural Network for Linear Regression?
 Deep Neural Networks are used because they can:
 	Learn complex and nonlinear relationships
-	Handle large datasets efficiently
-	Improve prediction accuracy
-	Automatically learn important features
-	Perform better than simple linear regression for complex data
+	Handle large datasets efficiently,Improve prediction accuracy
+	Automatically learn important features,Perform better than simple linear regression for complex data
 In Boston Housing prediction, DNN can capture hidden patterns between housing features and prices more effectively.
 Steps to Implement Linear Regression Using a DNN
 Let’s break down the process into clear steps:
@@ -539,97 +522,69 @@ Let’s break down the process into clear steps:
 5. Train the model.
 6. Evaluate the model’s performance.
 1. What is Deep Learning?
-Deep learning is a branch of machine learning that uses artificial neural networks with multiple hidden layers to learn complex patterns from data automatically.
+Deep learning is a branch of machine learning that uses artificial neural networks with multiple 
+hidden layers to learn complex patterns from data automatically.
 2. What is Linear Regression?
-Linear Regression is a supervised machine learning algorithm used to predict continuous values by finding the relationship between dependent and independent variables.
+Linear Regression is a supervised machine learning algorithm used to predict continuous values by finding the 
+relationship between dependent and independent variables.
 3. What is the Boston Housing Dataset?
-The Boston Housing dataset contains information about houses in Boston suburbs such as crime rate, number of rooms, tax rate, etc., and is used to predict house prices.
+The Boston Housing dataset contains information about houses in Boston suburbs such as crime rate, number of 
+rooms, tax rate, etc., and is used to predict house prices.
 4. What is the objective of this experiment?
 The objective is to predict housing prices using a Deep Neural Network and understand how regression can be implemented using deep learning techniques.
 5. Why is this problem called a regression problem?
 Because the output is a continuous numerical value (house price) rather than categories or classes.
 6. What is a Deep Neural Network (DNN)?
-A Deep Neural Network is a neural network having multiple hidden layers between input and output layers to learn complex relationships in data.
+A Deep Neural Network is a neural network having multiple hidden layers between 
+input and output layers to learn complex relationships in data.
 7. What are the main layers in a neural network?
-1.	Input Layer
-2.	Hidden Layer(s)
-3.	Output Laye
+1.	Input Layer,2.	Hidden Layer(s),3.	Output Laye
 8. Why do we use hidden layers?
 Hidden layers help the network learn complex features and patterns from the input data.
 9. What activation functions are commonly used in hidden layers?
-Common activation functions are:
-•	ReLU
-•	Sigmoid
-•	Tanh
+Common activation functions are:ReLU,Sigmoid,Tanh
 10. Which activation function is used in the output layer for regression?
 Generally, a linear activation function is used because regression predicts continuous values
 11. What is supervised learning?
 Supervised learning is a type of machine learning where the model learns from labeled data containing inputs and correct outputs.
 12. What are features in the Boston Housing Dataset?
-Features are input variables such as:
-•	Crime rate
-•	Average number of rooms
-•	Tax rate
-•	Pollution level
-•	Accessibility to highways
-13. What is the target variable in this dataset?
-The target variable is the house price.
-14. Why is normalization important?
-Normalization scales data into a smaller range, improving training speed and model performance.
-15. What is an epoch?
-An epoch is one complete pass of the entire training dataset through the neural network.
-16. What is batch size?
-Batch size is the number of training samples processed before updating the model weights.
-17. What is the role of optimizer in neural networks?
-The optimizer updates weights to minimize error and improve model accuracy.
-18. Which optimizer is commonly used?
-Adam optimizer is commonly used because it is fast and efficient.
+Features are input variables such as:	Crime rate,	Average number of rooms
+	Tax rate,Pollution level,Accessibility to highways
+13. What is the target variable in this dataset?The target variable is the house price.
+14. Why is normalization important? scales data into a smaller range, improving training speed & model performance.
+15. What is an epoch? is one complete pass of the entire training dataset through neural network.
+16. What is batch size? is the number of training samples processed before updating model weights.
+17. What is the role of optimizer in neural networks? updates weights to minimize error and improve model accuracy.
+18. Which optimizer is commonly used?Adam optimizer because it is fast and efficient.
 19. What loss function is used for regression problems?
 Mean Squared Error (MSE) is commonly used.
 MSE = \frac{1}{n}\sum_{i=1}^{n}(y_i-\hat{y}_i)^2
 20. What is Mean Squared Error (MSE)?
 MSE calculates the average squared difference between actual and predicted values.
-21. What is overfitting?
-Overfitting occurs when the model learns training data too well and performs poorly on new data.
-22. What is underfitting?
-Underfitting occurs when the model cannot learn patterns properly from training data.
+21. What is overfitting? occurs when the model learns training data too well and performs poorly on new data.
+22. What is underfitting? occurs when the model cannot learn patterns properly from training data.
 23. How can overfitting be reduced?
-Overfitting can be reduced using:
-	Dropout
-	More training data
-	Regularization
-	Early stoppin
-24. What is dropout?
-Dropout randomly disables some neurons during training to prevent overfitting.
-25. What is backpropagation?
-Backpropagation is the process of updating neural network weights based on error calculation.
+Overfitting can be reduced using:Dropout,More training data
+	Regularization,Early stoppin
+24. What is dropout? randomly disables some neurons during training to prevent overfitting.
+25. What is backpropagation? process of updating neural network weights based on error calculation.
 26. What is a neuron in neural networks?
 A neuron is the basic processing unit that receives inputs, performs calculations, and produces output.
 27. What is the difference between machine learning and deep learning?
-Machine learning often requires manual feature extraction, while deep learning automatically learns features using neural networks.
+Machine learning often requires manual feature extraction, 
+while deep learning automatically learns features using neural networks.
 28. Why use Deep Neural Network instead of simple Linear Regression?
 DNN can capture complex non-linear relationships better than simple linear regression.
 29. What libraries are commonly used in this experiment?
-	NumPy
-	Pandas
-	TensorFlow
-	Keras
-	Scikit-learn
-30. What is TensorFlow?
-TensorFlow is an open-source deep learning framework used to build and train neural networks.
-31. What is Keras?
-Keras is a high-level API used for building deep learning models easily.
+	NumPy,Pandas,TensorFlow,Keras,Scikit-learn
+30. What is TensorFlow? open-source DL framework used to build and train neural networks.
+31. What is Keras? high-level API used for building deep learning models easily.
 32. What evaluation metrics are used in regression?
-Common metrics:
-	MSE
-	MAE
-	RMSE
-R² Score
+Common metrics:MSE,MAE,RMSE,R² Score
 33. What is RMSE?
 Root Mean Squared Error is the square root of MSE and represents prediction error magnitude.
 RMSE = \sqrt{\frac{1}{n}\sum_{i=1}^{n}(y_i-\hat{y}_i)^2}
-34. What is the role of learning rate?
-Learning rate controls how much weights are updated during training.
+34. What is the role of learning rate? controls how much weights are updated during training.
 35. What happens if learning rate is too high?
 The model may skip optimal solutions and training may become unstable.
 36. What happens if learning rate is too low?
@@ -642,168 +597,105 @@ It is small, simple, and widely used for learning regression algorithms.
 39. What type of output does this model produce?
 The model produces continuous numerical house price predictions.
 40. What is the main conclusion of this experiment?
-Deep Neural Networks can successfully predict house prices and improve regression performance by learning complex relationships in data
-Short Quick Viva Answers (1-Line)
-What is regression?
-Prediction of continuous values.
-What is DNN?
-A neural network with multiple hidden layers.
-Which loss function is used?
-Mean Squared Error.
-Which optimizer is commonly used?
-Adam optimizer.
-What dataset is used?
-Boston Housing Dataset.
-What is the target variable?
-House price.
-Why use normalization?
-To improve training efficiency.
-What is overfitting?
-Model performs well on training but poorly on testing data.
-What activation is used in hidden layers?
-ReLU.
-What is an epoch?
-One complete training cycle through dataset.
+Deep Neural Networks can successfully predict house prices and improve regression performance
+by learning complex relationships in data
+What is regression?Prediction of continuous values.
+What is DNN?A neural network with multiple hidden layers.
+Which loss function is used?Mean Squared Error.
+What dataset is used?Boston Housing Dataset.
+What is the target variable?House price.
+Why use normalization?To improve training efficiency.
+What is overfitting?Model performs well on training but poorly on testing data.
+What activation is used in hidden layers?ReLU.
+What is an epoch?One complete training cycle through dataset.
 
 1. What is Linear Regression?
-Linear Regression is a supervised learning algorithm used to predict continuous values by finding a linear relationship between input variables and output variables.
+Linear Regression is a supervised learning algorithm used to predict continuous 
+values by finding a linear relationship between input variables and output variables.
 2. Why is it called Linear Regression?
 Because it assumes a linear relationship between input variable (x) and output variable (y).
 3. What is the goal of Linear Regression?
 The goal is to find the best-fit line that minimizes prediction error.
 4. What is the equation of Linear Regression?
 genui{"math_block_widget_always_prefetch_v2":{"content":"y = \theta_1 + \theta_2 x"}}
-Where:
-•	( \theta_1 ) = intercept
-•	( \theta_2 ) = slope/coefficient
-5. What is a hypothesis function?
-The hypothesis function predicts the output value (y) for a given input (x).
-6. What is supervised learning?
-Supervised learning is a machine learning method where the model learns from labeled data.
-7. What is dependent variable?
-Dependent variable is the output variable to be predicted.
+Where:	( \theta_1 ) = intercept,	( \theta_2 ) = slope/coefficient
+5. What is a hypothesis function? predicts the output value (y) for a given input (x).
+6. What is supervised learning?a ML method where the model learns from labeled data.
+7. What is dependent variable? is the output variable to be predicted.
 In this experiment, house price is the dependent variable
-8. What is independent variable?
-Independent variables are input features used to predict output.
+8. What is independent variable?are input features used to predict output.
 9. What is meant by best-fit line?
 The line that minimizes the error between actual and predicted values.
-10. What are θ1 and θ2?
-•	θ1 → Intercept/Bias
-•	θ2 → Coefficient/Slope
-11. What is Cost Function?
-Cost function measures how far predicted values are from actual values.
+10. What are θ1 and θ2?θ1 → Intercept/Bias,	θ2 → Coefficient/Slope
+11. What is Cost Function? measures how far predicted values are from actual values.
 12. Which cost function is used in Linear Regression?
 Mean Squared Error (MSE) or Root Mean Squared Error (RMSE).
 13. What is RMSE?
 RMSE = \sqrt{\frac{1}{n}\sum_{i=1}^{n}(y_i-\hat{y}_i)^2}
 It measures average prediction error.
-14. Why do we minimize the cost function?
-To improve prediction accuracy
-15. What is Gradient Descent?
-Gradient Descent is an optimization algorithm used to minimize cost by updating parameters iteratively
+14. Why do we minimize the cost function?To improve prediction accuracy
+15. What is Gradient Descent?optimization algo used to minimize cost by updating parameters iteratively
 16. How does Gradient Descent work?
 It starts with random values of parameters and continuously updates them to reduce error.
 17. What happens if learning rate is very high?
 The model may overshoot minimum cost and fail to converge.
-18. What happens if learning rate is too low?
-Training becomes very slow.
+18. What happens if learning rate is too low?Training becomes very slow.
 19. What is the Boston Housing Dataset?
 It is a dataset containing housing information in Boston suburbs used for price prediction.
-20. How many instances are present in the dataset?
-506 instances.
-21. How many features are present?
-13 input features and 1 target output.
-22. What is the target variable?
-House Price
-23. What does CRIM represent?
-Per capita crime rate by town.
-24. What does RM represent?
-Average number of rooms per dwelling
-25. What does PTRATIO represent?
-Pupil-teacher ratio by town.
-26. What does TAX represent?
-Property tax rate.
-27. Which feature indicates pollution level?
-NOX (Nitric Oxides concentration).
+20. How many instances are present in the dataset?506 instances.
+21. How many features are present?13 input features and 1 target output.
+22. What is the target variable?House Price
+23. What does CRIM represent?Per capita crime rate by town.
+24. What does RM represent?Average number of rooms per dwelling
+25. What does PTRATIO represent?Pupil-teacher ratio by town.
+26. What does TAX represent?Property tax rate.
+27. Which feature indicates pollution level?NOX (Nitric Oxides concentration).
 28. What is CHAS feature?
 A dummy variable indicating whether the tract bounds Charles Riv
-.29. Why is NumPy used?
-NumPy is used for numerical computations and array operations.
-30. Why is Pandas used?
-Pandas is used for data handling and DataFrame operations.
-31. Why is Matplotlib used?
-Matplotlib is used for plotting graphs and visualization
+.29. Why is NumPy used?used for numerical computations and array operations.
+30. Why is Pandas used?used for data handling and DataFrame operations.
+31. Why is Matplotlib used?used for plotting graphs and visualization
 32. What is the use of train_test_split()?
 It splits dataset into training and testing datasets.
 33. Why do we split data into train and test sets?
 To evaluate model performance on unseen data
-34. What is the purpose of random_state?
-It ensures reproducible results.
-35. What does test_size = 0.2 mean?
-20% data is used for testing and 80% for training.
+34. What is the purpose of random_state?It ensures reproducible results.
+35. What does test_size = 0.2 mean?20% data is used for testing and 80% for training.
 36. Which library provides Linear Regression model?
 Scikit-learn provides Linear Regression implementation
-37. What does fit() method do?
-It trains the model using training data.
-38. What does predict() method do?
-It predicts output values for test data.
-39. What is y_pred?
-Predicted output values generated by the model.
-40. Why do we plot scatter graph?
-To compare actual and predicted values visually.41. What is Deep Learning?
-Deep learning is a subset of machine learning using neural networks with multiple hidden layers.
-42. What is a Deep Neural Network (DNN)?
-A neural network containing multiple hidden layers
+37. What does fit() method do?It trains the model using training data.
+38. What does predict() method do?It predicts output values for test data.
+39. What is y_pred?Predicted output values generated by the model.
+40. Why do we plot scatter graph?To compare actual and predicted values visually.41.
+What is Deep Learning?subset of ML using neural networks with multiple hidden layers.
+42. What is a Deep Neural Network?A NN containing multiple hidden layers
 43. Difference between Linear Regression and DNN?
-•	Linear Regression models linear relationships.
-•	DNN can learn complex nonlinear relationships
+	Linear Regression models linear relationships.DNN can learn complex nonlinear relationships
 44. Why use DNN for housing prediction?
 Because housing prices may depend on complex nonlinear relationships between features
-45. What activation function is commonly used in hidden layers?
-ReLU activation function.
-46. Which activation is used in output layer for regression?
-Linear activation.
-47. What is an epoch?
-One complete pass of training data through the model.
-48. What is batch size?
-Number of samples processed before updating weights.
-49. What optimizer is commonly used in DNN?
-Adam optimizer.
+45. What activation function is commonly used in hidden layers?ReLU activation function.
+46. Which activation is used in output layer for regression?Linear activation.
+47. What is an epoch?One complete pass of training data through the model.
+48. What is batch size?NO.of samples processed before updating weights.
 50. What is overfitting?
-When the model performs well on training data but poorly on testing data.51. What does the scatter plot represent?
-Comparison between actual prices and predicted prices.
+When the model performs well on training data but poorly on testing data.
+51. What does the scatter plot represent?Comparison bet actual prices&predicted prices.
 52. What indicates a good prediction in scatter plot?
 Points lying close to the diagonal line indicate accurate prediction.
 53. What is Mean Squared Error?
 MSE = \frac{1}{n}\sum_{i=1}^{n}(y_i-\hat{y}_i)^2
 Average squared difference between actual and predicted values.
-54. What does lower MSE indicate?
-Better model performance.
-55. What is the output of this experiment?
-Prediction of Boston housing prices.
+54. What does lower MSE indicate?Better model performance.
+55. What is output of this experiment?Prediction of Boston housing prices.
 56. What is concluded from this experiment?
 Linear Regression can successfully predict house prices using housing features.
 57. What are the limitations of Linear Regression?
-•	Assumes linear relationship,Sensitive to outliers,Cannot model complex pattern
+Assumes linear relationship,Sensitive to outliers,Cannot model complex pattern
 58. What are advantages of DNN over Linear Regression?
 DNN handles nonlinear and complex data more effectively.
-What is regression?
-Prediction of continuous values.
-What is DNN?
-Neural network with multiple hidden layers.
-What is MSE?
-Average squared prediction error.
-What is RMSE?
-Square root of MSE.
-What is Gradient Descent?
-Optimization method to minimize error.
-Which dataset is used?
-Boston Housing Dataset.
-What is target variable?
-House Price.
-Which library is used for Linear Regression?
-Scikit-learn.
-What does fit() do?
-Trains the model.
-What does predict() do?
-Predicts output values.
+What is regression?Prediction of continuous values.
+What is Gradient Descent?Optimization method to minimize error.
+What is target variable?House Price.
+Which library is used for Linear Regression?Scikit-learn.
+What does fit() do?Trains the model.
+What does predict() do?Predicts output values.
