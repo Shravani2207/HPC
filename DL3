@@ -263,152 +263,87 @@ Add dense and dropout layers
 Compile model
 Train model
 Evaluate accuracy
-What is the aim of this program?
-The aim is to classify fashion images using a Convolutional Neural Network (CNN).
-What dataset is used in this program?
-The Fashion-MNIST dataset is used.
+
+What is the aim of this program?tclassify fashion images using Convolutional NN 
+What dataset is used in this program? Fashion-MNIST dataset is used.
 What does Fashion-MNIST contain?
 It contains grayscale images of fashion products such as:
-T-shirts
-Shoes
-Bags
-Dresses
-Coats
-How many classes are present in Fashion-MNIST?
-10 classes.
-What is the image size in Fashion-MNIST?
-28 × 28 pixels.
-What is CNN?
-CNN (Convolutional Neural Network) is a deep learning model mainly used for image processing and computer vision tasks.
+T-shirts,Shoes,Bags,Dresses,Coats
+How many classes are present in Fashion-MNIST?10 classes.
+What is the image size in Fashion-MNIST?28 × 28 pixels.
+What is CNN? is a DL model mainly used for image processing&computer vision tasks.
 Why is CNN preferred for image data?
 Because CNN automatically extracts important spatial features from images.
 Difference between CNN and ANN?
-CNN	ANN
 Used for images	Used for tabular data
 Feature extraction automatic	Manual feature extraction
 Uses convolution layers	Uses dense layers only
 
-What is Deep Learning?
-Deep Learning is a subset of Machine Learning using multi-layer neural networks.
-What does fashion_mnist.load_data() do?
-It loads training and testing datasets of Fashion-MNIST.
+What is Deep Learning? a subset of ML using multi-layer NN.
+What does fashion_mnist.load_data() do? loads training&testing datasets of Fashion-MNIST.
 What are trainX and trainY?
-trainX → Training images
-trainY → Training labels
-Why do we reshape images?
-CNN expects 4D input:
-Samples
-Height
-Width
-Channels
+trainX → Training images,trainY → Training labels
+Why do we reshape images?CNN expects 4D input:Samples,Height,Width,Channels
 Why is 1 used in reshape (28,28,1)?
 Because images are grayscale and contain only one color channel.
-Why normalize pixel values?
-Normalization improves training speed and model performance.
+Why normalize pixel values?Normalization improves training speed&model performance.
 Why divide by 255?
 Pixel values range from 0–255. Dividing by 255 converts them into 0–1 range.
-Formula:
-x_{normalized}=\frac{x}{255}
-What is one-hot encoding?
-It converts class labels into binary vectors.
-Example:
-Label 3	[0 0 0 1 0 0 0 0 0 0]
+Formula:x_{normalized}=\frac{x}{255}
+What is one-hot encoding?It converts class labels into binary vectors.
+Example:Label 3	[0 0 0 1 0 0 0 0 0 0]
 
-Why use to_categorical()?
-To convert integer labels into one-hot encoded vectors.
-What is a Convolution Layer?
-Convolution layer extracts features such as edges, textures, and shapes from images.
-What is a filter/kernel?
-A small matrix used to scan images and detect features.
-Why use 3×3 filter size
-3×3 filters effectively capture local image features with low computation.
-Why are 32 filters used in first layer?
-To learn 32 different image features.
-Why are 64 filters used in second layer?
-Deeper layers learn more complex features, requiring more filters.
-What is ReLU activation?
-Answer:
-ReLU replaces negative values with zero.
-Formula:
-f(x)=\max(0,x)
-Why is ReLU used?
-Faster computation
-Solves vanishing gradient problem
-Improves learning speed
-What is MaxPooling?
-MaxPooling reduces image dimensions while preserving important features.
-Why use pooling layers?
-Reduces computation
-Reduces overfitting
-Extracts dominant features
+Why use to_categorical()?To convert integer labels into one-hot encoded vectors.
+What is a Convolution Layer? extracts features such as edges, textures,&shapes from images.
+What is a filter/kernel?A small matrix used to scan images&detect features.
+Why use 3×3 filter size?effectively capture local image features with low computation.
+Why are 32 filters used in first layer?To learn 32 different image features.
+Why are 64 filters used in second layer?Deeper layers learn more complex features, requiring more filters.
+What is ReLU activation?ReLU replaces negative values with zero.
+Formula:f(x)=\max(0,x)
+Why is ReLU used?Faster computation,Solves vanishing gradient problem,Improves learning speed
+What is MaxPooling? reduces image dimensions while preserving important features.
+Why use pooling layers?Reduces computation,Reduces overfitting,Extracts dominant features
 What does (2,2) pooling mean?
 Pooling operates on 2×2 regions and selects maximum value.
-What is Flatten layer?
-Flatten converts 2D feature maps into 1D vector for dense layers.
-What is Dense layer?
-A fully connected neural network layer.
-Why use Dense(128)?
-128 neurons help learn complex image patterns.
-What is Dropout?
-Dropout randomly disables neurons during training.
-Why is Dropout used?
-To reduce overfitting.
-What does Dropout(0.5) mean?
-50% neurons are randomly deactivated during training.
-Why does output layer have 10 neurons?
-Because there are 10 clothing categories.
-What is Softmax activation?
-Softmax converts outputs into probabilities.
-Formula:
-\sigma(z_i)=\frac{e^{z_i}}{\sum_{j=1}^{K} e^{z_j}}
-Why is Softmax used in output layer?
-Because this is a multi-class classification problem.
-What is model.compile()?
-It configures optimizer, loss function, and metrics.
-What is Adam optimizer?
-Adam is an adaptive optimization algorithm used for faster convergence.
-Why use Adam optimizer?
-Because it provides efficient and faster training.
-What is learning rate?
-Learning rate controls weight update size during training.
+What is Flatten layer? converts 2D feature maps into 1D vector for dense layers.
+What is Dense layer?A fully connected neural network layer.
+Why use Dense(128)?128 neurons help learn complex image patterns.
+What is Dropout? randomly disables neurons during training.
+Why is Dropout used?To reduce overfitting.
+What does Dropout(0.5) mean?50% neurons are randomly deactivated during training.
+Why does output layer have 10 neurons?Because there are 10 clothing categories.
+What is Softmax activation?converts outputs into probabilities.
+Formula:\sigma(z_i)=\frac{e^{z_i}}{\sum_{j=1}^{K} e^{z_j}}
+Why is Softmax used in output layer?Because this is a multi-class classification problem.
+What is model.compile()?It configures optimizer, loss function, and metrics.
+What is Adam optimizer?Adam is an adaptive optimization algorithm used for faster convergence.
+Why use Adam optimizer?Because it provides efficient and faster training.
+What is learning rate? controls weight update size during training.
 What is categorical_crossentropy?
 Loss function used for multi-class classification.
-Formula:
-L=-\sum_{i=1}^{C} y_i\log(\hat{y_i})
-Why use categorical_crossentropy?
-Because output contains multiple classes.
-What is epoch?
-One complete pass of training data through network.
+Formula:L=-\sum_{i=1}^{C} y_i\log(\hat{y_i})
+Why use categorical_crossentropy?Bec output contains multiple classes.
+What is epoch?One complete pass of training data through network.
 What is batch size?
 Number of samples processed before updating weights.
-Why batch size = 32?
-It balances training speed and memory efficiency.
-What is validation data?
-Validation data checks model performance during training.
-What is overfitting?
-When model performs well on training data but poorly on unseen data.
+Why batch size = 32?It balances training speed and memory efficiency.
+What is validation data?checks model performance during training.
+What is overfitting?When model performs well on training data but poorly on unseen data.
 How does CNN reduce overfitting
-Using:
-Pooling
-Dropout
-Feature sharing
-What does model.evaluate() do?
-It evaluates model performance on test data.
-What is accuracy?
-Accuracy is percentage of correctly classified images.
-Formula:
-Accuracy=\frac{Correct\ Predictions}{Total\ Predictions}
+Using:Pooling,Dropout,Feature sharing
+What does model.evaluate() do?evaluates model performance on test data.
+What is accuracy? is percentage of correctly classified images.
+Formula:Accuracy=\frac{Correct\ Predictions}{Total\ Predictions}
 What is feature extraction in CNN?
 Automatic detection of important image patterns like edges and textures.
-What is forward propagation
-Passing input through layers to generate prediction.
-What is backpropagation?
-Updating weights using error gradients.
+What is forward propagationPassing input through layers to generate prediction.
+What is backpropagation?Updating weights using error gradients.
 What is vanishing gradient problem
 Gradients become very small in deep networks, slowing learning.
 Why is CNN better than ANN for image classification?
-CNN preserves spatial relationships and extracts image features automatically.Explain complete workflow of your project.
-Answer:
+CNN preserves spatial relationships and extracts image features automatically.
+Explain complete workflow of your project.
 Import required libraries
 Load Fashion-MNIST dataset
 Reshape images into CNN format
@@ -422,24 +357,22 @@ Add output layer with softmax activation
 Compile model using Adam optimizer and categorical crossentropy loss
 Train model using fit()
 Evaluate model accuracy using test dataset
+
 What is the use of the convolution layer in CNN?
-The Convolution Layer is used to extract important features from an image such as:
-edges
-textures
-shapes
-patterns
+ used to extract important features from an image such as:
+edges,textures,shapes,patterns
 It applies filters (kernels) to the input image and generates feature maps.
 Advantages:
 Automatic feature extraction
 Reduces manual work
 Captures spatial relationships in images
 What are the advantages of using CNN over DNN?
-CNN	DNN
 Specialized for image data	General-purpose network
 Uses convolution and pooling	Uses fully connected layers
 Fewer parameters	Large number of parameters
 Better feature extraction	Manual feature extraction needed
 Faster for images	More computationally expensive
+
 Main Advantages of CNN:
 Better image processing
 Lower computation
@@ -454,31 +387,18 @@ It handles large images efficiently
 ANN (Artificial Neural Network) treats images as simple vectors and loses spatial relationships.
 How would you visualize features of CNN in an image classification task?
 CNN features can be visualized using:
-Feature maps
-Activation maps
-Filters/Kernels visualization
-Early layers detect:
-edges
-lines
-Deeper layers detect:
-shapes
-objects
-complex patterns
+Feature maps,Activation maps,Filters/Kernels visualization
+Early layers detect:edges,lines,Deeper layers detect:
+shapes,objects,complex patterns
 Visualization helps understand what the CNN has learned from the image.
 What do you understand about shared weights in CNN?
 In CNN, the same filter weights are applied across the entire image.
 This is called weight sharing.
-Benefits:
-Reduces number of parameters
-Reduces memory usage
-Improves efficiency
-Detects same feature anywhere in image
-Example:
-One edge detector filter can identify edges throughout the image.
+Benefits:Reduces number of parameters,Reduces memory usage
+Improves efficiency,Detects same feature anywhere in image
+
 Explain the role of a fully connected (FC) layer in CNN.
-The Fully Connected Layer:
-Combines extracted features
-Performs final classification
+Combines extracted features&Performs final classification
 It connects every neuron from previous layer to every neuron in current layer.
 Role:
 Learns high-level relationships
@@ -492,190 +412,92 @@ Reduces overfitting
 Requires less memory
 Makes CNN efficient for image processing
 Without parameter sharing, CNN would need millions of parameters.
+
 Explain the different types of Pooling.
 Pooling reduces feature map dimensions while keeping important information
-Types of Pooling
-Max Pooling
-Selects the maximum value from a region.
-Example:
-From:
-2 5
-1 3
-Output = 5
-Advantages:
-Preserves strongest features
-Most commonly used
-Average Pooling
-Calculates average value from a region.
-Example:
-From:
-2 4
-6 8
-Output = (2+4+6+8)/4 = 5
-Advantages:
-Smoothens feature maps
-Global Max Pooling
-Takes maximum value from entire feature map.
-Global Average Pooling
-Takes average value from entire feature map.
-Why Pooling is Important
-Reduces image dimensions
-Reduces computation
-Prevents overfitting
-Improves training speed
-Makes model robust to small image variations
+Types of Pooling-Max Pooling-Selects the maximum value from a region.
+Example:From:2 5,1 3,Output = 5
+Advantages:Preserves strongest features
+
+Average PoolingCalculates average value from a region.
+Example:From:2 4,6 8,Output = (2+4+6+8)/4 = 5
+Advantages:Smoothens feature maps,Global Max Pooling
+
+Global Average Pooling-Takes average value from entire feature map.
+Why Pooling is Important?Reduces image dimensions,Reduces computation
 
 What is CNN?
-CNN (Convolutional Neural Network) is a deep learning algorithm mainly used for image processing and classification tasks.
-What is Deep Learning?
-Deep learning is a subset of machine learning that uses neural networks with multiple hidden layers to learn patterns automaticall
-What is the Fashion MNIST Dataset?
-Fashion MNIST is a dataset of grayscale clothing images used for image classification.
-It contains categories like:
-T-shirt
-Trouser
-Dress
-Coat
-Sandal
-Sneaker
-Ba
-How many classes are present in Fashion MNIST?
-10 classes.
-What is the image size in Fashion MNIST?
-28 × 28 pixels.
+is A DL algorithm mainly used for image processing&classification tasks.
+What is Deep Learning?a subset of ML that uses NN with multiple hidden layers to learn patterns automaticall
+What is the Fashion MNIST Dataset? a dataset of grayscale clothing images used for image classification.
+It contains categories like:T-shirt,Trouser,Dress,Coat,Sandal,Sneaker
+
+How many classes are present in Fashion MNIST?10 classes.
+What is the image size in Fashion MNIST?28 × 28 pixels.
 Why is Fashion MNIST preferred over MNIST sometimes?
 Because Fashion MNIST is more complex and realistic than handwritten digit classification.
-What type of images are used?
-Grayscale images
+What type of images are used?Grayscale images
 What are the main layers in CNN?
-Convolution Layer
-Activation Layer
-Pooling Layer
-Fully Connected Layer
-Output Layer
+Convolution Layer,Activation Layer,Pooling Layer,Fully Connected Layer,Output Layer
 What is a Convolution Layer?
 It extracts important features from images using filters/kernels.
 What is a filter/kernel in CNN?
 A small matrix used to detect features like edges, textures, and patterns.
-What is feature extraction?
-The process of identifying important patterns from input images.
-What is ReLU activation function?
-ReLU converts negative values to zero.
+What is feature extraction?process of identifying important patterns from input images.
+What is ReLU activation function?ReLU converts negative values to zero.
 ReLU(x)=\max(0,x)
 Why is ReLU used?
 Because it improves training speed and reduces vanishing gradient problem.
-What is pooling?
-Pooling reduces image dimensions while retaining important information.
-What is Max Pooling?
-Max pooling selects the maximum value from a region.
-hy is pooling used?
-Reduces computation
-Prevents overfitting
-Reduces image size
+What is pooling? reduces image dimensions while retaining important information.
+What is Max Pooling?selects the maximum value from a region.
+Why is pooling used?Reduces computation
+Prevents overfitting,Reduces image size
 What is Flatten layer?
 Flatten converts 2D feature maps into 1D vectors for classification
 What is Dense layer?
 A fully connected neural network layer used for final classification.
 Which activation is used in output layer?
-Softmax activation.
-Softmax(z_i)=\frac{e^{z_i}}{\sum_{j}e^{z_j}}
+Softmax activation.Softmax(z_i)=\frac{e^{z_i}}{\sum_{j}e^{z_j}}
 Why is Softmax used?
 Because it converts outputs into probabilities for multiple classes.
 Why do we normalize images?
 Normalization scales pixel values for faster and stable training.
-What is the pixel value range after normalization?
-0 to 1.
-Why reshape the dataset?
-CNN requires image data in specific dimensions.
-What is train-test split?
-Dividing dataset into training and testing data.
-Why use validation data?
-To evaluate model performance during training.
-What is epoch?
-One complete pass of training data through the model.
-What is batch size?
-Number of samples processed before weight update.
-What optimizer is commonly used?
-Adam optimizer.
-What is loss function?
-A function that measures prediction error.
+What is the pixel value range after normalization?0 to 1.
+Why reshape the dataset?CNN requires image data in specific dimensions.
+What is train-test split?Dividing dataset into training and testing data.
+Why use validation data?To evaluate model performance during training.
+What is epoch?One complete pass of training data through the model.
+What is batch size?Number of samples processed before weight update.
+What optimizer is commonly used?Adam optimizer.
+What is loss function?A function that measures prediction error.
 Which loss function is used for multiclass classification?
-Categorical Cross Entropy.
-L=-\sum_{i=1}^{C} y_i\log(\hat{y}_i)
-What is backpropagation?
-Process of updating weights using calculated error.
-What is gradient descent?
-Optimization technique used to minimize loss.
-What is accuracy?
-Percentage of correctly classified images.
+Categorical Cross Entropy.L=-\sum_{i=1}^{C} y_i\log(\hat{y}_i)
+What is backpropagation?Process of updating weights using calculated error.
+What is gradient descent?Optimization technique used to minimize loss.
+What is accuracy?Percentage of correctly classified images.
 What is overfitting?
 When model performs well on training data but poorly on testing data.
-How can overfitting be reduced?
-Dropout
-Data augmentation
-Regularization
-More training data
-What is dropout?
-Randomly disabling neurons during training to prevent overfitting
-What is underfitting?
-When the model cannot learn patterns properly.
-Which libraries are used?
-NumPy
-TensorFlow
-Keras
-Matplotlib
-What is TensorFlow?
-TensorFlow is an open-source deep learning framework.
-What is Keras?
-Keras is a high-level API for building deep learning models.
-What does model.compile() do?
-Configures optimizer, loss function, and metrics
-What does model.fit() do?
-Trains the CNN model.
-What does model.evaluate() do?
-Evaluates performance on test data.
-What does model.predict() do?
-Predicts output classes for new images.
+How can overfitting be reduced?Dropout,Data augmentation,Regularization
+What is dropout?Randomly disabling neurons during training to prevent overfitting
+What is underfitting?When the model cannot learn patterns properly.
+Which libraries are used?NumPy,TensorFlow,Keras,Matplotlib
+What is TensorFlow? open-source deep learning framework.
+What is Keras? high-level API for building deep learning models.
+What does model.compile() do?Configures optimizer, loss function& metrics
+What does model.fit() do?Trains the CNN model.
+What does model.evaluate() do?Evaluates performance on test data.
+What does model.predict() do?Predicts output classes for new images.
 Why is CNN better for image classification?
 CNN automatically extracts image features and handles spatial information efficiently.
 Difference between ANN and CNN?
 ANN uses fully connected layers only.
 CNN uses convolution and pooling for image processing.
-What are advantages of CNN?
-High accuracy
-Automatic feature extraction
-Good for image tasks
-What are limitations of CNN?
-Requires large data
-High computational cost
-Longer training time
-What applications use CNN?
-Face recognition
-Medical imaging
-Self-driving cars
-Object detection
+What are advantages of CNN?High accuracy,Automatic feature extraction,Good for image tasks
+What are limitations of CNN?Requires large data,High computational cost,Longer training time
+What applications use CNN?Face recognition,Medical imaging,Self-driving cars,Object detection
 What is the conclusion of this experiment?
 CNN successfully classifies Fashion MNIST clothing images with good accuracy.
-What is CNN?
-Deep learning model for image processing.
-Which dataset is used?
-Fashion MNIST Dataset.
-Image size?
-28 × 28 pixels.
-Number of classes?
-10 classes.
-Which activation is used in hidden layers?
-ReLU.
-Which activation is used in output layer?
-Softmax.
-Which loss function is used?
-Categorical Cross Entropy.
-Why use pooling?
-To reduce dimensions.
-What is normalization?
-Scaling pixel values between 0 and 1.
-What is dropout?
-Technique to prevent overfitting.
+
 
 
 
