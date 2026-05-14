@@ -180,18 +180,13 @@ return 0;
 •	Terminates program successfully.
 
 1. What is Bubble Sort?
-Bubble Sort is a sorting algorithm that repeatedly compares adjacent elements and swaps them if they are in wrong order.
-2. What type of sorting algorithm is Bubble Sort?
-Comparison-based sorting algorithm
-3. What is the main idea behind Bubble Sort?
-Largest elements “bubble up” to the end after every pass.
-4. Which sorting technique is used here?
-Odd-Even Transposition Sort (parallel Bubble Sort).
-5. Why is normal Bubble Sort difficult to parallelize?
-Adjacent swaps may conflict with each other.
+a sorting algorithm that repeatedly compares adjacent elements and swaps them if they are in wrong order.
+2. What type of sorting algorithm is Bubble Sort?Comparison-based sorting algorithm
+3. What is the main idea behind Bubble Sort?Largest elements “bubble up” to the end after every pass.
+4. Which sorting technique is used here?Odd-Even Transposition Sort (parallel Bubble Sort).
+5. Why is normal Bubble Sort difficult to parallelize?Adjacent swaps may conflict with each other.
 6. Why is <omp.h> included?
-#include<omp.h>
-To use OpenMP directives for parallel programming.
+#include<omp.h>To use OpenMP directives for parallel programming.
 7. Why using namespace std is used?
 using namespace std;
 Allows using:
@@ -214,30 +209,19 @@ int first = i % 2;
 Determines whether current phase is:
 	Even phase
 Odd phase
-13. What is Odd-Even Transposition Sort?
-A parallel version of Bubble Sort.
+13. What is Odd-Even Transposition Sort?A parallel version of Bubble Sort.
 14. How does Odd-EvenSort work?
-Even Phase
-Compare:
-(0,1), (2,3), (4,5)
-Odd Phase
-Compare:
-(1,2), (3,4), (5,6)
-15. Why j += 2 is used?
-j += 2
-To compare alternate adjacent pairs.
-16. What is OpenMP?
-OpenMP is an API for parallel programming in C/C++.
-17. Explain:
-#pragma omp parallel for
+Even Phase-Compare:(0,1), (2,3), (4,5)
+Odd Phase-Compare:(1,2), (3,4), (5,6)
+15. Why j += 2 is used?To compare alternate adjacent pairs.
+16. What is OpenMP?an API for parallel programming in C/C++.
+17. Explain #pragma omp parallel for
 Executes loop iterations simultaneously using multiple threads
 18. What does shared(a,first) mean?
 shared(a,first)
 Variables shared among all threads.
-19. What is parallel computing?
-Performing multiple operations simultaneously.
-20. What are threads?
-Small execution units running in parallel.
+19. What is parallel computing?Performing multiple operations simultaneously.
+20. What are threads?Small execution units running in parallel.
 21. Explain swapping logic.
 test=a;
 a=b;
@@ -253,86 +237,58 @@ a = new int[n];
 Array size is decided at runtime.
 ________________________________________
 24. Difference between static and dynamic array?
-Static	Dynamic
 Fixed size	Runtime size
 Stack memory	Heap memory
 25. Time complexity of Bubble Sort?
-Worst Case
-O(n²)
+Worst Case-O(n²)
 26. Space complexity?
-O(1)
-Only temporary variable used.
+O(1) Only temporary variable used.
 27. Best case complexity?
-O(n²)
-(Optimization not implemented here.)
-30. What is sorting?
-Arranging data in ascending or descending order
+O(n²) (Optimization not implemented here.)
+30. What is sorting?Arranging data in ascending or descending order
 31. Difference between sequential and parallel sorting?
-Sequential	Parallel
 One thread	Multiple threads
 Slower	Faster
-
-32. Why is OpenMP useful?
-Improves performance on multicore processors.
+32. Why is OpenMP useful?Improves performance on multicore processors.
 33. What is race condition?
 Multiple threads modifying shared data simultaneously.
 
 34. Does this program have race condition?
 No major conflict because independent pairs are processed.
 35. Why Bubble Sort is not preferred for large datasets?
-Because complexity is:
-O(n²)
-Very slow for large input.
+Because complexity is:O(n²)Very slow for large input.
 36. Which sorting algorithms are faster than Bubble Sort?
 Algorithm	Complexity
 Merge Sort	O(n log n)
 Quick Sort	O(n log n)
 Heap Sort	O(n log n)
 
-37. Is Bubble Sort stable?
-Yes.
-Equal elements maintain relative order.
-38. Is Bubble Sort adaptive?
-Normal Bubble Sort can be adaptive if optimized.
-This implementation is not optimized.
-39. How to compile this program?
-g++ -fopenmp bubble.cpp -o bubble
+37. Is Bubble Sort stable?Yes.Equal elements maintain relative order.
+38. Is Bubble Sort adaptive?Normal Bubble Sort can be adaptive if optimized.
+39. How to compile this program?g++ -fopenmp bubble.cpp -o bubble
 40. How to run program?
 ./bubble
 OR on Windows:
 .\bubble.exe
-Why OpenMP is used?
-To perform sorting operations in parallel.
-Why j += 2 is used?
-To process independent adjacent pairs safely.
-Why references used in swap?
-To modify actual variables directl
-Main disadvantage of Bubble Sort?
-Very high time complexity
-Main advantage of Bubble Sort?
-Simple and easy to implement.
-
-
-
+Why OpenMP is used?To perform sorting operations in parallel.
+Why j += 2 is used?To process independent adjacent pairs safely.
+Why references used in swap?To modify actual variables directl
+Main disadvantage of Bubble Sort?Very high time complexity
+Main advantage of Bubble Sort?Simple and easy to implement.
 Why Odd-Even Method is Used?
 Normal Bubble Sort cannot be parallelized easily because adjacent swaps may conflict.
 Odd-Even Transposition Sort solves this by:
 Comparing independent pairs simultaneously.
-Example:
-(0,1) and (2,3)
-can run together safely.
-Time Complexity
-Worst Case
-O(n²)
-Space Complexity
-O(1)
+Example:(0,1) and (2,3) run together safely.
+Time Complexity Worst Case O(n²)
+Space Complexity O(1)
 Only temporary variables used.
 
   
 1.	What is Parallel Bubble Sort? 
-Parallel Bubble Sort is a parallel version of the Bubble Sort algorithm where multiple threads compare and swap elements simultaneously to improve sorting speed. 
+Parallel Bubble Sort is a parallel version of the Bubble Sort algorithm where multiple threads compar
+and swap elements simultaneously to improve sorting speed. 
 It uses parallel programming techniques such as OpenMP to divide sorting work among multiple processors/threads. 
-One-Line Answer 
 “Parallel Bubble Sort performs sorting using multiple threads simultaneously.”  
 2.	How does Parallel Bubble Sort work? 
 Parallel Bubble Sort works by dividing comparison and swapping operations among multiple threads. 
@@ -343,38 +299,12 @@ Working
 4.	Repeat passes until array becomes sorted. 
 Odd-Even Transposition Method 
 Parallel Bubble Sort commonly uses: 
-Odd phase 
-	Even phase 
+Odd phase ,Even phase 
 Example 
-Even Phase 
-Compare: 
-(0,1), (2,3), (4,5) 
-Odd Phase 
-Compare: 
-(1,2), (3,4), (5,6) 
+Even Phase Compare: (0,1), (2,3), (4,5) 
+Odd Phase Compare: (1,2), (3,4), (5,6) 
 These comparisons occur in parallel.  
 3.	How do you implement Parallel Bubble Sort using OpenMP? 
-OpenMP Implementation 
-#include <stdio.h> 
-#include <omp.h> 
-void parallelBubbleSort(int a[], int n) { 
-    for(int i = 0; i < n; i++) { 
- 
-        // Even phase 
-        #pragma omp parallel for         for(int j = 0; j < n-1; j += 2) { 
-            if(a[j] > a[j+1]) {                 int temp = a[j];                 a[j] = a[j+1];                 a[j+1] = temp; 
-            } 
-        } 
-        // Odd phase 
-        #pragma omp parallel for         for(int j = 1; j < n-1; j += 2) { 
-            if(a[j] > a[j+1]) {                 int temp = a[j];                 a[j] = a[j+1];                 a[j+1] = temp; 
-            } 
-        } 
-    } 
-} 
-Explanation 
-	#pragma omp parallel for distributes comparisons among threads. 
-	Odd and even phases avoid conflicts between threads.  
 4.	What are the advantages of Parallel Bubble Sort? 
 Advantages 
 1.	Faster execution 
@@ -382,77 +312,44 @@ Advantages
 3.	Multiple comparisons occur simultaneously 
 4.	Suitable for multicore processors 
 5.	Reduced sorting time for large datasets 
-One-Line Answer 
-“Parallel Bubble Sort improves performance by using multiple threads simultaneously.”  
+
 5.	Difference between Serial Bubble Sort and Parallel Bubble Sort 
-Serial Bubble Sort 	Parallel Bubble Sort 
 Uses single processor 	Uses multiple processors/threads 
 Comparisons happen sequentially Comparisons happen simultaneously 
 Slower execution 	Faster execution 
 No parallelism 	Uses parallelism 
 Less CPU utilization 	Better CPU utilization  
-Parallel Bubble Sort 
-“Sorting is performed simultaneously using multiple threads.” 
-OpenMP Directive 
-#pragma omp parallel for 
-Main Advantage 
-“Reduced execution time.” 
-Technique Used 
-“Odd-Even Transposition method.” 
-Time Complexity of Bubble Sort 
-O(n^2)  
-1.	What is Bubble Sort? 
-Bubble Sort is a sorting algorithm that repeatedly swaps adjacent elements if they are in the wrong order.  
+ 
+Time Complexity of Bubble Sort O(n^2)   
 2.	Why is it called Bubble Sort? 
 Because larger elements move toward the end like bubbles rising in water.  
 3.	What is the basic idea of Bubble Sort? 
 Compare adjacent elements and swap them if they are not in correct order.  
-4.	What is the first step in Bubble Sort? 
-Start from the beginning of the array.  
-5.	Which elements are compared in Bubble Sort? 
-Adjacent elements.  
-6.	When are elements swapped? 
-When the left element is greater than the right element.  
-7.	What is the time complexity of Bubble Sort? 
-O(n^2)  
-8.	Why is Bubble Sort inefficient for large datasets? 
-Because it requires many comparisons and swaps.  
-9.	What is the space complexity of Bubble Sort?  
-O(1)  
+4.	What is the first step in Bubble Sort? Start from the beginning of the array.  
+5.	Which elements are compared in Bubble Sort? Adjacent elements.  
+6.	When are elements swapped? When the left element is greater than the right element.  
+7.	What is the time complexity of Bubble Sort? O(n^2)  
+8.	Why is Bubble Sort inefficient for large datasets? Bec it requires many comparisons&swaps.  
+9.	What is the space complexity of Bubble Sort?  O(1)  
 10.	What are the advantages of Bubble Sort?  
-•	Easy to understand 
-•	Simple to implement 
-•	Useful for small datasets  
-11.	Where is Bubble Sort mainly used? 
-Educational purposes and small datasets.  
-12.	Why is Bubble Sort useful for partially sorted arrays? 
-Because fewer swaps are needed.  
-13.	Is Bubble Sort stable? 
-Yes, Bubble Sort is a stable sorting algorithm.  
-14.	What is a stable sorting algorithm? 
-It preserves the relative order of equal elements.  
-15.	What is the best-case complexity of Bubble Sort? 
-Answer: O(n) for already sorted arrays.  
-16.	What is OpenMP?  
-OpenMP is an API for shared-memory parallel programming.  
-17.	Which languages support OpenMP? 
-C, C++, and Fortran.  
+•	Easy to understand ,Simple to implement ,Useful for small datasets  
+11.	Where is Bubble Sort mainly used? Educational purposes and small datasets.  
+12.	Why is Bubble Sort useful for partially sorted arrays? Bec fewer swaps are needed.  
+13.	Is Bubble Sort stable? Yes, Bubble Sort is a stable sorting algorithm.  
+14.	What is a stable sorting algorithm? It preserves the relative order of equal elements.  
+15.	What is the best-case complexity of Bubble Sort?  O(n) for already sorted arrays.  
+17.	Which languages support OpenMP? C, C++, and Fortran.  
 18.	What is parallel programming? 
 Executing multiple tasks simultaneously using multiple processors or threads.  
-19.	What is shared-memory architecture? 
-All threads share the same memory space.  
+19.	What is shared-memory architecture? All threads share the same memory space.  
 20.	What is the fork-join model? 
 Master thread creates worker threads and joins them after execution.  
-21.	What are OpenMP directives? 
-Compiler instructions used for parallel execution.  
-22.	Which directive is used for parallel loops? 
-#pragma omp parallel for  
-23.	What is Parallel Bubble Sort? 
-A parallel version of Bubble Sort where multiple threads sort data simultaneously.  
+21.	What are OpenMP directives? Compiler instructions used for parallel execution.  
+22.	Which directive is used for parallel loops? #pragma omp parallel for  
+23.	What is Parallel Bubble Sort?  where multiple threads sort data simultaneously.  
 24.	How does Parallel Bubble Sort work? 
-The list is divided into sublists, and different threads sort them concurrently.  
-25.	What is the advantage of Parallel Bubble Sort?  
-Reduced execution time.  
+The list is divided into sublists&different threads sort them concurrently.  
+25.	What is the advantage of Parallel Bubble Sort?  Reduced execution time.  
 26.	How is parallelization achieved in Bubble Sort? 
 Using OpenMP directives to distribute work among threads.  
 27.	What is synchronization in Parallel Bubble Sort?  
@@ -460,9 +357,7 @@ Coordinating threads to maintain correct order of elements.
 28.	Why is synchronization important? 
 To avoid incorrect sorting due to simultaneous access.  
 29.	What affects the performance of Parallel Bubble Sort? 
-	Number of threads 
-	Dataset size 
-	Synchronization overhead  
+Number of threads ,Dataset size ,Synchronization overhead  
 30.	Why may Parallel Bubble Sort not help on small datasets? 
 Because thread creation overhead may exceed performance gain.  
 31.	What is thread overhead? 
@@ -481,14 +376,10 @@ Amount of memory used during execution.
 To analyze speedup and efficiency.  
 38.	What does top command do? 
 Shows real-time CPU and memory usage.  
-39.	What is htop? 
-An advanced interactive version of top.  
-40.	What does ps aux show? 
-List of running processes and resource usage.  
-41.	What does free -h show? 
-System memory usage.  
-42.	What does vmstat show? 
-CPU, memory, and system statistics.   
+39.	What is htop? An advanced interactive version of top.  
+40.	What does ps aux show? List of running processes and resource usage.  
+41.	What does free -h show? System memory usage.  
+42.	What does vmstat show? CPU, memory, and system statistics.   
  
 
 
