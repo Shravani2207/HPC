@@ -1,0 +1,604 @@
+
+import tensorflow as tf
+from tensorflow.keras.datasets import imdb
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Embedding, Flatten
+from tensorflow.keras.preprocessing.sequence import pad_sequences
+vocab_size = 10000   # consider top 10,000 words
+
+(X_train, y_train), (X_test, y_test) = imdb.load_data(num_words=vocab_size)
+max_length = 200
+
+X_train = pad_sequences(X_train, maxlen=max_length)
+X_test = pad_sequences(X_test, maxlen=max_length)
+model = Sequential()
+
+# Word embedding layer
+model.add(Embedding(input_dim=vocab_size, output_dim=128, input_length=max_length))
+
+# Flatten embeddings
+model.add(Flatten())
+
+# Hidden layers
+model.add(Dense(64, activation='relu'))
+model.add(Dense(32, activation='relu'))
+
+# Output layer (binary classification)
+model.add(Dense(1, activation='sigmoid'))
+model.compile(
+    optimizer='adam',
+    loss='binary_crossentropy',
+    metrics=['accuracy']
+)
+
+history = model.fit(
+    X_train,
+    y_train,
+    epochs=10,
+    batch_size=128,
+    validation_split=0.2
+)
+loss, accuracy = model.evaluate(X_test, y_test)
+print("Test Accuracy:", accuracy)
+
+
+
+________________________________________
+Import Libraries
+import tensorflow as tf
+Imports TensorFlow library.
+TensorFlow is used for deep learning and neural networks.
+from tensorflow.keras.datasets import imdb
+Imports the IMDB dataset from Keras.
+IMDB dataset contains movie reviews labeled as positive or negative.
+from tensorflow.keras.models import Sequential
+Imports the Sequential model.
+Sequential means layers are added one after another in order.
+from tensorflow.keras.layers import Dense, Embedding, Flatten
+Imports neural network layers:
+Dense → Fully connected neural network layer.
+Embedding → Converts words into dense vectors.
+Flatten → Converts multi-dimensional data into 1D vector.
+from tensorflow.keras.preprocessing.sequence import pad_sequences
+Used to make all review sequences the same length.
+Neural networks require fixed-size input.
+Define Vocabulary Size
+vocab_size = 10000
+Only the top 10,000 most frequent words are considered.
+Rare words are ignored.
+Example:
+“good”, “movie”, “bad” may be included.
+Very uncommon words are removed.
+Load Dataset
+(X_train, y_train), (X_test, y_test) = imdb.load_data(num_words=vocab_size)
+This loads:
+Training data
+Testing data
+Variables
+Variable	Meaning
+X_train	Training reviews
+y_train	Training labels
+X_test	Test reviews
+y_test	Test labels
+Labels
+0 → Negative review
+1 → Positive review
+Important
+Reviews are already converted into integers.
+Example:
+[1, 14, 22, 16, 43]
+Each number represents a word.
+Set Maximum Review Length
+max_length = 200
+Each review will contain maximum 200 words.
+Longer reviews are truncated.
+Shorter reviews are padded with zeros.
+Pad Sequences
+X_train = pad_sequences(X_train, maxlen=max_length)
+X_test = pad_sequences(X_test, maxlen=max_length)
+Purpose:
+Make all reviews exactly 200 words long.
+Example:
+Before padding:
+[1, 5, 8]
+After padding:
+[0,0,0,...,1,5,8]
+This ensures equal input size
+Create Neural Network Model
+model = Sequential()
+Creates an empty Sequential neural network.
+Embedding Layer
+model.add(Embedding(input_dim=vocab_size, output_dim=128, input_length=max_length))
+This is one of the most important layers.
+Parameters
+Parameter	Meaning
+input_dim=vocab_size	Total vocabulary size (10,000 words)
+output_dim=128	Each word converted into 128-dimensional vector
+input_length=max_length	Input review length = 200
+What Embedding Does
+Converts words into meaningful vectors.
+Example:
+Word	Vector
+good	[0.2, 0.8, ...]
+bad	[0.7, 0.1, ...]
+Words with similar meaning get similar vectors.
+Flatten Layer
+model.add(Flatten())
+Embedding output is 2D.
+Shape:
+(200, 128)
+Flatten converts it into:
+(25600,)
+because:
+200 × 128 = 25600
+Hidden Dense Layer
+model.add(Dense(64, activation='relu'))
+64 neurons
+Uses ReLU activation
+ReLU formula:
+f(x)=\max(0,x)
+Purpose:
+Learns patterns in reviews.
+Second Hidden Layer
+model.add(Dense(32, activation='relu'))
+Another hidden layer
+32 neurons
+Helps extract deeper features
+Output Layer
+model.add(Dense(1, activation='sigmoid'))
+Single neuron because output is binary.
+Sigmoid gives probability between 0 and 1.
+Sigmoid function:
+\sigma(x)=\frac{1}{1+e^{-x}}
+Example:
+Output = 0.95 → Positive review
+Output = 0.10 → Negative review
+Compile the Model
+model.compile(
+optimizer='adam',
+loss='binary_crossentropy',
+metrics=['accuracy']
+)
+Optimizer = Adam
+Updates weights efficiently during training.
+Loss Function = Binary Crossentropy
+Used for binary classification.
+Binary crossentropy:
+L=-\left(y\log(\hat{y})+(1-y)\log(1-\hat{y})\right)
+Metrics = Accuracy
+Measures correct predictions.
+
+Train the Model
+history = model.fit(
+X_train,
+y_train,
+epochs=10,
+batch_size=128,
+validation_split=0.2
+)
+Parameters
+Parameter	Meaning
+X_train	Training reviews
+y_train	Labels
+epochs=10	Dataset trained 10 times
+batch_size=128	128 samples processed at once
+validation_split=0.2	20% training data used for validation
+
+Evaluate Model
+loss, accuracy = model.evaluate(X_test, y_test)
+Tests model on unseen data.
+Returns:
+Loss
+Accuracy
+Print Accuracy
+print("Test Accuracy:", accuracy)
+Displays final test accuracy.
+Example:
+Test Accuracy: 0.87
+Meaning:
+Model predicts correctly 87% of the time.
+FLOW OF THE ENTIRE PROGRAM
+Load IMDB Data
+↓
+Convert reviews into equal length
+↓
+Convert words into embeddings
+↓
+Flatten vectors
+↓
+Pass through hidden layers
+↓
+Predict positive/negative
+↓
+Train using Adam optimizer
+↓
+Evaluate accuracy
+What is the purpose of this project?
+This project performs sentiment analysis on movie reviews using a deep learning neural network.
+What is sentiment analysis?
+Sentiment analysis identifies whether text expresses positive or negative sentiment.
+Why is IMDB dataset used?
+It is a standard dataset for binary sentiment classification containing labeled movie reviews.
+Why do we use Embedding layer?
+Embedding converts words into dense numerical vectors so neural networks can understand semantic relationships between words.
+What is vocab_size?
+It defines the number of words considered from the dataset vocabulary.
+Why use padding?
+Because neural networks require fixed-size inputs, padding makes all sequences equal length.
+What is max_length?
+Maximum number of words allowed in each review.
+What does Flatten layer do?
+It converts multidimensional embeddings into a single-dimensional vector.
+Why is ReLU used?
+ReLU helps the model learn nonlinear patterns and avoids vanishing gradient problems.
+Why sigmoid in output layer?
+Sigmoid outputs probability values between 0 and 1, suitable for binary classification.
+Why binary_crossentropy loss?
+Because the problem has only two classes: positive and negative.
+What is an epoch?
+One complete pass of the entire training dataset through the neural network.
+What is batch size?
+Number of samples processed before updating weights.
+What is validation_split?
+Portion of training data reserved for validation during training.
+Difference between training and testing data?
+Training Data	Testing Data
+Used to train model	Used to evaluate model
+Model learns from it	Model never sees it during training
+
+What optimizer is used?
+Answer:
+Adam optimizer.
+Why Adam optimizer?
+It combines advantages of momentum and RMSProp, giving faster convergence.
+What is overfitting
+When model performs well on training data but poorly on unseen test data.
+How can overfitting be reduced?
+Dropout
+Regularization
+More data
+Early stopping
+Why deep learning instead of traditional ML?
+Deep learning automatically learns features from text without manual feature engineering.
+Why is Embedding better than one-hot encoding?
+Embedding produces dense low-dimensional vectors and captures semantic similarity, while one-hot encoding is sparse and inefficient.
+What shape comes after embedding layer?
+Input:
+(batch_size, 200)
+Output:
+(batch_size, 200, 128)
+Why can Flatten be problematic?
+
+Flatten ignores sequence order and temporal relationships between words.
+Better alternatives:
+LSTM
+GRU
+CNN
+How can this model be improved?
+Use LSTM
+Add Dropout
+Use Bidirectional LSTM
+Increase embedding quality
+Use pretrained embeddings like Word2Vec or GloVe
+SHORT SUMMARY
+This code:
+Loads IMDB movie reviews
+Converts text into integer sequences
+Pads sequences
+Uses embedding layer for word representation
+Builds dense neural network
+Trains model for sentiment analysis
+Evaluates prediction accuracy
+
+Types of Loss Functions with Examples
+A loss function measures how much the predicted output differs from the actual output.
+The goal of training is to minimize the loss.
+Common Types of Loss Functions
+Loss Function	Used For	Example
+Mean Squared Error (MSE)	Regression	House price prediction
+Mean Absolute Error (MAE)	Regression	Temperature prediction
+Binary Crossentropy	Binary classification	Spam detection
+Categorical Crossentropy	Multiclass classification	Digit recognition
+Sparse Categorical Crossentropy	Multiclass with integer labels	MNIST labels
+Hinge Loss	SVM models	Margin classification
+Mean Squared Error (MSE)
+Used in regression problems.
+Formula:
+MSE=\frac{1}{n}\sum_{i=1}^{n}(y_i-\hat{y}_i)^2
+Where:
+(y_i) = actual value
+(\hat{y}_i) = predicted value
+Example
+Actual price = 100
+Predicted price = 90
+Error:
+(100 - 90)² = 100
+Large errors get heavily penalized.
+Mean Absolute Error (MAE)
+Used in regression.
+Formula:
+MAE=\frac{1}{n}\sum_{i=1}^{n}|y_i-\hat{y}_i|
+Example
+Actual = 100
+Predicted = 90
+Error:
+|100 - 90| = 10
+Less sensitive to outliers than MSE.
+Binary Crossentropy
+Used for binary classification.
+Formula:
+L=-\left(y\log(\hat{y})+(1-y)\log(1-\hat{y})\right)
+Example
+Sentiment analysis
+Spam detection
+Output:
+0 → Negative
+1 → Positive
+
+Categorical Crossentropy
+Used for multiclass classification.
+Formula:
+L=-\sum_{i=1}^{C} y_i\log(\hat{y}_i)
+Example
+Classifying:
+Cat
+Dog
+Horse
+Sparse Categorical Crossentropy
+Same as categorical crossentropy but labels are integers.
+Example:
+0,1,2,3
+instead of one-hot encoding.
+What are L1 and L2 Loss Functions?
+L1 and L2 are error measurement methods and also used in regularization.
+
+L1 Loss (Least Absolute Deviations)
+Formula:
+L1=\sum |y-\hat{y}|
+It calculates absolute differences.
+
+Example
+Actual = 20
+Predicted = 15
+L1 Loss:
+|20 - 15| = 5
+Characteristics of L1 Loss
+Feature	Description
+Uses absolute values	Yes
+Sensitive to outliers	Less
+Produces sparse models	Yes
+Easier interpretation	Yes
+
+L2 Loss (Least Squares Error)
+Formula:
+L2=\sum (y-\hat{y})^2
+Squares the errors.
+
+Example
+Actual = 20
+Predicted = 15
+L2 Loss:
+(20 - 15)² = 25
+Characteristics of L2 Loss
+Feature	Description
+Uses squared errors	Yes
+Sensitive to outliers	More
+Smooth optimization	Yes
+Most commonly used	Yes
+
+Difference Between L1 and L2
+Feature	L1 Loss	L2 Loss
+Formula	Absolute error	Squared error
+Outlier sensitivity	Low	High
+Produces sparse weights	Yes	No
+Optimization	Harder	Easier
+Example	MAE	MSE
+
+What is Deep Networking?
+Deep networking means using a neural network with multiple hidden layers.
+It is also called:
+Deep Neural Network (DNN)
+Deep Learning Network
+
+Structure of Deep Neural Network
+Input Layer
+↓
+Hidden Layer 1
+↓
+Hidden Layer 2
+↓
+Hidden Layer 3
+↓
+Output Layer
+
+Why Called “Deep”?
+Because it contains many hidden layers.
+1 hidden layer → shallow network
+Multiple hidden layers → deep network
+
+Purpose of Deep Networks
+Deep networks automatically learn:
+patterns
+features
+relationships
+from large datasets.
+Example Applications
+Application	Use
+Image Recognition	Face detection
+NLP	Sentiment analysis
+Speech Recognition	Voice assistants
+Medical Diagnosis	Disease prediction
+Self-driving Cars	Object detection
+________________________________________
+Example of Deep Network in Keras
+model = Sequential()
+
+model.add(Dense(128, activation='relu'))
+model.add(Dense(64, activation='relu'))
+model.add(Dense(32, activation='relu'))
+
+model.add(Dense(1, activation='sigmoid'))
+This is a deep neural network because it has multiple hidden layers.
+________________________________________
+Advantages of Deep Networks
+Advantage	Explanation
+Automatic feature extraction	No manual features needed
+High accuracy	Learns complex patterns
+Works with big data	Effective for large datasets
+Handles unstructured data	Text, images, audio
+
+Disadvantages
+Disadvantage	Explanation
+Requires large data	Training needs more samples
+High computation	Needs GPU/CPU power
+Overfitting risk	Can memorize training data
+Longer training time	More layers = more computation
+
+Q1. What is a loss function?
+A loss function measures the difference between predicted and actual values.
+Q2. Why is loss function important?
+It helps the model learn by minimizing prediction errors.
+Q3. Which loss function is used for binary classification?
+Binary crossentropy.
+Q4. Which loss function is used for regression?
+MSE or MAE.
+Q5. Difference between L1 and L2 loss?
+L1 uses absolute error while L2 uses squared error.
+Q6. Why is L2 sensitive to outliers?
+Because squaring large errors increases their impact significantly.
+Q7. What is deep learning?
+Deep learning uses neural networks with multiple hidden layers to learn complex patterns.
+Q8. What is a hidden layer?
+A layer between input and output that extracts features and patterns
+Q9. Why are activation functions used?
+They introduce nonlinearity so the network can learn complex relationships.
+Q10. Name common activation functions.
+ReLU
+Sigmoid
+Tanh
+Softmax
+What is the aim of this project?
+To classify IMDB movie reviews as positive or negative using Deep Neural Networks.
+What type of problem is this?
+Binary classification problem.
+Why is IMDB dataset used?
+Because it contains labeled movie reviews for sentiment analysis.
+What are the classes in this dataset?
+Positive review (1)
+Negative review (0)
+What is sentiment analysis?
+It is the process of identifying emotions/opinions from text.
+What is vocab_size?
+Number of most frequent words considered in the dataset.
+Example:
+vocab_size = 10000
+Why are reviews converted into numbers?
+Neural networks work only with numerical data.
+What is padding?
+Padding makes all sequences equal length by adding zeros.
+Why is max_length used?
+To ensure every review has fixed input size.
+What is preprocessing:
+Cleaning and preparing data before training.
+What is Deep Neural Network?
+A neural network with multiple hidden layers.
+What is the role of Embedding layer?
+Converts words into dense vectors.
+Why use Embedding instead of one-hot encoding?
+Embedding is memory efficient and captures semantic meaning.
+What does Flatten layer do?
+Converts multidimensional data into 1D vector.
+What is Dense layer?
+A fully connected neural network layer.
+Why is ReLU activation used?
+ReLU:
+f(x)=\max(0,x)
+It helps the model learn nonlinear patterns and avoids vanishing gradient.
+Why sigmoid in output layer?
+Sigmoid:
+\sigma(x)=\frac{1}{1+e^{-x}}
+Answer:
+Because binary classification requires output between 0 and 1.
+What is epoch?
+One complete pass of training data through the model.
+What is batch size?
+Number of samples processed before weight update.
+What is optimizer?
+Algorithm used to update weights during training.
+Why Adam optimizer?
+It gives faster and efficient convergence.
+What is loss function?
+Measures prediction error.
+Which loss function is used here?
+Binary crossentropy.
+Binary crossentropy:
+L=-\left(y\log(\hat{y})+(1-y)\log(1-\hat{y})\right)
+Why binary_crossentropy?
+Because there are only two classes.
+What is accuracy?
+Percentage of correct predictions.
+Difference between training and testing data?
+Training Data	Testing Data
+Used for learning	Used for evaluation
+
+What is overfitting?
+When model performs well on training data but poorly on new data.
+How to reduce overfitting?:
+Dropout
+Regularization
+More data
+Early stopping
+What is underfitting?
+When model cannot learn patterns properly.
+What is activation function?
+Function that introduces nonlinearity into the network.
+Why Sequential model is used?
+Because layers are added one after another.
+What does model.compile() do?
+Configures optimizer, loss function, and metrics.
+What does model.fit() do?
+Trains the neural network.
+What does model.evaluate() do?
+Tests model performance on unseen data.
+What is history variable?
+Stores training and validation accuracy/loss.
+Why is NLP needed here?
+Because movie reviews are text data.
+What are embeddings?
+Dense vector representations of words.
+Why can Flatten be less effective?
+It ignores sequence order of words.
+Better alternatives to Flatten?
+LSTM
+GRU
+CNN
+How can model accuracy be improved?
+More epochs
+Better architecture
+Dropout
+LSTM layers
+Pretrained embeddings
+Why binary classification?
+Because output has only two classes.
+What happens if sigmoid is removed?
+Output will not represent probability properly.
+Why use Deep Learning instead of traditional ML?
+Deep learning automatically learns features from text.
+What is the output shape after embedding layer?
+Input:
+(batch_size, 200)
+Output:
+(batch_size, 200, 128)
+What is the final output of the model?
+Probability of positive sentiment.
+Question	Short Answer
+What is NLP?	Processing human language using computers
+What is embedding?	Word vector representation
+Why padding?	Equal input size
+Why sigmoid?	Binary probability output
+Why Adam?	Fast optimization
+What is epoch?	One full training cycle
+What is overfitting?	Memorizing training data
+What is accuracy?	Correct prediction percentage
+What is Dense layer?	Fully connected layer
+What is loss function?	Measures error
